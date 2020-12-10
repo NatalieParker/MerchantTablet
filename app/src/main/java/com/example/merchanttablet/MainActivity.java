@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "LOGIN SUBMITTED");
+                Log.i(TAG, "LOGIN SUBMITTED ");
             }
         });
     }
