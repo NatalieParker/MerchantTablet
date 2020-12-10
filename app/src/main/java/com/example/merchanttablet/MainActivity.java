@@ -41,8 +41,12 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
                 Date date = new Date();
                 Log.i(TAG, "LOGIN SUBMITTED AT: " + date);
+=======
+                Log.i(TAG, "LOGIN SUBMITTED ");
+>>>>>>> cd922ec808986cfe257fc2a49a3478edff630e23
             }
         });
     }
