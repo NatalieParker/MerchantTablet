@@ -12,6 +12,8 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginScreen";
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "LOGIN SUBMITTED");
+                Date date = new Date();
+                Log.i(TAG, "LOGIN SUBMITTED AT: " + date);
             }
         });
     }
