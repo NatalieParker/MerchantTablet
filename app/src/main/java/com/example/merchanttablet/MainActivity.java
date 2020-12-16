@@ -2,6 +2,7 @@ package com.example.merchanttablet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Date date = new Date();
                 Log.i(TAG, "LOGIN SUBMITTED AT: " + date);
+
+                Intent intent = new Intent(MainActivity.this, UserKeypadActivity.class);
+                startActivity(intent);
             }
         });
     }
