@@ -1,4 +1,4 @@
-package com.example.merchanttablet;
+package com.jayurewards.tablet;
 
 import org.junit.Test;
 
