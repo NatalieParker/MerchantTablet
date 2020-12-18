@@ -13,6 +13,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -23,14 +28,16 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final String TAG = "LoginScreen";
+    private static final int RC_SIGN_IN = 1;
 
 
     private EditText emailEditText;
     private EditText passwordEditText;
     private MaterialButton emailLoginButton;
+    private MaterialButton buttonGoogle;
     private FirebaseAuth auth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +47,16 @@ public class MainActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.editTextLoginEmailAddress);
         passwordEditText = findViewById(R.id.editTextLoginPassword);
         emailLoginButton = findViewById(R.id.buttonLoginSubmit);
+        buttonGoogle = findViewById(R.id.buttonGoogle);
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
         enableEmailSubmit(false);
         setUpClickListeners();
         auth = FirebaseAuth.getInstance();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
 
@@ -52,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        // updateUI(account);
 
         if (currentUser != null) {
             Log.i(TAG, "User" + currentUser.toString());
@@ -115,6 +129,17 @@ public class MainActivity extends AppCompatActivity {
                 signIn(email, password);
             }
         });
+        buttonGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.buttonGoogle:
+                        googleSignIn();
+                        break;
+                    // ...
+                }
+            }
+        });
     }
 
     private void goToKeypadPage() {
@@ -124,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, UserKeypadActivity.class);
         startActivity(intent);
+    }
+
+    private void googleSignIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void signIn(String email, String password) {
@@ -154,5 +184,28 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            goToKeypadPage();
+//            updateUI(account);
+
+        } catch (ApiException e) {
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+//            updateUI(null);
+        }
+    }
+
 
 }
