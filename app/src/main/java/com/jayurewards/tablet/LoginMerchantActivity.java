@@ -1,24 +1,24 @@
-package com.jayurewards.tablet;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.os.SystemClock;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-
+//package com.jayurewards.tablet;
+//
+//import android.annotation.SuppressLint;
+//import android.content.Context;
+//import android.content.Intent;
+//import android.content.SharedPreferences;
+//import android.content.res.ColorStateList;
+//import android.os.SystemClock;
+//import androidx.annotation.NonNull;
+//import androidx.appcompat.app.AppCompatActivity;
+//import android.os.Bundle;
+//import android.text.Editable;
+//import android.text.TextWatcher;
+//import android.util.Log;
+//import android.view.View;
+//import android.view.inputmethod.InputMethodManager;
+//import android.widget.Button;
+//import android.widget.EditText;
+//import android.widget.ImageButton;
+//import android.widget.RelativeLayout;
+//
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -49,8 +49,8 @@ import android.widget.RelativeLayout;
 //import retrofit2.Call;
 //import retrofit2.Callback;
 //import retrofit2.Response;
-
-public class LoginMerchantActivity extends AppCompatActivity {
+//
+//public class LoginMerchantActivity extends AppCompatActivity {
 //    private static final String TAG = "Merchant Login Activity";
 //
 //    private final int RC_SIGN_IN = 111;
@@ -69,7 +69,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
 //    private GoogleSignInClient googleSignInClient;
 //
 //    // Reference to keyboard manager
-//    InputMethodManager imm;
+//    private InputMethodManager imm;
 //
 //    // Variable to track event time to prevent mis-clicks
 //    private long lastClickTime = 0;
@@ -411,6 +411,6 @@ public class LoginMerchantActivity extends AppCompatActivity {
 //    private boolean isValidEmail(CharSequence target) {
 //        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
 //    }
-
-
-}
+//
+//
+//}

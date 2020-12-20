@@ -3,13 +3,16 @@ package com.jayurewards.tablet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,7 +33,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "LoginScreen";
     private static final int RC_SIGN_IN = 1;
-
+    private long lastClickTime = 0;
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -50,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
         buttonGoogle = findViewById(R.id.buttonGoogle);
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
+        emailEditText.requestFocus();
+        auth = FirebaseAuth.getInstance();
         enableEmailSubmit(false);
         setUpClickListeners();
-        auth = FirebaseAuth.getInstance();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -74,6 +79,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+    }
+
+    private void preventDuplicateClicks() {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
+    }
 
     /**
      * EDIT TEXT METHODS
@@ -127,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 signIn(email, password);
+                preventDuplicateClicks();
             }
         });
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
@@ -136,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.buttonGoogle:
                         googleSignIn();
                         break;
-                    // ...
                 }
+                preventDuplicateClicks();
             }
         });
     }
@@ -180,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
                             // ...
                         }
 
-                        // ...
+                        hideKeyboard();
+
                     }
                 });
     }
@@ -205,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
 //            updateUI(null);
         }
+        hideKeyboard();
     }
 
 
