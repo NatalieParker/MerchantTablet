@@ -171,13 +171,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void googleSignIn() {
-//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-//        startActivityForResult(signInIntent, RC_SIGN_IN);
-        alert("Test title google", "Test message");
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void signIn(String email, String password) {
-        alert("Test title email", "Test message");
 
         if (!email.isEmpty()) {
             if (!isValidEmail(email)) {
@@ -191,22 +189,14 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                        if (task.isSuccessful() && auth.getCurrentUser() != null) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            if (user != null) {
-                                Log.i(TAG, "User2" + " " + user.getEmail() + "  " + user.getDisplayName());
-                                goToKeypadPage();
-                            } else {
-                                Log.i(TAG, "No Current User2");
-                            }
+                            goToKeypadPage();
                         } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Email or password is incorrect.",
-                                    Toast.LENGTH_SHORT).show();
-                            // updateUI(null);
-                            // ...
+                            Log.e(TAG, "signInWithEmail:failure", task.getException());
+
+                            alert("Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
                         }
 
                         hideKeyboard();
@@ -232,8 +222,31 @@ public class MainActivity extends AppCompatActivity {
 //            updateUI(account);
 
         } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-//            updateUI(null);
+            Log.w(TAG, "signInResult:failed code=" + e);
+//
+            switch (e.getStatusCode()) {
+                    case 12501:
+                        Log.w(TAG, "User canceled the Google Sign in");
+                        break;
+
+                    case 12502:
+                        alert( "Please Wait", "Google is currently logging you in.");
+                        break;
+
+                    case 12500:
+                        alert("Unable To Login",
+                                "Google was not able to log you in. Please check your account and try again.");
+                        break;
+
+                    case 5:
+                        alert("Invalid Account",
+                                "Please check your account for accuracy, and try again.");
+                        break;
+
+                    default:
+                        alert("Network Issue", "Please check your internet connection.");
+                        break;
+                }
 
         }
         hideKeyboard();
@@ -245,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         builder1.setMessage(setMessage);
 
         builder1.setPositiveButton(
-                "Yes",
+                "OK",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
