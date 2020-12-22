@@ -204,11 +204,11 @@
 //
 //                switch (e.getStatusCode()) {
 //                    case 12501:
-//                        Log.w(TAG, "User canceled the Google Signin");
+//                        Log.w(TAG, "User canceled the Google Sign in");
 //                        break;
 //
 //                    case 12502:
-//                        AlertService.showAlert(this, "Please Wait", "Google is currently loggin you in.");
+//                        AlertService.showAlert(this, "Please Wait", "Google is currently logging you in.");
 //                        break;
 //
 //                    case 12500:

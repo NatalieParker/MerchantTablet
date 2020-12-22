@@ -1,9 +1,11 @@
 package com.jayurewards.tablet;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -140,21 +142,21 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preventDuplicateClicks();
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 signIn(email, password);
-                preventDuplicateClicks();
             }
         });
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                preventDuplicateClicks();
                 switch (v.getId()) {
                     case R.id.buttonGoogle:
                         googleSignIn();
                         break;
                 }
-                preventDuplicateClicks();
             }
         });
     }
@@ -169,11 +171,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void googleSignIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+        alert("Test title google", "Test message");
     }
 
     private void signIn(String email, String password) {
+        alert("Test title email", "Test message");
+
+        if (!email.isEmpty()) {
+            if (!isValidEmail(email)) {
+                emailEditText.setError("Please enter a valid email.");
+                emailEditText.requestFocus();
+                return;
+            }
+        }
+
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -189,9 +202,8 @@ public class MainActivity extends AppCompatActivity {
                                 Log.i(TAG, "No Current User2");
                             }
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Email or password is incorrect.",
                                     Toast.LENGTH_SHORT).show();
                             // updateUI(null);
                             // ...
@@ -222,9 +234,28 @@ public class MainActivity extends AppCompatActivity {
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
 //            updateUI(null);
+
         }
         hideKeyboard();
     }
 
+    private void alert(String setTitle, String setMessage) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+        builder1.setTitle(setTitle);
+        builder1.setMessage(setMessage);
 
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i(TAG, "Yes button pressed");
+                    }
+                });
+
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+    }
 }
