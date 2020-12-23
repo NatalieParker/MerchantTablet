@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private MaterialButton emailLoginButton;
     private MaterialButton buttonGoogle;
+    private MaterialButton buttonSignUp;
+    private MaterialButton buttonForgotPassword;
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -53,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextLoginPassword);
         emailLoginButton = findViewById(R.id.buttonLoginSubmit);
         buttonGoogle = findViewById(R.id.buttonGoogle);
+        buttonSignUp = findViewById(R.id.buttonSignUp);
+        buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
         emailEditText.requestFocus();
@@ -157,6 +163,20 @@ public class MainActivity extends AppCompatActivity {
                         googleSignIn();
                         break;
                 }
+            }
+        });
+        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preventDuplicateClicks();
+                website("https://portal.jayu.us/auth/signup");
+            }
+        });
+        buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preventDuplicateClicks();
+                website("https://portal.jayu.us/auth/forgot-password");
             }
         });
     }
@@ -271,4 +291,16 @@ public class MainActivity extends AppCompatActivity {
         alert11.show();
 
     }
+
+    private void website(String setWebsite) {
+        Intent openWebsite = new Intent(Intent.ACTION_VIEW);
+        try {
+            openWebsite.setData(Uri.parse(setWebsite));
+            startActivity(openWebsite);
+        } catch (ActivityNotFoundException e) {
+            Log.i(TAG, "Website error");
+            alert("Error", "Something went wrong, please check your internet connection and try again.");
+        }
+    }
+
 }
