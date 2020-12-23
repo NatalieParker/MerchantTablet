@@ -40,7 +40,7 @@
             android:background="#F8F8F8"
             android:text="Login"
             android:textColor="#7B2FD1"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="#2B2B2B"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editTextLoginPassword" />
