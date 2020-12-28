@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = auth.getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        // updateUI(account);
 
         if (currentUser != null) {
             Log.i(TAG, "User" + currentUser.toString());
@@ -89,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        }
     }
 
     private void preventDuplicateClicks() {
@@ -239,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             goToKeypadPage();
-//            updateUI(account);
 
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e);
@@ -287,8 +287,9 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+//        AlertDialog alert11 = builder1.create();
+//        alert11.show();
+        builder1.show();
 
     }
 
