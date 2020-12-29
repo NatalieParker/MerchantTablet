@@ -31,6 +31,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jayurewards.tablet.helpers.AlertHelper;
 
 import java.util.Date;
 
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Log.e(TAG, "signInWithEmail:failure", task.getException());
 
-                            alert("Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
+                            AlertHelper.showAlert( MainActivity.this,"Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
                         }
 
                         hideKeyboard();
@@ -250,21 +251,21 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 12502:
-                        alert( "Please Wait", "Google is currently logging you in.");
+                        AlertHelper.showAlert( this,"Please Wait", "Google is currently logging you in.");
                         break;
 
                     case 12500:
-                        alert("Unable To Login",
+                        AlertHelper.showAlert( this,"Unable To Login",
                                 "Google was not able to log you in. Please check your account and try again.");
                         break;
 
                     case 5:
-                        alert("Invalid Account",
+                        AlertHelper.showAlert( this,"Invalid Account",
                                 "Please check your account for accuracy, and try again.");
                         break;
 
                     default:
-                        alert("Network Issue", "Please check your internet connection.");
+                        AlertHelper.showAlert( this,"Network Issue", "Please check your internet connection.");
                         break;
                 }
 
@@ -272,26 +273,22 @@ public class MainActivity extends AppCompatActivity {
         hideKeyboard();
     }
 
-    private void alert(String setTitle, String setMessage) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-        builder1.setTitle(setTitle);
-        builder1.setMessage(setMessage);
-
-        builder1.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Log.i(TAG, "Yes button pressed");
-                    }
-                });
-
-
-//        AlertDialog alert11 = builder1.create();
-//        alert11.show();
-        builder1.show();
-
-    }
+//    private void alert(String setTitle, String setMessage) {
+//        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
+//        builder1.setTitle(setTitle);
+//        builder1.setMessage(setMessage);
+//
+//        builder1.setPositiveButton(
+//                "OK",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        Log.i(TAG, "Yes button pressed");
+//                    }
+//                });
+//        builder1.show();
+//
+//    }
 
     private void website(String setWebsite) {
         Intent openWebsite = new Intent(Intent.ACTION_VIEW);
@@ -300,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(openWebsite);
         } catch (ActivityNotFoundException e) {
             Log.i(TAG, "Website error");
-            alert("Error", "Something went wrong, please check your internet connection and try again.");
+            AlertHelper.showAlert( this,"Error", "Something went wrong, please check your internet connection and try again.");
         }
     }
 
