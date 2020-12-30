@@ -36,14 +36,14 @@
 //import com.jayurewards.jayu.com.jayurewards.tablet.helpers.AlertService;
 //import com.jayurewards.jayu.com.jayurewards.tablet.helpers.AuthService;
 //import com.jayurewards.jayu.com.jayurewards.tablet.helpers.GlobalConstants;
-//import com.jayurewards.jayu.merchant_app.models.stripe.UpdateSubscriptionStatus;
+//import com.jayurewards.jayu.merchant_app.com.jayurewards.tablet.models.stripe.UpdateSubscriptionStatus;
 //import com.jayurewards.jayu.merchant_app.screens_merchant.WebViewActivity;
 //import com.jayurewards.jayu.com.jayurewards.tablet.networking.RetrofitClient;
 //import com.jayurewards.jayu.merchant_app.screens_merchant.dashboard.DashboardMerchantActivity;
 //import com.jayurewards.jayu.merchant_app.com.jayurewards.tablet.helpers.GlobalConstantsMerchant;
-//import com.jayurewards.jayu.merchant_app.models.stripe.CheckSubscriptionParams;
-//import com.jayurewards.jayu.merchant_app.models.stripe.CheckSubscriptionResponse;
-//import com.jayurewards.jayu.merchant_app.models.MerchantModel;
+//import com.jayurewards.jayu.merchant_app.com.jayurewards.tablet.models.stripe.CheckSubscriptionParams;
+//import com.jayurewards.jayu.merchant_app.com.jayurewards.tablet.models.stripe.CheckSubscriptionResponse;
+//import com.jayurewards.jayu.merchant_app.com.jayurewards.tablet.models.MerchantModel;
 //import com.jayurewards.jayu.services.FCMService;
 //
 //import retrofit2.Call;

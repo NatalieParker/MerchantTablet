@@ -3,15 +3,18 @@ package com.jayurewards.tablet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,8 +35,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.jayurewards.tablet.helpers.AlertHelper;
+import com.jayurewards.tablet.models.MerchantModel;
+import com.jayurewards.tablet.networking.RetrofitClient;
 
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "LoginScreen";
@@ -48,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton buttonForgotPassword;
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
+    private SharedPreferences preferences;
+    private ConstraintLayout constraintLayoutSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +77,17 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         enableEmailSubmit(false);
         setUpClickListeners();
-
+        constraintLayoutSpinner = findViewById(R.id.constraintLayoutSpinner);
+        constraintLayoutSpinner.setVisibility(View.GONE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        Log.i(TAG, "Email: " + preferences.getString("email", null));
+        Log.i(TAG, "Firebase UID: " + preferences.getString("firebaseUid", null));
+        Log.i(TAG, "Merchant ID: " + preferences.getInt("merchantId", 0));
 
     }
 
@@ -93,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
         }
     }
+
+
 
     private void preventDuplicateClicks() {
         if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
@@ -150,35 +169,44 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                constraintLayoutSpinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 signIn(email, password);
+                constraintLayoutSpinner.setVisibility(View.GONE);
             }
         });
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                constraintLayoutSpinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 switch (v.getId()) {
                     case R.id.buttonGoogle:
                         googleSignIn();
+                        constraintLayoutSpinner.setVisibility(View.GONE);
                         break;
                 }
+
             }
         });
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                constraintLayoutSpinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 website("https://portal.jayu.us/auth/signup");
+                constraintLayoutSpinner.setVisibility(View.GONE);
             }
         });
         buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                constraintLayoutSpinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 website("https://portal.jayu.us/auth/forgot-password");
+                constraintLayoutSpinner.setVisibility(View.GONE);
             }
         });
     }
@@ -214,14 +242,17 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful() && auth.getCurrentUser() != null) {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            goToKeypadPage();
+                            String firebaseUid = auth.getCurrentUser().getUid();
+                            Log.i(TAG, "Firebase ID: " + firebaseUid);
+                            getMerchantData(firebaseUid);
                         } else {
                             Log.e(TAG, "signInWithEmail:failure", task.getException());
 
-                            AlertHelper.showAlert( MainActivity.this,"Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
+                            AlertHelper.showAlert(MainActivity.this, "Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
                         }
 
                         hideKeyboard();
+                        goToKeypadPage();
 
                     }
                 });
@@ -246,49 +277,32 @@ public class MainActivity extends AppCompatActivity {
             Log.w(TAG, "signInResult:failed code=" + e);
 //
             switch (e.getStatusCode()) {
-                    case 12501:
-                        Log.w(TAG, "User canceled the Google Sign in");
-                        break;
+                case 12501:
+                    Log.w(TAG, "User canceled the Google Sign in");
+                    break;
 
-                    case 12502:
-                        AlertHelper.showAlert( this,"Please Wait", "Google is currently logging you in.");
-                        break;
+                case 12502:
+                    AlertHelper.showAlert(this, "Please Wait", "Google is currently logging you in.");
+                    break;
 
-                    case 12500:
-                        AlertHelper.showAlert( this,"Unable To Login",
-                                "Google was not able to log you in. Please check your account and try again.");
-                        break;
+                case 12500:
+                    AlertHelper.showAlert(this, "Unable To Login",
+                            "Google was not able to log you in. Please check your account and try again.");
+                    break;
 
-                    case 5:
-                        AlertHelper.showAlert( this,"Invalid Account",
-                                "Please check your account for accuracy, and try again.");
-                        break;
+                case 5:
+                    AlertHelper.showAlert(this, "Invalid Account",
+                            "Please check your account for accuracy, and try again.");
+                    break;
 
-                    default:
-                        AlertHelper.showAlert( this,"Network Issue", "Please check your internet connection.");
-                        break;
-                }
+                default:
+                    AlertHelper.showNetworkAlert(this);
+                    break;
+            }
 
         }
         hideKeyboard();
     }
-
-//    private void alert(String setTitle, String setMessage) {
-//        AlertDialog.Builder builder1 = new AlertDialog.Builder(MainActivity.this);
-//        builder1.setTitle(setTitle);
-//        builder1.setMessage(setMessage);
-//
-//        builder1.setPositiveButton(
-//                "OK",
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        Log.i(TAG, "Yes button pressed");
-//                    }
-//                });
-//        builder1.show();
-//
-//    }
 
     private void website(String setWebsite) {
         Intent openWebsite = new Intent(Intent.ACTION_VIEW);
@@ -297,8 +311,37 @@ public class MainActivity extends AppCompatActivity {
             startActivity(openWebsite);
         } catch (ActivityNotFoundException e) {
             Log.i(TAG, "Website error");
-            AlertHelper.showAlert( this,"Error", "Something went wrong, please check your internet connection and try again.");
+            AlertHelper.showAlert(this, "Error", "Something went wrong, please check your internet connection and try again.");
         }
+    }
+
+    private void getMerchantData(String firebaseUid) {
+        Call<MerchantModel> call = RetrofitClient.getInstance().getRestAuth().getMerchant(firebaseUid);
+        call.enqueue(new Callback<MerchantModel>() {
+            @Override
+            public void onResponse(@NonNull Call<MerchantModel> call, @NonNull Response<MerchantModel> response) {
+                MerchantModel merchant = response.body();
+                String firstName = merchant.getFirstName();
+                String email = merchant.getEmail();
+                String firebaseUid = merchant.getFirebaseUid();
+                int merchantId = merchant.getMerchantId();
+
+                Log.i(TAG, "Merchant data response retrieved: " + firstName);
+                Log.i(TAG, "Merchant data retrieved: " + merchant);
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("email", email);
+                editor.putString("firebaseUid", firebaseUid);
+                editor.putInt("merchantId", merchantId);
+                editor.apply();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<MerchantModel> call, @NonNull Throwable t) {
+
+                Log.e(TAG, "Get merchant data error: " + t.getMessage());
+            }
+        });
     }
 
 }

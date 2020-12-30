@@ -17,12 +17,7 @@ public class AlertHelper {
 
         builder1.setPositiveButton(
                 "OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        Log.i(TAG, "OK button pressed");
-                    }
-                });
+                (dialog, id) -> Log.i(TAG, "OK button pressed"));
 
         builder1.show();
     }
