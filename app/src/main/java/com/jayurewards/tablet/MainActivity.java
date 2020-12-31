@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             emailLoginButton.setEnabled(false);
 
         } else {
-            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.purple_500)));
             emailLoginButton.setEnabled(true);
         }
     }
