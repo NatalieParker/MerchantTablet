@@ -245,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
                             String firebaseUid = auth.getCurrentUser().getUid();
                             Log.i(TAG, "Firebase ID: " + firebaseUid);
                             getMerchantData(firebaseUid);
+                            goToKeypadPage();
                         } else {
                             Log.e(TAG, "signInWithEmail:failure", task.getException());
 
@@ -252,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         hideKeyboard();
-                        goToKeypadPage();
 
                     }
                 });

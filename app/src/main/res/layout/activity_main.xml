@@ -4,24 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_screen_bkg">
+    android:background="#BF4949">
+
+    <!--    Background image-->
+    <!--    TODO: Change background image and make it wider.-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_screen_bkg" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".MainActivity" >
+            tools:context=".MainActivity">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="299dp"
-                android:layout_height="425dp"
-                android:layout_marginStart="332dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
                 android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -53,7 +61,6 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="20dp"
-                    android:background="#673AB7"
                     android:text="Login"
                     android:textColor="#FFFFFF"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -67,9 +74,10 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="22dp"
                     android:layout_marginEnd="20dp"
-                    android:backgroundTint="#BF4949"
                     android:text="Log in with Google"
+                    android:drawableLeft="@drawable/ic_google_icon"
                     android:textColor="#FFFFFF"
+                    app:backgroundTint="#BF4949"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +102,9 @@
                     android:id="@+id/name_text_input"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/name_text_input2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/guideline">
@@ -105,7 +112,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextLoginEmailAddress"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_username_icon"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#CDCDCD"
                         android:hint="Email"
                         android:inputType="textEmailAddress"
                         android:textColor="@android:color/black"
@@ -118,7 +128,7 @@
                     android:id="@+id/name_text_input2"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
@@ -129,7 +139,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextLoginPassword"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_key_solid"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#CDCDCD"
                         android:hint="Password"
                         android:inputType="textPassword"
                         android:textColor="@android:color/black"
@@ -180,6 +193,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutSpinner"
