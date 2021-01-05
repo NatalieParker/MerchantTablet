@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (currentUser != null) {
             Log.i(TAG, "User" + currentUser.toString());
+            goToKeypadPage();
         } else {
             Log.i(TAG, "No Current User");
         }

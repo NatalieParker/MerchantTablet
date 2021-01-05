@@ -1,5 +1,6 @@
 package com.jayurewards.tablet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.nfc.Tag;
@@ -155,24 +156,24 @@ public class UserKeypadActivity extends AppCompatActivity {
         keypadButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMerchantData();
+                givePoints();
             }
         });
     }
 
-    private void getMerchantData() {
+    private void givePoints() {
         GivePointsRequest params = new GivePointsRequest("1", "7578765083", 1, "company", 2, "merchant_web", "general", 0, 0, 1000, "Tuesday", "13:00");
         Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
         call.enqueue(new Callback<GivePointsResponse>() {
             @Override
-            public void onResponse(Call<GivePointsResponse> call, Response<GivePointsResponse> response) {
+            public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
 
-                Log.i(TAG, "Merchant data recieved: " + params);
+                Log.i(TAG, "Merchant data recieved: " + response.body());
 
             }
 
             @Override
-            public void onFailure(Call<GivePointsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
                 Log.i( TAG,"Get merchant data error: " + t.getMessage());
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
             }
