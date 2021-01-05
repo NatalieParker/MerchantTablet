@@ -37,6 +37,6 @@ public class RetrofitClient {
     public RestAuth getRestAuth() {
         return retrofit.create(RestAuth.class);
     }
-
+    public RestPoints getRestPoints(){return retrofit.create(RestPoints.class);}
 
 }

@@ -35,6 +35,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.jayurewards.tablet.helpers.AlertHelper;
+import com.jayurewards.tablet.models.GivePointsRequest;
 import com.jayurewards.tablet.models.MerchantModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
@@ -245,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
                             String firebaseUid = auth.getCurrentUser().getUid();
                             Log.i(TAG, "Firebase ID: " + firebaseUid);
                             getMerchantData(firebaseUid);
-                            goToKeypadPage();
                         } else {
                             Log.e(TAG, "signInWithEmail:failure", task.getException());
 
@@ -334,12 +334,14 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("firebaseUid", firebaseUid);
                 editor.putInt("merchantId", merchantId);
                 editor.apply();
+                goToKeypadPage();
             }
 
             @Override
             public void onFailure(@NonNull Call<MerchantModel> call, @NonNull Throwable t) {
 
                 Log.e(TAG, "Get merchant data error: " + t.getMessage());
+                AlertHelper.showNetworkAlert(MainActivity.this);
             }
         });
     }
