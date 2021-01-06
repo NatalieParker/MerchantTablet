@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.65"
+        app:layout_constraintGuide_percent="0.66"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -26,25 +26,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/keypadButton1"
+                android:id="@+id/key1"
+                android:tag="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="1" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/key2"
+                android:tag="2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="2" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/key3"
+                android:tag="3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -53,25 +56,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/key4"
+                android:tag="4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="4" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/key5"
+                android:tag="5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="5" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/key6"
+                android:tag="6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -80,25 +86,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/key7"
+                android:tag="7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="7" />
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/key8"
+                android:tag="8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="8" />
 
             <Button
-                android:id="@+id/button9"
+                android:id="@+id/key9"
+                android:tag="9"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -107,25 +116,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button10"
+                android:id="@+id/deleteButton"
+                android:tag="delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Button" />
 
             <Button
-                android:id="@+id/button11"
+                android:id="@+id/key0"
+                android:tag="0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="0" />
 
             <Button
-                android:id="@+id/button12"
+                android:id="@+id/enterButton"
+                android:tag="enter"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -135,14 +147,25 @@
 
     </LinearLayout>
 
+
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/jayuLogo"
         android:layout_width="120dp"
         android:layout_height="43dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="152dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="113dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_white_1200x815" />
+
+    <EditText
+        android:id="@+id/keypadInput"
+        android:layout_width="327dp"
+        android:layout_height="108dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/jayuLogo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

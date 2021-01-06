@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.models.GivePointsRequest;
@@ -21,7 +22,21 @@ import retrofit2.Response;
 
 public class UserKeypadActivity extends AppCompatActivity {
     private static final String TAG = "KeypadScreen";
-    private Button keypadButton1;
+    private Button key1;
+    private Button key2;
+    private Button key3;
+    private Button key4;
+    private Button key5;
+    private Button key6;
+    private Button key7;
+    private Button key8;
+    private Button key9;
+    private Button key0;
+    private Button deleteButton;
+    private Button enterButton;
+    private EditText keypadInput;
+
+
 
 
 //    private static final String TAG = "GivePointsFrag";
@@ -69,8 +84,8 @@ public class UserKeypadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
-        keypadButton1 = findViewById(R.id.keypadButton1);
-        clickListenerTest();
+        keypadInput = findViewById(R.id.keypadInput);
+
 
 
         //        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
@@ -150,15 +165,6 @@ public class UserKeypadActivity extends AppCompatActivity {
 //        setClickListeners();
 //
 //        return view;
-    }
-
-    private void clickListenerTest() {
-        keypadButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                givePoints();
-            }
-        });
     }
 
     private void givePoints() {
