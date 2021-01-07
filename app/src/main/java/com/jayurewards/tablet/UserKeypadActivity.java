@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.models.GivePointsRequest;
@@ -34,9 +37,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button key0;
     private Button deleteButton;
     private Button enterButton;
-    private EditText keypadInput;
-
-
+    private TextView keypadInput;
 
 
 //    private static final String TAG = "GivePointsFrag";
@@ -85,7 +86,21 @@ public class UserKeypadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
         keypadInput = findViewById(R.id.keypadInput);
-
+        key1 = findViewById(R.id.key1);
+        key2 = findViewById(R.id.key2);
+        key3 = findViewById(R.id.key3);
+        key4 = findViewById(R.id.key4);
+        key5 = findViewById(R.id.key5);
+        key6 = findViewById(R.id.key6);
+        key7 = findViewById(R.id.key7);
+        key8 = findViewById(R.id.key8);
+        key9 = findViewById(R.id.key9);
+        key0 = findViewById(R.id.key0);
+        deleteButton = findViewById(R.id.deleteButton);
+        enterButton = findViewById(R.id.enterButton);
+        keypadInput.addTextChangedListener(textWatcher);
+        setUpClickListeners();
+        enableDeleteButton(false);
 
 
         //        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
@@ -167,6 +182,73 @@ public class UserKeypadActivity extends AppCompatActivity {
 //        return view;
     }
 
+    private void setUpClickListeners() {
+        key1.setOnClickListener(v -> keypadButtonInput("1"));
+
+        key2.setOnClickListener(v -> keypadButtonInput("2"));
+
+        key3.setOnClickListener(v -> keypadButtonInput("3"));
+
+        key4.setOnClickListener(v -> keypadButtonInput("4"));
+
+        key5.setOnClickListener(v -> keypadButtonInput("5"));
+
+        key6.setOnClickListener(v -> keypadButtonInput("6"));
+
+        key7.setOnClickListener(v -> keypadButtonInput("7"));
+
+        key8.setOnClickListener(v -> keypadButtonInput("8"));
+
+        key9.setOnClickListener(v -> keypadButtonInput("9"));
+
+        key0.setOnClickListener(v -> keypadButtonInput("0"));
+
+        deleteButton.setOnClickListener(v -> {
+            String str = keypadInput.getText().toString();
+            String strNew = str.substring(0, str.length() - 1);
+            keypadInput.setText(strNew);
+        });
+
+        enterButton.setOnClickListener(v -> givePoints());
+    }
+
+    private void keypadButtonInput(String number) {
+        keypadInput.setText(keypadInput.getText() + number);
+    }
+
+    private void enableDeleteButton(boolean enabled) {
+        if (!enabled) {
+            deleteButton.setEnabled(false);
+        } else {
+            deleteButton.setEnabled(true);
+        }
+    }
+
+    private void checkForEmptyField() {
+        String keypad = keypadInput.getText().toString();
+
+        Log.i(TAG, "PHONE NUMBER: " + keypad);
+        boolean goEnableButton = keypad.length() >= 1;
+        enableDeleteButton(goEnableButton);
+    }
+
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkForEmptyField();
+        }
+    };
+
     private void givePoints() {
         GivePointsRequest params = new GivePointsRequest("1", "7578765083", 1, "company", 2, "merchant_web", "general", 0, 0, 1000, "Tuesday", "13:00");
         Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
@@ -180,7 +262,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-                Log.i( TAG,"Get merchant data error: " + t.getMessage());
+                Log.i(TAG, "Get merchant data error: " + t.getMessage());
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
             }
         });

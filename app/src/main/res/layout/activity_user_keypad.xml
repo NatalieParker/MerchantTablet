@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -31,15 +32,14 @@
 
             <Button
                 android:id="@+id/key1"
-                android:tag="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="1" />
+                android:text="1"
+                android:textColor="#FFFFFF" />
 
             <Button
                 android:id="@+id/key2"
-                android:tag="2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -47,7 +47,6 @@
 
             <Button
                 android:id="@+id/key3"
-                android:tag="3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -61,7 +60,6 @@
 
             <Button
                 android:id="@+id/key4"
-                android:tag="4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -69,7 +67,6 @@
 
             <Button
                 android:id="@+id/key5"
-                android:tag="5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -77,7 +74,6 @@
 
             <Button
                 android:id="@+id/key6"
-                android:tag="6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -91,7 +87,6 @@
 
             <Button
                 android:id="@+id/key7"
-                android:tag="7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -99,7 +94,6 @@
 
             <Button
                 android:id="@+id/key8"
-                android:tag="8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -107,7 +101,6 @@
 
             <Button
                 android:id="@+id/key9"
-                android:tag="9"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -121,7 +114,6 @@
 
             <Button
                 android:id="@+id/deleteButton"
-                android:tag="delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -129,7 +121,6 @@
 
             <Button
                 android:id="@+id/key0"
-                android:tag="0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -137,7 +128,6 @@
 
             <Button
                 android:id="@+id/enterButton"
-                android:tag="enter"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -158,13 +148,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_white_1200x815" />
 
-    <EditText
+    <TextView
         android:id="@+id/keypadInput"
         android:layout_width="327dp"
         android:layout_height="108dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="35dp"
         android:ems="10"
         android:inputType="number"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintStart_toEndOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/jayuLogo" />
 
