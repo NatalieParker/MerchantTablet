@@ -1,7 +1,7 @@
 package com.jayurewards.tablet.networking;
 
-import com.jayurewards.tablet.models.GivePointsRequest;
-import com.jayurewards.tablet.models.GivePointsResponse;
+import com.jayurewards.tablet.models.Points.GivePointsRequest;
+import com.jayurewards.tablet.models.Points.GivePointsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

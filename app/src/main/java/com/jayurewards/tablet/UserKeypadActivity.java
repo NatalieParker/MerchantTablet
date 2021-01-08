@@ -3,20 +3,19 @@ package com.jayurewards.tablet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.nfc.Tag;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jayurewards.tablet.helpers.AlertHelper;
-import com.jayurewards.tablet.models.GivePointsRequest;
-import com.jayurewards.tablet.models.GivePointsResponse;
-import com.jayurewards.tablet.models.MerchantModel;
+import com.jayurewards.tablet.helpers.AuthHelper;
+import com.jayurewards.tablet.models.Points.GivePointsRequest;
+import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
 import retrofit2.Call;
@@ -37,6 +36,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button key0;
     private Button deleteButton;
     private Button enterButton;
+    private Button signOutButton;
     private TextView keypadInput;
 
 
@@ -98,6 +98,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         key0 = findViewById(R.id.key0);
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
+        signOutButton = findViewById(R.id.signOutButton);
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
@@ -210,6 +211,13 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         enterButton.setOnClickListener(v -> givePoints());
+
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AuthHelper.logOut(UserKeypadActivity.this);
+            }
+        });
     }
 
     private void keypadButtonInput(String number) {

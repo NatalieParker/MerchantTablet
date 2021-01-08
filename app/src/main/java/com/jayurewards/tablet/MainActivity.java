@@ -1,13 +1,11 @@
 package com.jayurewards.tablet;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -21,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,7 +32,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.jayurewards.tablet.helpers.AlertHelper;
-import com.jayurewards.tablet.models.GivePointsRequest;
+import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.MerchantModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
@@ -325,15 +322,21 @@ public class MainActivity extends AppCompatActivity {
                 String firstName = merchant.getFirstName();
                 String email = merchant.getEmail();
                 String firebaseUid = merchant.getFirebaseUid();
+                String stripeId = merchant.getStripeId();
+                String subscriptionId = merchant.getSubscriptionId();
+//                String status = merchant.getStatus();
                 int merchantId = merchant.getMerchantId();
 
                 Log.i(TAG, "Merchant data response retrieved: " + firstName);
                 Log.i(TAG, "Merchant data retrieved: " + merchant);
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("email", email);
-                editor.putString("firebaseUid", firebaseUid);
-                editor.putInt("merchantId", merchantId);
+                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_EMAIL, email);
+                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID, firebaseUid);
+                editor.putInt(GlobalConstants.SHARED_PREF_MERCHANT_ID, merchantId);
+                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_STRIPE_ID, stripeId);
+                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_SUBSCRIPTION_ID, subscriptionId);
+//                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_STRIPE_STATUS, status);
                 editor.apply();
                 goToKeypadPage();
             }
