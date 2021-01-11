@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
+import com.jayurewards.tablet.models.CheckSubscriptionParams;
+import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.networking.RetrofitClient;
@@ -38,7 +42,6 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button enterButton;
     private Button signOutButton;
     private TextView keypadInput;
-
 
 //    private static final String TAG = "GivePointsFrag";
 //    private static final String TEAM_ID = "team_id";
@@ -102,7 +105,6 @@ public class UserKeypadActivity extends AppCompatActivity {
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
-
 
         //        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
 //
@@ -215,7 +217,30 @@ public class UserKeypadActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthHelper.logOut(UserKeypadActivity.this);
+                AuthHelper.logInCheck(UserKeypadActivity.this);
+            }
+        });
+    }
+
+    private void getMerchantSubscription(String subscription) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
+        String stripeId = sharedPref.getString("stripeId", null);
+        String subscriptionId = sharedPref.getString("subscriptionId", null);
+
+        Log.i(TAG, "STRIPE ID: " + sharedPref.getString("stripeId", null));
+        Log.i(TAG, "SUBSCRIPTION ID: " + sharedPref.getString("subscriptionId", null));
+
+        CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId,subscriptionId);
+        Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
+        call.enqueue(new Callback<CheckSubscriptionResponse>() {
+            @Override
+            public void onResponse(Call<CheckSubscriptionResponse> call, Response<CheckSubscriptionResponse> response) {
+                
+            }
+
+            @Override
+            public void onFailure(Call<CheckSubscriptionResponse> call, Throwable t) {
+
             }
         });
     }

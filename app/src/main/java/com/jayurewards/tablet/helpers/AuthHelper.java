@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.jayurewards.tablet.MainActivity;
 import com.jayurewards.tablet.UserKeypadActivity;
 
@@ -26,7 +28,9 @@ public class AuthHelper {
         Log.i(TAG, "USER SIGNED OUT AT: " + date);
     }
 
-    public static void logInCheck() {
-        
+    public static void logInCheck(Context currentScreen) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) logOut(currentScreen);
     }
+
 }
