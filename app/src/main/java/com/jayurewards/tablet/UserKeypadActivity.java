@@ -16,10 +16,12 @@ import android.widget.TextView;
 
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
+import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.CheckSubscriptionParams;
 import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
+import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
 import retrofit2.Call;
@@ -105,6 +107,8 @@ public class UserKeypadActivity extends AppCompatActivity {
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
+
+        getMerchantSubscription();
 
         //        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
 //
@@ -222,7 +226,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
     }
 
-    private void getMerchantSubscription(String subscription) {
+    private void getMerchantSubscription() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         String stripeId = sharedPref.getString("stripeId", null);
         String subscriptionId = sharedPref.getString("subscriptionId", null);
@@ -232,15 +236,39 @@ public class UserKeypadActivity extends AppCompatActivity {
 
         CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId,subscriptionId);
         Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
+
         call.enqueue(new Callback<CheckSubscriptionResponse>() {
             @Override
-            public void onResponse(Call<CheckSubscriptionResponse> call, Response<CheckSubscriptionResponse> response) {
-                
+            public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
+                CheckSubscriptionResponse status = response.body();
+                if (status != null &&
+                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
+                                || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
+                                || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
+                    getMerchantSubscription();
+                } else {
+                    String subStatus = "inactive";
+                    Log.w(TAG, "STATUS = FALSE");
+
+                    AuthHelper.logOut(UserKeypadActivity.this);
+                    sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID);
+                    sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID);
+                    sharedPref.edit().clear().apply();
+                    if (status != null && status.getStatus() != null) {
+                        status.setStatus(subStatus);
+                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
+
+                    }
+                }
+
+
+                Log.i(TAG, "STATUS: " + status);
             }
 
             @Override
-            public void onFailure(Call<CheckSubscriptionResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
 
+                Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
             }
         });
     }

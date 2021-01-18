@@ -95,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = auth.getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if (currentUser != null) {
-            Log.i(TAG, "User" + currentUser.toString());
-            goToKeypadPage();
-        } else {
-            Log.i(TAG, "No Current User");
-        }
+//        if (currentUser != null) {
+//            Log.i(TAG, "User" + currentUser.toString());
+//            goToKeypadPage();
+//        } else {
+//            Log.i(TAG, "No Current User");
+//        }
     }
 
     private void hideKeyboard() {
