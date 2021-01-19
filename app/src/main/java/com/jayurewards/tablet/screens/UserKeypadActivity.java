@@ -113,6 +113,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         setUpClickListeners();
         enableDeleteButton(false);
 
+        
         spinner.setVisibility(View.VISIBLE);
         getMerchantSubscription();
 
