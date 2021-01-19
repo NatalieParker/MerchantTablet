@@ -2,15 +2,11 @@ package com.jayurewards.tablet.helpers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.jayurewards.tablet.MainActivity;
-import com.jayurewards.tablet.UserKeypadActivity;
+import com.jayurewards.tablet.screens.MainActivity;
 
 import java.util.Date;
 

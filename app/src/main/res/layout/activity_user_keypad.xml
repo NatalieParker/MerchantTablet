@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#510D78"
-    tools:context=".UserKeypadActivity">
+    tools:context=".screens.UserKeypadActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -170,5 +170,9 @@
         android:text="Sign out"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/spinnerUserKeypad"
+        layout="@layout/view_spinner_default"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

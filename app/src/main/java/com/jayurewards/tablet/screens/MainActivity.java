@@ -1,4 +1,4 @@
-package com.jayurewards.tablet;
+package com.jayurewards.tablet.screens;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +31,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.MerchantModel;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         enableEmailSubmit(false);
         setUpClickListeners();
-        constraintLayoutSpinner = findViewById(R.id.constraintLayoutSpinner);
+        constraintLayoutSpinner = findViewById(R.id.spinnerLogin);
         constraintLayoutSpinner.setVisibility(View.GONE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -95,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = auth.getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
-//        if (currentUser != null) {
-//            Log.i(TAG, "User" + currentUser.toString());
-//            goToKeypadPage();
-//        } else {
-//            Log.i(TAG, "No Current User");
-//        }
+        if (currentUser != null) {
+            Log.i(TAG, "User" + currentUser.toString());
+            goToKeypadPage();
+        } else {
+            Log.i(TAG, "No Current User");
+        }
     }
 
     private void hideKeyboard() {

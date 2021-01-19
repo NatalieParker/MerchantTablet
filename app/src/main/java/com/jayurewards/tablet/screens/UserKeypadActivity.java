@@ -1,9 +1,10 @@
-package com.jayurewards.tablet;
+package com.jayurewards.tablet.screens;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
@@ -44,6 +46,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button enterButton;
     private Button signOutButton;
     private TextView keypadInput;
+    private ConstraintLayout spinner;
 
 //    private static final String TAG = "GivePointsFrag";
 //    private static final String TEAM_ID = "team_id";
@@ -104,10 +107,13 @@ public class UserKeypadActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
         signOutButton = findViewById(R.id.signOutButton);
+        spinner = findViewById(R.id.spinnerUserKeypad);
+
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
 
+        spinner.setVisibility(View.VISIBLE);
         getMerchantSubscription();
 
         //        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
@@ -226,6 +232,10 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Network calls
+     */
     private void getMerchantSubscription() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         String stripeId = sharedPref.getString("stripeId", null);
@@ -241,24 +251,50 @@ public class UserKeypadActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
                 CheckSubscriptionResponse status = response.body();
+
                 if (status != null &&
                         (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
-                    getMerchantSubscription();
+
+                    Log.i(TAG, "\n\n SUBSCRIPTION STATUS PASSED: " + status);
+                    getMerchantShops();
+
                 } else {
                     String subStatus = "inactive";
                     Log.w(TAG, "STATUS = FALSE");
 
-                    AuthHelper.logOut(UserKeypadActivity.this);
-                    sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID);
-                    sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID);
-                    sharedPref.edit().clear().apply();
+                    logoutMerchant();
+
                     if (status != null && status.getStatus() != null) {
                         status.setStatus(subStatus);
-                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
 
+                        // TODO: Check and verify this network call works
+
+                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
+                        Call<String> callUpdate = RetrofitClient.getInstance().getRestAuth().updateSubscriptionStatus(uss);
+                        callUpdate.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                Log.i(TAG, "UPDATE STATUS RESPONSE: " + response.body());
+
+
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
+
+
+                            }
+                        });
                     }
+
+
+                    Intent intent = new Intent(UserKeypadActivity.this, InactiveAccountActivity.class);
+                    startActivity(intent);
+
+
                 }
 
 
@@ -269,8 +305,27 @@ public class UserKeypadActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
 
                 Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
+                spinner.setVisibility(View.GONE);
+
+                if (t.getMessage() != null && t.getMessage().equals("timeout")) {
+                    logoutMerchant();
+                }
             }
         });
+    }
+
+    private void getMerchantShops() {
+        spinner.setVisibility(View.GONE);
+
+    }
+
+
+    private void logoutMerchant() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
+        AuthHelper.logOut(UserKeypadActivity.this);
+        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID).apply();
+        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID).apply();
+        sharedPref.edit().clear().apply();
     }
 
     private void keypadButtonInput(String number) {
