@@ -28,9 +28,12 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.jayurewards.tablet.BuildConfig;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences preferences;
-    private ConstraintLayout constraintLayoutSpinner;
+    private ConstraintLayout spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +75,15 @@ public class MainActivity extends AppCompatActivity {
         buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
-        emailEditText.requestFocus();
+//        emailEditText.requestFocus();
         auth = FirebaseAuth.getInstance();
         enableEmailSubmit(false);
         setUpClickListeners();
-        constraintLayoutSpinner = findViewById(R.id.spinnerLogin);
-        constraintLayoutSpinner.setVisibility(View.GONE);
+        spinner = findViewById(R.id.spinnerLogin);
+        spinner.setVisibility(View.GONE);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(BuildConfig.googleSigninWebClientId)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -169,23 +174,23 @@ public class MainActivity extends AppCompatActivity {
         emailLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 signIn(email, password);
-                constraintLayoutSpinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
             }
         });
         buttonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 switch (v.getId()) {
                     case R.id.buttonGoogle:
                         googleSignIn();
-                        constraintLayoutSpinner.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
                         break;
                 }
 
@@ -194,19 +199,19 @@ public class MainActivity extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 website("https://portal.jayu.us/auth/signup");
-                constraintLayoutSpinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
             }
         });
         buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 website("https://portal.jayu.us/auth/forgot-password");
-                constraintLayoutSpinner.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
             }
         });
     }
@@ -270,10 +275,10 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            goToKeypadPage();
+            firebaseSignInWithGoogle(account);
 
         } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e);
+            Log.e(TAG, "signInResult:failed code=" + e);
 //
             switch (e.getStatusCode()) {
                 case 12501:
@@ -301,6 +306,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
         hideKeyboard();
+    }
+
+
+    private void firebaseSignInWithGoogle(GoogleSignInAccount account) {
+        Log.i(TAG, "ACCOUNT: " + account.getIdToken() + " \n" + account);
+        AuthCredential cred = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        auth.signInWithCredential(cred).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful() && auth.getCurrentUser() != null) {
+                    String firebaseUid = auth.getCurrentUser().getUid();
+                    getMerchantData(firebaseUid);
+                } else {
+                    Log.e(TAG, "MERCHANT GOOGLE FIREBASE AUTH ERROR" + task.getException());
+                    spinner.setVisibility(View.GONE);
+                    AlertHelper.showNetworkAlert(MainActivity.this);
+                }
+            }
+        });
     }
 
     private void website(String setWebsite) {
@@ -346,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<MerchantModel> call, @NonNull Throwable t) {
 
                 Log.e(TAG, "Get merchant data error: " + t.getMessage());
+                spinner.setVisibility(View.GONE);
                 AlertHelper.showNetworkAlert(MainActivity.this);
             }
         });

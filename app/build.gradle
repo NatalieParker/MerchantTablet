@@ -22,6 +22,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Allow http traffic for local host only
+            manifestPlaceholders = [usesCleartextTraffic:"true"]
+
+            buildConfigField "String",'googleSigninWebClientId','"336479330285-rsu2kcpr34v39el6qh9oid1kli137s45.apps.googleusercontent.com"'
+
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

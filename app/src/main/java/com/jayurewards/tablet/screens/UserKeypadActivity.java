@@ -23,8 +23,12 @@ import com.jayurewards.tablet.models.CheckSubscriptionParams;
 import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
+import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
 import com.jayurewards.tablet.networking.RetrofitClient;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +51,8 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button signOutButton;
     private TextView keypadInput;
     private ConstraintLayout spinner;
+    private SharedPreferences sharedPref;
+    private ArrayList<ShopAdminModel> shops = new ArrayList<>();
 
 //    private static final String TAG = "GivePointsFrag";
 //    private static final String TEAM_ID = "team_id";
@@ -108,6 +114,8 @@ public class UserKeypadActivity extends AppCompatActivity {
         enterButton = findViewById(R.id.enterButton);
         signOutButton = findViewById(R.id.signOutButton);
         spinner = findViewById(R.id.spinnerUserKeypad);
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
 
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
@@ -227,7 +235,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthHelper.logInCheck(UserKeypadActivity.this);
+                AuthHelper.logOut(UserKeypadActivity.this);
             }
         });
     }
@@ -237,7 +245,6 @@ public class UserKeypadActivity extends AppCompatActivity {
      * Network calls
      */
     private void getMerchantSubscription() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         String stripeId = sharedPref.getString("stripeId", null);
         String subscriptionId = sharedPref.getString("subscriptionId", null);
 
@@ -316,12 +323,25 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void getMerchantShops() {
         spinner.setVisibility(View.GONE);
+        int merchantId = sharedPref.getInt("merchantId", 0);
+        Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestBusiness().getMerchantShops(merchantId);
+        call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
 
+                shops = response.body();
+                Log.i(TAG, "MERCHANT SHOPS: " + shops);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
 
     private void logoutMerchant() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         AuthHelper.logOut(UserKeypadActivity.this);
         sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID).apply();
         sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID).apply();
@@ -372,7 +392,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
 
-                Log.i(TAG, "Merchant data recieved: " + response.body());
+                Log.i(TAG, "Merchant data received: " + response.body());
 
             }
 
