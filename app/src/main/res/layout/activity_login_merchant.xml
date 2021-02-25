@@ -1,246 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   >
+    android:background="#BF4949">
 
-<!--    <ScrollView-->
+    <!--    Background image-->
+    <!--    TODO: Change background image and make it wider.-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_screen_bkg" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".screens.LoginMerchantActivity">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.15" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonForgotPassword"
+                    android:layout_width="181dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="116dp"
+                    android:background="#00FFFFFF"
+                    android:text="Forgot password?"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="#A6A6A6"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonLoginSubmit"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonLoginSubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Login"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/name_text_input2" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonGoogle"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="20dp"
+                    android:drawableLeft="@drawable/ic_google_icon"
+                    android:text="Log in with Google"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="#BF4949"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonSignUp"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="29dp"
+                    android:layout_marginEnd="28dp"
+                    android:background="#00FFFFFF"
+                    android:text="Sign up"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#673AB7"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonGoogle" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_text_input"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/guideline">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextLoginEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_username_icon"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#CDCDCD"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_text_input2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_text_input">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextLoginPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_key_solid"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#CDCDCD"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/name_text_input" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="40dp"
+                    android:text="Don't have an account?"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="#A6A6A6"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonGoogle" />
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="85dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="105dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="106dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/logo_purple_1200x815" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="143dp"
+                    android:text="or"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonLoginSubmit" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+    <include
+        android:id="@+id/spinnerLogin"
+        layout="@layout/view_spinner_default"/>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/constraintLayoutSpinner"-->
 <!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="#99000000"-->
+<!--        android:visibility="gone">-->
 
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
+<!--        <androidx.constraintlayout.widget.Guideline-->
+<!--            android:id="@+id/guideline3"-->
+<!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
-<!--            android:paddingBottom="30dp"-->
-<!--            tools:context=".screens.onboarding.UserRegistrationActivity">-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintGuide_percent="1.0" />-->
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/layoutMerchantLoginTop"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintTop_toTopOf="parent">-->
+<!--        <ProgressBar-->
+<!--            android:layout_width="90dp"-->
+<!--            android:layout_height="90dp"-->
+<!--            android:layout_marginStart="439dp"-->
+<!--            android:layout_marginEnd="431dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/guideline3" />-->
 
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/layoutMerchantLoginNav"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="10dp"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
-
-<!--                    <ImageButton-->
-<!--                        android:id="@+id/buttonMerchantLoginBack"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="0dp"-->
-<!--                        android:layout_marginStart="10dp"-->
-<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
-<!--                        android:contentDescription="@string/back"-->
-<!--                        android:src="?attr/homeAsUpIndicator"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/textEnterPhoneBusinessHeader"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="0dp"-->
-<!--                        android:fontFamily="@font/soleil_bold"-->
-<!--                        android:gravity="end|center_vertical"-->
-<!--                        android:text="@string/don_t_have_an_account"-->
-<!--                        android:textColor="@android:color/black"-->
-<!--                        android:textSize="16sp"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintEnd_toStartOf="@+id/buttonMerchantLoginSignUp"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                    <com.google.android.material.button.MaterialButton-->
-<!--                        android:id="@+id/buttonMerchantLoginSignUp"-->
-<!--                        style="@style/Widget.MaterialComponents.Button.TextButton"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginStart="0dp"-->
-<!--                        android:fontFamily="@font/soleil_bold"-->
-<!--                        android:letterSpacing="0"-->
-<!--                        android:paddingStart="3dp"-->
-<!--                        android:paddingEnd="0dp"-->
-<!--                        android:text="@string/signup"-->
-<!--                        android:textAllCaps="false"-->
-<!--                        android:textColor="@color/colorPrimary"-->
-<!--                        android:textSize="16sp"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent" />-->
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="120dp"-->
-<!--                    android:layout_height="80dp"-->
-<!--                    android:layout_marginStart="20dp"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:contentDescription="@string/logo"-->
-<!--                    android:scaleType="fitStart"-->
-<!--                    android:src="@drawable/logo_purple"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/layoutMerchantLoginNav" />-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textMerchantLoginHeader"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:fontFamily="@font/soleil_bold"-->
-<!--                android:gravity="start"-->
-<!--                android:text="@string/business_login"-->
-<!--                android:textColor="@android:color/black"-->
-<!--                android:textSize="23sp"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/layoutMerchantLoginTop" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textMerchantLoginEmail"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:fontFamily="@font/soleil_book"-->
-<!--                android:text="@string/email"-->
-<!--                android:textColor="@color/colorGray"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/textMerchantLoginHeader" />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/editTextMerchantLoginEmail"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_marginEnd="15dp"-->
-<!--                android:backgroundTint="@android:color/darker_gray"-->
-<!--                android:fontFamily="@font/soleil_regular"-->
-<!--                android:imeOptions="actionNext"-->
-<!--                android:importantForAutofill="no"-->
-<!--                android:inputType="textEmailAddress"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/textMerchantLoginEmail"-->
-<!--                tools:ignore="LabelFor" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/textMerchantLoginPassword"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:fontFamily="@font/soleil_book"-->
-<!--                android:text="@string/password"-->
-<!--                android:textColor="@color/colorGray"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/editTextMerchantLoginEmail" />-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/editTextMerchantLoginPassword"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_marginEnd="15dp"-->
-<!--                android:backgroundTint="@android:color/darker_gray"-->
-<!--                android:fontFamily="@font/soleil_regular"-->
-<!--                android:imeOptions="actionDone"-->
-<!--                android:importantForAutofill="no"-->
-<!--                android:inputType="textPassword"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/textMerchantLoginPassword"-->
-<!--                tools:ignore="LabelFor" />-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/layoutMerchantLoginButtonRow"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:orientation="horizontal"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/editTextMerchantLoginPassword">-->
-
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/buttonMerchantLoginForgotPassword"-->
-<!--                    style="@style/Widget.MaterialComponents.Button.TextButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:fontFamily="@font/soleil_bold"-->
-<!--                    android:gravity="start"-->
-<!--                    android:letterSpacing="0"-->
-<!--                    android:text="@string/forgot_password"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="@android:color/black"-->
-<!--                    android:textSize="16sp"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/editTextMerchantLoginEmail" />-->
-
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/buttonMerchantLoginEmailSubmit"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:fontFamily="@font/soleil_bold"-->
-<!--                    android:letterSpacing="0"-->
-<!--                    android:text="@string/login"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="#ffffff"-->
-<!--                    android:textSize="17sp" />-->
-<!--            </LinearLayout>-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/layoutMerchantLoginOrSeparator"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginStart="20dp"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:layout_marginEnd="20dp"-->
-<!--                android:gravity="center"-->
-<!--                android:orientation="horizontal"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/layoutMerchantLoginButtonRow">-->
-
-<!--                <View-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="2dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:background="?android:attr/listDivider" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:fontFamily="@font/soleil"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="@string/or"-->
-<!--                    android:textSize="16sp"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/layoutMerchantLoginButtonRow" />-->
-
-<!--                <View-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="2dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:background="?android:attr/listDivider" />-->
-<!--            </LinearLayout>-->
-
-<!--            <com.google.android.gms.common.SignInButton-->
-<!--                android:id="@+id/buttonMerchantLoginGoogleSignin"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:text="@string/common_signin_button_text_long"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/layoutMerchantLoginOrSeparator" />-->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--    </ScrollView>-->
-
-<!--    &lt;!&ndash;Loading Spinner&ndash;&gt;-->
-<!--    <include-->
-<!--        android:id="@+id/loadingMerchantLogin"-->
-<!--        layout="@layout/view_loading_standard" />-->
-
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

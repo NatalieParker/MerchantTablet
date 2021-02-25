@@ -10,8 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MerchantTablet">
+
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".screens.LoginMerchantActivity"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity">
@@ -27,7 +28,12 @@
         <activity
             android:name=".screens.InactiveAccountActivity"
             android:screenOrientation="sensorLandscape" />
-
+        <activity
+            android:name=".screens.LoginTeam"
+            android:screenOrientation="sensorLandscape" />
+        <activity
+            android:name=".screens.RegistrationTeam"
+            android:screenOrientation="sensorLandscape"/>
     </application>
 
 </manifest>

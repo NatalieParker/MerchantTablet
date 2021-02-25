@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.jayurewards.tablet.screens.MainActivity;
+import com.jayurewards.tablet.screens.LoginMerchantActivity;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class AuthHelper {
     public static void logOut(Context currentScreen) {
         FirebaseAuth.getInstance().signOut();
         Date date = new Date();
-        Intent intent = new Intent(currentScreen, MainActivity.class);
+        Intent intent = new Intent(currentScreen, LoginMerchantActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         currentScreen.startActivity(intent);
 

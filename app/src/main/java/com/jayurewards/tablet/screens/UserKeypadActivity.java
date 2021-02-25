@@ -45,6 +45,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button deleteButton;
     private Button enterButton;
     private Button signOutButton;
+    private Button goToTeamLoginButton;
     private TextView keypadInput;
     private ConstraintLayout spinner;
 
@@ -107,13 +108,14 @@ public class UserKeypadActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
         signOutButton = findViewById(R.id.signOutButton);
+        goToTeamLoginButton = findViewById(R.id.goToTeamLoginButton);
         spinner = findViewById(R.id.spinnerUserKeypad);
 
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
 
-        
+
         spinner.setVisibility(View.VISIBLE);
         getMerchantSubscription();
 
@@ -229,6 +231,16 @@ public class UserKeypadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AuthHelper.logInCheck(UserKeypadActivity.this);
+            }
+        });
+
+        goToTeamLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "SENT TO LOGIN TEAM SCREEN");
+
+                Intent intent = new Intent(UserKeypadActivity.this, LoginTeam.class);
+                startActivity(intent);
             }
         });
     }
