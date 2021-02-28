@@ -3,6 +3,7 @@ package com.jayurewards.tablet.screens;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import com.jayurewards.tablet.R;
 public class LoginTeam extends AppCompatActivity {
 
     EditText phoneNumberInput;
-    Button buttonCancel;
+    Button buttonBack;
     Button buttonSend;
 
     @Override
@@ -22,14 +23,15 @@ public class LoginTeam extends AppCompatActivity {
         setContentView(R.layout.activity_login_team);
 
         phoneNumberInput = findViewById(R.id.phoneNumberInput);
-        buttonCancel = findViewById(R.id.buttonCancel);
+        buttonBack = findViewById(R.id.buttonCancel);
+        buttonBack.setPaintFlags(buttonBack.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         buttonSend = findViewById(R.id.buttonSend);
 
         setUpClickListeners();
     }
 
     private void setUpClickListeners () {
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
+        buttonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
