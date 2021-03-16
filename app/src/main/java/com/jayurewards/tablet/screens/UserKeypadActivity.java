@@ -49,6 +49,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private TextView keypadInput;
     private ConstraintLayout spinner;
 
+    //test
 //    private static final String TAG = "GivePointsFrag";
 //    private static final String TEAM_ID = "team_id";
 //    private static final String MERCHANT_SHOPS = "merchantShops";
