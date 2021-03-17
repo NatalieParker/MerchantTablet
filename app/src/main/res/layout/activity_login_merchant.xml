@@ -46,7 +46,7 @@
                     android:layout_height="40dp"
                     android:layout_marginEnd="116dp"
                     android:background="#00FFFFFF"
-                    android:text="Forgot password?"
+                    android:text="@string/forgot_password"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="#A6A6A6"
@@ -57,13 +57,13 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLoginSubmit"
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="20dp"
+                    android:backgroundTint="#510d78"
                     android:text="Login"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#510d78"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/name_text_input2" />
@@ -71,12 +71,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonGoogle"
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:drawableLeft="@drawable/ic_google_icon"
-                    android:text="Log in with Google"
+                    android:text="Sign in with Google"
                     android:textColor="#FFFFFF"
                     app:backgroundTint="#BF4949"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,10 +85,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonApple"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:drawableLeft="@drawable/ic_apple_logo"
+                    android:text="Sign in with Apple"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonGoogle" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonSignUp"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="29dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="28dp"
                     android:background="#00FFFFFF"
                     android:text="Sign up"
@@ -96,8 +111,9 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="#510d78"
                     android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonGoogle" />
+                    app:layout_constraintTop_toBottomOf="@+id/buttonApple" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/name_text_input"
@@ -144,7 +160,7 @@
                         android:drawableStart="@drawable/ic_key_solid"
                         android:drawablePadding="10dp"
                         android:drawableTint="#CDCDCD"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:textColor="@android:color/black"
                         android:textSize="12sp"
@@ -157,16 +173,16 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="159dp"
+                    android:layout_height="22dp"
                     android:layout_marginStart="48dp"
-                    android:layout_marginTop="40dp"
-                    android:text="Don't have an account?"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/don_t_have_an_account"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="#A6A6A6"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonGoogle" />
+                    app:layout_constraintTop_toBottomOf="@+id/buttonApple" />
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -185,7 +201,7 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="143dp"
                     android:text="or"
                     app:layout_constraintEnd_toEndOf="parent"

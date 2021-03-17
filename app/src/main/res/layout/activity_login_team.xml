@@ -79,6 +79,7 @@
                         android:id="@+id/phoneNumberInput"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:drawableStart="@drawable/ic_phone_"
                         android:drawablePadding="10dp"
                         android:drawableTint="#CDCDCD"
@@ -117,7 +118,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/textLoginExplanation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="45dp"
@@ -132,39 +133,43 @@
 
 
 <!--                TODO: Add phone field-->
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/layoutEnterPhoneInput"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="15dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginEnd="15dp"-->
-<!--                    android:gravity="center"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/textEnterPhoneHeader">-->
+                <LinearLayout
+                    android:id="@+id/layoutEnterPhoneInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/textLoginExplanation">
 
-<!--                    <com.hbb20.CountryCodePicker-->
-<!--                        android:id="@+id/ccpEnterPhone"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        app:ccp_autoDetectCountry="true"-->
-<!--                        app:ccp_countryPreference="US,KR"-->
-<!--                        app:ccp_textSize="18sp" />-->
+                    <com.hbb20.CountryCodePicker
+                        android:id="@+id/ccpEnterPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:ccp_autoDetectCountry="true"
+                        app:ccp_countryPreference="US,KR"
+                        app:ccp_textSize="18sp" />
 
-<!--                    <EditText-->
-<!--                        android:id="@+id/editTextEnterPhone"-->
-<!--                        android:layout_width="250dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:backgroundTint="@color/colorPrimary"-->
-<!--                        android:fontFamily="@font/soleil_regular"-->
-<!--                        android:hint="@string/enter_phone_number"-->
-<!--                        android:importantForAutofill="no"-->
-<!--                        android:inputType="phone"-->
-<!--                        android:maxLength="14"-->
-<!--                        android:textColorHint="@color/colorGray"-->
-<!--                        android:textSize="18sp" />-->
+                    <EditText
+                        android:id="@+id/editTextEnterPhone"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_phone_"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="#CDCDCD"
+                        android:ems="10"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:fontFamily="@font/soleil_regular"
+                        android:hint="@string/enter_phone_number"
+                        android:importantForAutofill="no"
+                        android:inputType="phone"
+                        android:maxLength="14"
+                        android:textColorHint="@color/colorGray"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-<!--                </LinearLayout>-->
+                </LinearLayout>
 
 
 

@@ -26,11 +26,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.OAuthProvider;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
@@ -52,6 +55,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private MaterialButton emailLoginButton;
     private MaterialButton buttonGoogle;
+    private MaterialButton buttonApple;
     private MaterialButton buttonSignUp;
     private MaterialButton buttonForgotPassword;
     private FirebaseAuth auth;
@@ -68,6 +72,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextLoginPassword);
         emailLoginButton = findViewById(R.id.buttonLoginSubmit);
         buttonGoogle = findViewById(R.id.buttonGoogle);
+        buttonApple = findViewById(R.id.buttonApple);
         buttonSignUp = findViewById(R.id.buttonSignUp);
         buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
         emailEditText.addTextChangedListener(textWatcher);
@@ -189,6 +194,55 @@ public class LoginMerchantActivity extends AppCompatActivity {
                         break;
                 }
 
+            }
+        });
+
+        buttonApple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OAuthProvider.Builder provider = OAuthProvider.newBuilder("apple.com");
+                Log.i(TAG,"SIGN IN WITH APPLE BUTTON PRESSED");
+
+                Task<AuthResult> pending = auth.getPendingAuthResult();
+                if (pending != null) {
+                    pending.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            authResult.getUser();
+                            authResult.getAdditionalUserInfo();
+                            authResult.getCredential();
+                            Log.d(TAG,"CHECKPENDING:ONSUCCESS:" + authResult);
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG,"CHECKPENDING:ONFAILURE", e);
+                        }
+                    });
+                } else {
+                    Log.d(TAG,"PENDING: NULL");
+
+                    auth.startActivityForSignInWithProvider(LoginMerchantActivity.this, provider.build())
+                            .addOnSuccessListener(
+                                    new OnSuccessListener<AuthResult>() {
+                                        @Override
+                                        public void onSuccess(AuthResult authResult) {
+                                            Log.d(TAG, "ACTIVITYSIGNIN:ONSUCCESS:" + authResult.getUser());
+                                            FirebaseUser user = authResult.getUser();
+                                        }
+                                    }
+                            )
+                            .addOnFailureListener(
+                                    new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
+                                            Log.w(TAG,"ACTIVITYSIGNIN:ONFAILURE", e);
+                                        }
+                                    }
+                            );
+                }
             }
         });
         buttonSignUp.setOnClickListener(new View.OnClickListener() {

@@ -231,7 +231,8 @@ public class UserKeypadActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthHelper.logInCheck(UserKeypadActivity.this);
+                AuthHelper.logOut(UserKeypadActivity.this);
+                Log.i(TAG,"SIGN OUT BUTTON PRESSED");
             }
         });
 

@@ -10,9 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MerchantTablet">
-
         <activity
-            android:name=".screens.LoginMerchantActivity"
+            android:name=".screens.SplashScreenActivity"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity">
@@ -22,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".screens.LoginMerchantActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="sensorLandscape"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".screens.UserKeypadActivity"
             android:screenOrientation="sensorLandscape" />
@@ -33,7 +38,7 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".screens.RegistrationTeam"
-            android:screenOrientation="sensorLandscape"/>
+            android:screenOrientation="sensorLandscape" />
     </application>
 
 </manifest>
