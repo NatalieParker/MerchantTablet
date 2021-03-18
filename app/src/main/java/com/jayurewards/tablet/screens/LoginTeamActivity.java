@@ -40,10 +40,10 @@ public class LoginTeamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_team);
 
-        phoneNumberInput = findViewById(R.id.editTextEnterPhone);
-        buttonBack = findViewById(R.id.buttonCancel);
-        buttonSend = findViewById(R.id.buttonSend);
-        ccp = findViewById(R.id.ccpEnterPhone);
+        phoneNumberInput = findViewById(R.id.editTextLoginTeamEnterPhone);
+        buttonBack = findViewById(R.id.buttonLoginTeamCancel);
+        buttonSend = findViewById(R.id.buttonLoginTeamSend);
+        ccp = findViewById(R.id.ccpLoginTeamEnterPhone);
 
         phoneNumberInput.addTextChangedListener(textWatcher);
         phoneNumberInput.requestFocus();
@@ -122,7 +122,7 @@ public class LoginTeamActivity extends AppCompatActivity {
 
 //         Back button returns to this activity
         fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.add(R.id.frameVerifyPhoneFragment, fragment, "Verify_Fragment").commit();
+        fragmentTransaction.add(R.id.frameLoginTeamVerifyPhoneFragment, fragment, "Verify_Fragment").commit();
     }
 
 

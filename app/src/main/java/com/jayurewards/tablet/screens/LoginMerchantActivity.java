@@ -68,20 +68,20 @@ public class LoginMerchantActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_merchant);
 
-        emailEditText = findViewById(R.id.editTextLoginEmailAddress);
-        passwordEditText = findViewById(R.id.editTextLoginPassword);
-        emailLoginButton = findViewById(R.id.buttonLoginSubmit);
-        buttonGoogle = findViewById(R.id.buttonGoogle);
-        buttonApple = findViewById(R.id.buttonApple);
-        buttonSignUp = findViewById(R.id.buttonSignUp);
-        buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
+        emailEditText = findViewById(R.id.editTextLoginMerchantEmailAddress);
+        passwordEditText = findViewById(R.id.editTextLoginMerchantPassword);
+        emailLoginButton = findViewById(R.id.buttonLoginMerchantLoginSubmit);
+        buttonGoogle = findViewById(R.id.buttonLoginMerchantGoogle);
+        buttonApple = findViewById(R.id.buttonLoginMerchantApple);
+        buttonSignUp = findViewById(R.id.buttonLoginMerchantSignUp);
+        buttonForgotPassword = findViewById(R.id.buttonLoginMerchantForgotPassword);
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
         emailEditText.requestFocus();
         auth = FirebaseAuth.getInstance();
         enableEmailSubmit(false);
         setUpClickListeners();
-        constraintLayoutSpinner = findViewById(R.id.spinnerLogin);
+        constraintLayoutSpinner = findViewById(R.id.spinnerLoginMerchant);
         constraintLayoutSpinner.setVisibility(View.GONE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -188,7 +188,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 constraintLayoutSpinner.setVisibility(View.VISIBLE);
                 preventDuplicateClicks();
                 switch (v.getId()) {
-                    case R.id.buttonGoogle:
+                    case R.id.buttonLoginMerchantGoogle:
                         googleSignIn();
                         constraintLayoutSpinner.setVisibility(View.GONE);
                         break;
@@ -386,12 +386,12 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 Log.i(TAG, "Merchant data retrieved: " + merchant);
 
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_EMAIL, email);
-                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID, firebaseUid);
-                editor.putInt(GlobalConstants.SHARED_PREF_MERCHANT_ID, merchantId);
-                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_STRIPE_ID, stripeId);
-                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_SUBSCRIPTION_ID, subscriptionId);
-//                editor.putString(GlobalConstants.SHARED_PREF_MERCHANT_STRIPE_STATUS, status);
+                editor.putString(GlobalConstants.EMAIL, email);
+                editor.putString(GlobalConstants.MERCHANT_FIREBASE_UID, firebaseUid);
+                editor.putInt(GlobalConstants.MERCHANT_ID, merchantId);
+                editor.putString(GlobalConstants.STRIPE_ID, stripeId);
+                editor.putString(GlobalConstants.SUBSCRIPTION_ID, subscriptionId);
+//                editor.putString(GlobalConstants.STRIPE_STATUS, stripeStatus);
                 editor.apply();
                 goToKeypadPage();
             }

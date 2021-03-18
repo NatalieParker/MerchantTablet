@@ -4,7 +4,7 @@ plugins {
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-
+apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.jayurewards.tablet"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -51,8 +51,10 @@ dependencies {
     /**
      * Firebase
      */
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
@@ -73,7 +75,6 @@ dependencies {
  * Country dialing codes with flag picker
  */
     implementation 'com.hbb20:ccp:2.4.0'
-    implementation 'com.hbb20:ccp:X.Y.Z'
 
 // Circular images
     implementation 'de.hdodenhof:circleimageview:3.1.0'

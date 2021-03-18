@@ -95,21 +95,21 @@ public class UserKeypadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
-        keypadInput = findViewById(R.id.keypadInput);
-        key1 = findViewById(R.id.key1);
-        key2 = findViewById(R.id.key2);
-        key3 = findViewById(R.id.key3);
-        key4 = findViewById(R.id.key4);
-        key5 = findViewById(R.id.key5);
-        key6 = findViewById(R.id.key6);
-        key7 = findViewById(R.id.key7);
-        key8 = findViewById(R.id.key8);
-        key9 = findViewById(R.id.key9);
-        key0 = findViewById(R.id.key0);
+        keypadInput = findViewById(R.id.textViewUserKeypadInput);
+        key1 = findViewById(R.id.buttonUserKeypadKey1);
+        key2 = findViewById(R.id.buttonUserKeypadKey2);
+        key3 = findViewById(R.id.buttonUserKeypadKey3);
+        key4 = findViewById(R.id.buttonUserKeypadKey4);
+        key5 = findViewById(R.id.buttonUserKeypadKey5);
+        key6 = findViewById(R.id.buttonUserKeypadKey6);
+        key7 = findViewById(R.id.buttonUserKeypadKey7);
+        key8 = findViewById(R.id.buttonUserKeypadKey8);
+        key9 = findViewById(R.id.buttonUserKeypadKey9);
+        key0 = findViewById(R.id.buttonUserKeypadKey0);
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
-        signOutButton = findViewById(R.id.signOutButton);
-        goToTeamLoginButton = findViewById(R.id.goToTeamLoginButton);
+        signOutButton = findViewById(R.id.buttonUserKeypadSignOut);
+        goToTeamLoginButton = findViewById(R.id.buttonUserKeypadSwitchToEmployeeAccount);
         spinner = findViewById(R.id.spinnerUserKeypad);
 
         keypadInput.addTextChangedListener(textWatcher);
@@ -338,13 +338,14 @@ public class UserKeypadActivity extends AppCompatActivity {
     private void logoutMerchant() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         AuthHelper.logOut(UserKeypadActivity.this);
-        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID).apply();
-        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID).apply();
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
         sharedPref.edit().clear().apply();
     }
 
     private void keypadButtonInput(String number) {
-        keypadInput.setText(keypadInput.getText() + number);
+        String digit = keypadInput.getText() + number;
+        keypadInput.setText(digit);
     }
 
     private void enableDeleteButton(boolean enabled) {
@@ -461,7 +462,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                String type = GlobalConstants.POINT_TYPE_GENERAL;
 //
 //                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-//                String userPhone = sharedPreferences.getString(GlobalConstants.SHARED_PREF_PHONE, null);
+//                String userPhone = sharedPreferences.getString(GlobalConstants.PHONE, null);
 //
 //                if (userPhone != null && userPhone.equals(phone)) {
 //                    AlertService.showAlert(getActivity(), "Not Allowed", "You cannot give yourself reward points.");
