@@ -241,7 +241,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i(TAG, "SENT TO LOGIN TEAM SCREEN");
 
-                Intent intent = new Intent(UserKeypadActivity.this, LoginTeam.class);
+                Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
                 startActivity(intent);
             }
         });

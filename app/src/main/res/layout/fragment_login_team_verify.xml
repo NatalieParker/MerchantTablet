@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/login_screen_bkg"
+    tools:context=".screens.LoginTeamVerifyFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="320dp"
+            android:layout_height="360dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/bg_rounded_corners_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonVerifyFragmentCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="103dp"
+                android:layout_marginEnd="109dp"
+                android:layout_marginBottom="5dp"
+                android:background="#00FFFFFF"
+                android:text="Back"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#510d78"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayoutVerifyFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="170dp"
+                android:layout_marginEnd="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/editTextVerifyFragmentVerificationInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableStart="@drawable/ic_key_solid"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="#CDCDCD"
+                    android:ems="10"
+                    android:hint="Verification Code"
+                    android:inputType="phone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonVerifyFragmentSubmit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginTop="28dp"
+                android:backgroundTint="#510d78"
+                android:text="verify"
+                app:cornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayoutVerifyFragment"/>
+
+            <ImageView
+                android:id="@+id/imageViewVerifyFragmentJayuLogo"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo_purple_1200x815" />
+
+            <TextView
+                android:id="@+id/textViewVerifyFragmentAssignTabletToCashier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="70dp"
+                android:text="Assign tablet to cashier"
+                android:textColor="#5B7B98"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewVerifyFragmentJayuLogo" />
+
+            <TextView
+                android:id="@+id/textViewVerifyFragmentLoginExplanation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="45dp"
+                android:text="Enter Code Sent to"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewVerifyFragmentAssignTabletToCashier" />
+
+            <TextView
+                android:id="@+id/textViewVerifyFragmentUserPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewVerifyFragmentLoginExplanation" />
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/layoutEnterPhoneInputFragment"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="15dp"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textViewVerifyFragmentLoginExplanation">-->
+
+<!--                <com.hbb20.CountryCodePicker-->
+<!--                    android:id="@+id/ccpEnterPhoneFragment"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:ccp_autoDetectCountry="true"-->
+<!--                    app:ccp_countryPreference="US,KR"-->
+<!--                    app:ccp_textSize="18sp" />-->
+
+<!--                <EditText-->
+<!--                    android:id="@+id/editTextEnterPhoneFragment"-->
+<!--                    android:layout_width="250dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:backgroundTint="@color/colorPrimary"-->
+<!--                    android:drawableStart="@drawable/ic_phone_"-->
+<!--                    android:drawablePadding="10dp"-->
+<!--                    android:drawableTint="#CDCDCD"-->
+<!--                    android:ems="10"-->
+<!--                    android:hint="@string/enter_phone_number"-->
+<!--                    android:importantForAutofill="no"-->
+<!--                    android:inputType="phone"-->
+<!--                    android:maxLength="14"-->
+<!--                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+<!--                    android:textColorHint="@color/colorGray" />-->
+
+<!--            </LinearLayout>-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

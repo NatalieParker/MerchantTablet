@@ -34,7 +34,7 @@
             android:name=".screens.InactiveAccountActivity"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".screens.LoginTeam"
+            android:name=".screens.LoginTeamActivity"
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".screens.RegistrationTeam"
