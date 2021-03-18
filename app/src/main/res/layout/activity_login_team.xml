@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonCancel"
+                android:id="@+id/buttonLoginTeamCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="103dp"
@@ -39,11 +39,11 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonSend"
+                android:id="@+id/buttonLoginTeamSend"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginEnd="40dp"
                 android:backgroundTint="#510d78"
                 android:text="send code"
@@ -51,37 +51,37 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutLoginTeamEnterPhoneInput" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="55dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="190dp"
-                android:layout_marginEnd="40dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <!--            <com.google.android.material.textfield.TextInputLayout-->
+            <!--                android:id="@+id/textInputLayout"-->
+            <!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="55dp"-->
+            <!--                android:layout_marginStart="40dp"-->
+            <!--                android:layout_marginTop="190dp"-->
+            <!--                android:layout_marginEnd="40dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-                <EditText
-                    android:id="@+id/phoneNumberInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawableStart="@drawable/ic_phone_"
-                    android:drawablePadding="10dp"
-                    android:drawableTint="#CDCDCD"
-                    android:ems="10"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:visibility="gone" />
+            <!--                <EditText-->
+            <!--                    android:id="@+id/phoneNumberInput"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:drawableStart="@drawable/ic_phone_"-->
+            <!--                    android:drawablePadding="10dp"-->
+            <!--                    android:drawableTint="#CDCDCD"-->
+            <!--                    android:ems="10"-->
+            <!--                    android:hint="Phone Number"-->
+            <!--                    android:inputType="phone"-->
+            <!--                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+            <!--                    android:visibility="gone" />-->
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <!--            </com.google.android.material.textfield.TextInputLayout>-->
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewLoginTeamJayuLogo"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="100dp"
@@ -93,7 +93,7 @@
                 app:srcCompat="@drawable/logo_purple_1200x815" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textViewLoginTeamAssignTabletToCashier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
@@ -105,10 +105,10 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLoginTeamJayuLogo" />
 
             <TextView
-                android:id="@+id/textLoginExplanation"
+                android:id="@+id/textViewLoginTeamLoginExplanation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="45dp"
@@ -119,31 +119,32 @@
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewLoginTeamAssignTabletToCashier" />
 
 
             <!--                TODO: Add phone field-->
             <LinearLayout
-                android:id="@+id/layoutEnterPhoneInput"
+                android:id="@+id/linearLayoutLoginTeamEnterPhoneInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/textLoginExplanation">
+                app:layout_constraintTop_toBottomOf="@+id/textViewLoginTeamLoginExplanation">
 
                 <com.hbb20.CountryCodePicker
-                    android:id="@+id/ccpEnterPhone"
+                    android:id="@+id/ccpLoginTeamEnterPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:ccp_autoDetectCountry="true"
                     app:ccp_countryPreference="US,KR"
-                    app:ccp_textSize="18sp" />
+                    app:ccp_textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/editTextEnterPhone"
+                    android:id="@+id/editTextLoginTeamEnterPhone"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimary"
@@ -162,8 +163,9 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <FrameLayout
-            android:id="@+id/frameVerifyPhoneFragment"
+            android:id="@+id/frameLoginTeamVerifyPhoneFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

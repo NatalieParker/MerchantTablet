@@ -8,7 +8,7 @@
     tools:context=".screens.UserKeypadActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guidelineUserKeypad"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -17,13 +17,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linearLayoutUserKeypadKeypad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline2">
+        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/key1"
+                android:id="@+id/buttonUserKeypadKey1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -39,14 +39,14 @@
                 android:textColor="#FFFFFF" />
 
             <Button
-                android:id="@+id/key2"
+                android:id="@+id/buttonUserKeypadKey2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="2" />
 
             <Button
-                android:id="@+id/key3"
+                android:id="@+id/buttonUserKeypadKey3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -59,21 +59,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/key4"
+                android:id="@+id/buttonUserKeypadKey4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="4" />
 
             <Button
-                android:id="@+id/key5"
+                android:id="@+id/buttonUserKeypadKey5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="5" />
 
             <Button
-                android:id="@+id/key6"
+                android:id="@+id/buttonUserKeypadKey6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -86,21 +86,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/key7"
+                android:id="@+id/buttonUserKeypadKey7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="7" />
 
             <Button
-                android:id="@+id/key8"
+                android:id="@+id/buttonUserKeypadKey8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="8" />
 
             <Button
-                android:id="@+id/key9"
+                android:id="@+id/buttonUserKeypadKey9"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -120,7 +120,7 @@
                 android:text="Button" />
 
             <Button
-                android:id="@+id/key0"
+                android:id="@+id/buttonUserKeypadKey0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -139,17 +139,17 @@
 
 
     <ImageView
-        android:id="@+id/jayuLogo"
+        android:id="@+id/imageViewUserKeypadJayuLogo"
         android:layout_width="120dp"
         android:layout_height="43dp"
         android:layout_marginStart="113dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_white_1200x815" />
 
     <TextView
-        android:id="@+id/keypadInput"
+        android:id="@+id/textViewUserKeypadInput"
         android:layout_width="327dp"
         android:layout_height="108dp"
         android:layout_marginTop="10dp"
@@ -157,12 +157,12 @@
         android:ems="10"
         android:inputType="number"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintStart_toEndOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/jayuLogo" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutUserKeypadKeypad"
+        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewUserKeypadJayuLogo" />
 
     <Button
-        android:id="@+id/signOutButton"
+        android:id="@+id/buttonUserKeypadSignOut"
         android:layout_width="112dp"
         android:layout_height="54dp"
         android:layout_marginStart="2dp"
@@ -173,16 +173,16 @@
 
     <include
         android:id="@+id/spinnerUserKeypad"
-        layout="@layout/view_spinner_default"/>
+        layout="@layout/view_spinner_default" />
 
     <Button
-        android:id="@+id/goToTeamLoginButton"
+        android:id="@+id/buttonUserKeypadSwitchToEmployeeAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="4dp"
         android:text="switch to employee account"
-        app:layout_constraintStart_toEndOf="@+id/signOutButton"
+        app:layout_constraintStart_toEndOf="@+id/buttonUserKeypadSignOut"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
