@@ -23,12 +23,8 @@ import com.jayurewards.tablet.models.CheckSubscriptionParams;
 import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
-import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
 import com.jayurewards.tablet.networking.RetrofitClient;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,11 +45,11 @@ public class UserKeypadActivity extends AppCompatActivity {
     private Button deleteButton;
     private Button enterButton;
     private Button signOutButton;
+    private Button goToTeamLoginButton;
     private TextView keypadInput;
     private ConstraintLayout spinner;
-    private SharedPreferences sharedPref;
-    private ArrayList<ShopAdminModel> shops = new ArrayList<>();
 
+    //test
 //    private static final String TAG = "GivePointsFrag";
 //    private static final String TEAM_ID = "team_id";
 //    private static final String MERCHANT_SHOPS = "merchantShops";
@@ -99,27 +95,27 @@ public class UserKeypadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
-        keypadInput = findViewById(R.id.keypadInput);
-        key1 = findViewById(R.id.key1);
-        key2 = findViewById(R.id.key2);
-        key3 = findViewById(R.id.key3);
-        key4 = findViewById(R.id.key4);
-        key5 = findViewById(R.id.key5);
-        key6 = findViewById(R.id.key6);
-        key7 = findViewById(R.id.key7);
-        key8 = findViewById(R.id.key8);
-        key9 = findViewById(R.id.key9);
-        key0 = findViewById(R.id.key0);
+        keypadInput = findViewById(R.id.textViewUserKeypadInput);
+        key1 = findViewById(R.id.buttonUserKeypadKey1);
+        key2 = findViewById(R.id.buttonUserKeypadKey2);
+        key3 = findViewById(R.id.buttonUserKeypadKey3);
+        key4 = findViewById(R.id.buttonUserKeypadKey4);
+        key5 = findViewById(R.id.buttonUserKeypadKey5);
+        key6 = findViewById(R.id.buttonUserKeypadKey6);
+        key7 = findViewById(R.id.buttonUserKeypadKey7);
+        key8 = findViewById(R.id.buttonUserKeypadKey8);
+        key9 = findViewById(R.id.buttonUserKeypadKey9);
+        key0 = findViewById(R.id.buttonUserKeypadKey0);
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
-        signOutButton = findViewById(R.id.signOutButton);
+        signOutButton = findViewById(R.id.buttonUserKeypadSignOut);
+        goToTeamLoginButton = findViewById(R.id.buttonUserKeypadSwitchToEmployeeAccount);
         spinner = findViewById(R.id.spinnerUserKeypad);
-
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
 
         keypadInput.addTextChangedListener(textWatcher);
         setUpClickListeners();
         enableDeleteButton(false);
+
 
         spinner.setVisibility(View.VISIBLE);
         getMerchantSubscription();
@@ -236,6 +232,17 @@ public class UserKeypadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AuthHelper.logOut(UserKeypadActivity.this);
+                Log.i(TAG,"SIGN OUT BUTTON PRESSED");
+            }
+        });
+
+        goToTeamLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "SENT TO LOGIN TEAM SCREEN");
+
+                Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -245,6 +252,7 @@ public class UserKeypadActivity extends AppCompatActivity {
      * Network calls
      */
     private void getMerchantSubscription() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         String stripeId = sharedPref.getString("stripeId", null);
         String subscriptionId = sharedPref.getString("subscriptionId", null);
 
@@ -323,33 +331,21 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void getMerchantShops() {
         spinner.setVisibility(View.GONE);
-        int merchantId = sharedPref.getInt("merchantId", 0);
-        Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestBusiness().getMerchantShops(merchantId);
-        call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
 
-                shops = response.body();
-                Log.i(TAG, "MERCHANT SHOPS: " + shops);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
-
-            }
-        });
     }
 
 
     private void logoutMerchant() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         AuthHelper.logOut(UserKeypadActivity.this);
-        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_ID).apply();
-        sharedPref.edit().remove(GlobalConstants.SHARED_PREF_MERCHANT_FIREBASE_UID).apply();
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
         sharedPref.edit().clear().apply();
     }
 
     private void keypadButtonInput(String number) {
-        keypadInput.setText(keypadInput.getText() + number);
+        String digit = keypadInput.getText() + number;
+        keypadInput.setText(digit);
     }
 
     private void enableDeleteButton(boolean enabled) {
@@ -392,7 +388,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
 
-                Log.i(TAG, "Merchant data received: " + response.body());
+                Log.i(TAG, "Merchant data recieved: " + response.body());
 
             }
 
@@ -466,7 +462,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                String type = GlobalConstants.POINT_TYPE_GENERAL;
 //
 //                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-//                String userPhone = sharedPreferences.getString(GlobalConstants.SHARED_PREF_PHONE, null);
+//                String userPhone = sharedPreferences.getString(GlobalConstants.PHONE, null);
 //
 //                if (userPhone != null && userPhone.equals(phone)) {
 //                    AlertService.showAlert(getActivity(), "Not Allowed", "You cannot give yourself reward points.");

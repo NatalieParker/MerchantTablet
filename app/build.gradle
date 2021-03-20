@@ -4,7 +4,7 @@ plugins {
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
-
+apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.jayurewards.tablet"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -47,17 +47,22 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-
+    /**
+     * Android
+     */
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0-beta01'
+    implementation 'com.google.android.material:material:1.4.0-alpha01'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.browser:browser:1.3.0"
 
     /**
      * Firebase
      */
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation platform('com.google.firebase:firebase-bom:26.7.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
@@ -67,5 +72,19 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
+    /**
+     * Glide
+     */
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+/**
+ * Country dialing codes with flag picker
+ */
+    implementation 'com.hbb20:ccp:2.4.0'
+
+// Circular images
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
 }

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_screen_bkg"
+    tools:context=".screens.LoginTeamActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="320dp"
+            android:layout_height="360dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/bg_rounded_corners_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonLoginTeamCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="103dp"
+                android:layout_marginEnd="109dp"
+                android:layout_marginBottom="5dp"
+                android:background="#00FFFFFF"
+                android:text="Back"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#510d78"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonLoginTeamSend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="40dp"
+                android:backgroundTint="#510d78"
+                android:text="send code"
+                app:cornerRadius="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutLoginTeamEnterPhoneInput" />
+
+            <!--            <com.google.android.material.textfield.TextInputLayout-->
+            <!--                android:id="@+id/textInputLayout"-->
+            <!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="55dp"-->
+            <!--                android:layout_marginStart="40dp"-->
+            <!--                android:layout_marginTop="190dp"-->
+            <!--                android:layout_marginEnd="40dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+            <!--                <EditText-->
+            <!--                    android:id="@+id/phoneNumberInput"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:drawableStart="@drawable/ic_phone_"-->
+            <!--                    android:drawablePadding="10dp"-->
+            <!--                    android:drawableTint="#CDCDCD"-->
+            <!--                    android:ems="10"-->
+            <!--                    android:hint="Phone Number"-->
+            <!--                    android:inputType="phone"-->
+            <!--                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+            <!--                    android:visibility="gone" />-->
+
+            <!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+            <ImageView
+                android:id="@+id/imageViewLoginTeamJayuLogo"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/logo_purple_1200x815" />
+
+            <TextView
+                android:id="@+id/textViewLoginTeamAssignTabletToCashier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="70dp"
+                android:text="Assign tablet to cashier"
+                android:textColor="#5B7B98"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLoginTeamJayuLogo" />
+
+            <TextView
+                android:id="@+id/textViewLoginTeamLoginExplanation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="45dp"
+                android:text="This employee will get credit for new customers joining your loyalty program through this tablet."
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewLoginTeamAssignTabletToCashier" />
+
+
+            <!--                TODO: Add phone field-->
+            <LinearLayout
+                android:id="@+id/linearLayoutLoginTeamEnterPhoneInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="15dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/textViewLoginTeamLoginExplanation">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccpLoginTeamEnterPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_countryPreference="US,KR"
+                    app:ccp_textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/editTextLoginTeamEnterPhone"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:drawableStart="@drawable/ic_phone_"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="#CDCDCD"
+                    android:ems="10"
+                    android:hint="@string/enter_phone_number"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:maxLength="14"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColorHint="@color/colorGray" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLoginTeamVerifyPhoneFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+
+
+
+

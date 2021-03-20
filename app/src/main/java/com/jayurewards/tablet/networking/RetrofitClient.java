@@ -34,8 +34,10 @@ public class RetrofitClient {
     }
 
 //     Construct Retrofit Rest interfaces
-    public RestAuth getRestAuth() {return retrofit.create(RestAuth.class);}
+    public RestAuth getRestAuth() {
+        return retrofit.create(RestAuth.class);
+    }
     public RestPoints getRestPoints(){return retrofit.create(RestPoints.class);}
-    public RestBusiness getRestBusiness(){return retrofit.create(RestBusiness.class);}
+    public RestUser getRestUser(){return retrofit.create(RestUser.class);}
 
 }
