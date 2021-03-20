@@ -120,6 +120,7 @@ public class LoginTeamVerifyFragment extends Fragment {
         spinner = view.findViewById(R.id.spinnerLoginTeamVerifyFragment);
 
         textViewUserPhoneNumber.setText(phoneFormatted);
+        editTextVerificationInput.addTextChangedListener(textWatcher);
         editTextVerificationInput.requestFocus();
 //        spinner.setVisibility(View.VISIBLE);
 
@@ -459,6 +460,9 @@ public class LoginTeamVerifyFragment extends Fragment {
 //                        && !codeField_5.getText().toString().isEmpty()
 //                        && !codeField_6.getText().toString().isEmpty();
 //        enablePostSubmit(codeFieldsFilled);
+        boolean codeFieldsFilled = editTextVerificationInput.getText().length() == 6;
+        Log.i(TAG, "checkForEmptyField: \n EDIT TEXT FIELD: " + editTextVerificationInput.getText().toString());
+        enablePostSubmit(codeFieldsFilled);
     }
 
     private void enablePostSubmit(Boolean enabled) {
