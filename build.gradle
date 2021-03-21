@@ -20,6 +20,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        // uCrop Image Cropper
+        maven { url "https://jitpack.io" }
     }
 }
 

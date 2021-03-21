@@ -76,7 +76,11 @@ dependencies {
  */
     implementation 'com.hbb20:ccp:2.4.0'
 
-// Circular images
+    // Circular images
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // Image Cropper "uCrop"
+    implementation 'com.github.yalantis:ucrop:2.2.6'
+
 
 }

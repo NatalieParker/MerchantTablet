@@ -9,4 +9,19 @@
     <string name="channel_name_default">jayuNotifications</string>
     <string name="channel_description_default">defaultJayuNotifications</string>
     <string name="CHANNEL_DEFAULT">defaultNotificationChannel</string>
+    <string name="create_your_profile">Create your profile</string>
+    <string name="add_photo">Add photo</string>
+    <string name="required">required</string>
+    <string name="email">Email</string>
+    <string name="for_receiving_gift_cards">For receiving gift cards</string>
+    <string name="select_birthday">Select birthday</string>
+    <string name="for_birthday_specials">For birthday specials</string>
+    <string name="birthdays_can_only_be_set_once">Birthdays can only be set once</string>
+    <string name="gender">Gender</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="register">Register</string>
+    <string name="cancel">Cancel</string>
+    <string name="username">Username</string>
+    <string name="change_photo">Change photo</string>
 </resources>

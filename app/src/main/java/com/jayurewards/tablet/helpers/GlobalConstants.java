@@ -37,6 +37,7 @@ public class GlobalConstants {
     public static final String FCM_RECIPIENT_MERCHANT = "fcmRecipientMerchant";
     public static final String FCM_NOTIFICATION_ID = "fcmNotificationId";
     public static final String FCM_NOTIFICATION_ID_MERCHANT = "fcmNotificationIdMerchant";
+    public static final String USER_TERMS_AND_CONDITIONS_LINK = "userTermsAndConditionsLink";
 
 
 }

@@ -1,6 +1,7 @@
 package com.jayurewards.tablet.networking;
 
 import com.jayurewards.tablet.models.FCMTokenUpdateModel;
+import com.jayurewards.tablet.models.RegisterUserModel;
 import com.jayurewards.tablet.models.UpdatePushMessageOpenModel;
 import com.jayurewards.tablet.models.UserModel;
 
@@ -16,6 +17,12 @@ public interface RestUser {
     // Retrieve a user's profile
     @GET("user/{userUID}")
     Call<UserModel> getUser(@Path("userUID") String userUID);
+
+    // Register new user
+    @Headers("Content-Type: application/json")
+    @POST("/user/register")
+    Call<String>registerUser(@Body RegisterUserModel params);
+
 
     // Update User FCM token
     @Headers("Content-Type: application/json")

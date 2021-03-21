@@ -37,8 +37,13 @@
             android:name=".screens.LoginTeamActivity"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".screens.RegistrationTeam"
+            android:name=".screens.RegistrationTeamActivity"
             android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <!-- Firebase Messaging (Push Notifications) -->
         <service
