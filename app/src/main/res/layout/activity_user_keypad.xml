@@ -7,182 +7,255 @@
     android:background="#510D78"
     tools:context=".screens.UserKeypadActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineUserKeypad"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.66"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayoutUserKeypadKeypad"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineUserKeypad"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintGuide_percent="0.66"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
+            android:id="@+id/linearLayoutUserKeypadKeypad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad">
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="1"
-                android:textColor="#FFFFFF" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="2" />
+                <Button
+                    android:id="@+id/buttonUserKeypadKey1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="1"
+                    android:textColor="#FFFFFF" />
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="3" />
+                <Button
+                    android:id="@+id/buttonUserKeypadKey2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="2" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="4" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="5" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="6" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="7" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="8" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="9" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Button" />
+
+                <Button
+                    android:id="@+id/buttonUserKeypadKey0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="0" />
+
+                <Button
+                    android:id="@+id/enterButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Button" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey4"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="4" />
+        <ImageView
+            android:id="@+id/imageViewUserKeypadJayuLogo"
+            android:layout_width="120dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="113dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_white_1200x815" />
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey5"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="5" />
+        <TextView
+            android:id="@+id/textViewUserKeypadInput"
+            android:layout_width="327dp"
+            android:layout_height="108dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="35dp"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutUserKeypadKeypad"
+            app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewUserKeypadJayuLogo" />
 
-            <Button
-                android:id="@+id/buttonUserKeypadKey6"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="6" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonUserKeypadKey7"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="7" />
-
-            <Button
-                android:id="@+id/buttonUserKeypadKey8"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="8" />
-
-            <Button
-                android:id="@+id/buttonUserKeypadKey9"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="9" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/buttonUserKeypadKey0"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="0" />
-
-            <Button
-                android:id="@+id/enterButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Button" />
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/imageViewUserKeypadJayuLogo"
-        android:layout_width="120dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="113dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_white_1200x815" />
-
-    <TextView
-        android:id="@+id/textViewUserKeypadInput"
-        android:layout_width="327dp"
-        android:layout_height="108dp"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonUserKeypadOptionsMenu"
+        android:layout_width="60dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="35dp"
-        android:ems="10"
-        android:inputType="number"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutUserKeypadKeypad"
-        app:layout_constraintStart_toEndOf="@+id/guidelineUserKeypad"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewUserKeypadJayuLogo" />
-
-    <Button
-        android:id="@+id/buttonUserKeypadSignOut"
-        android:layout_width="112dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="1dp"
-        android:text="Sign out"
+        android:backgroundTint="@color/colorPrimaryLight"
+        app:cornerRadius="50dp"
+        app:icon="@drawable/ic_ellipsis_vertical"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        app:iconTint="@color/colorGray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayoutUserKeypadDarkenScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutUserKeypadOptionsMenu"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_rounded_corners_white"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="2dp"
+        android:visibility="gone">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadLockScreen"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="Lock Screen"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_lock_solid"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadUpdatePoints"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="Update Points"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_coins_solid"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadSwitchToEmployeeAccount"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="Team Member"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_username_icon"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadSignOut"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="Log Out"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_log_out"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+    </LinearLayout>
 
     <include
         android:id="@+id/spinnerUserKeypad"
         layout="@layout/view_spinner_default" />
-
-    <Button
-        android:id="@+id/buttonUserKeypadSwitchToEmployeeAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="4dp"
-        android:text="switch to employee account"
-        app:layout_constraintStart_toEndOf="@+id/buttonUserKeypadSignOut"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

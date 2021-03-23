@@ -26,6 +26,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:minWidth="500dp"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/bg_rounded_corners_white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,6 +40,57 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.15" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutLoginMerchantEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/guidelineLoginMerchant">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextLoginMerchantEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:drawableStart="@drawable/ic_at_sign"
+                        android:drawablePadding="10dp"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayoutLoginMerchantPassword"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLoginMerchantEmail">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextLoginMerchantPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_lock_solid"
+                        android:drawablePadding="10dp"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLoginMerchantEmail" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLoginMerchantForgotPassword"
@@ -117,61 +169,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/buttonLoginMerchantApple" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutLoginMerchantEmail"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/guidelineLoginMerchant">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextLoginMerchantEmailAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_username_icon"
-                        android:drawablePadding="10dp"
-                        android:drawableTint="#CDCDCD"
-                        android:hint="Email"
-                        android:inputType="textEmailAddress"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayoutLoginMerchantPassword"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLoginMerchantEmail">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextLoginMerchantPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_lock_solid"
-                        android:drawablePadding="10dp"
-                        android:drawableTint="#CDCDCD"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLoginMerchantEmail" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
