@@ -41,6 +41,7 @@ import com.jayurewards.tablet.models.CheckSubscriptionParams;
 import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
+import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
@@ -118,8 +119,6 @@ public class UserKeypadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
 
-        View view = inflater.inflate(R.layout.fragment_give_points, container, false);
-
         phoneNumber = findViewById(R.id.textViewUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
@@ -142,14 +141,14 @@ public class UserKeypadActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
 
-        header = view.findViewById(R.id.textGivePointsTitle);
-        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
-        pointAmount = view.findViewById(R.id.editTextGivePointsAmount);
-        company = view.findViewById(R.id.textGivePointsCompany);
-        resultsContainer = view.findViewById(R.id.layoutGivePointsResult);
-        userImage = view.findViewById(R.id.imageGivePoints);
-        givePointsResult = view.findViewById(R.id.textGivePointsResult);
-        dismissButton = view.findViewById(R.id.buttonGivePointsDismiss);
+//        header = view.findViewById(R.id.textGivePointsTitle);
+//        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
+//        pointAmount = view.findViewById(R.id.editTextGivePointsAmount);
+//        company = view.findViewById(R.id.textGivePointsCompany);
+//        resultsContainer = view.findViewById(R.id.layoutGivePointsResult);
+//        userImage = view.findViewById(R.id.imageGivePoints);
+//        givePointsResult = view.findViewById(R.id.textGivePointsResult);
+//        dismissButton = view.findViewById(R.id.buttonGivePointsDismiss);
 
         spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
@@ -162,86 +161,68 @@ public class UserKeypadActivity extends AppCompatActivity {
         constraintLayoutDarkenScreen.setEnabled(false);
 
 
-        countryCode.addTextChangedListener(textWatcher);
+//        countryCode.addTextChangedListener(textWatcher);
         phoneNumber.addTextChangedListener(textWatcher);
-        pointAmount.addTextChangedListener(textWatcher);
+//        pointAmount.addTextChangedListener(textWatcher);
 
 //        // Phone number formatting based off user's device Locale (Country)
         phoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
-        if (merchantShops.size() <= 1) {
-            company.setText(passedCompany);
-            company.setEnabled(false);
-            countryCode.setText(merchantShops.get(0).getCountryCode() != null ? merchantShops.get(0).getCountryCode() : usaCountryCode);
+//        if (merchantShops.size() <= 1) {
+//            company.setText(passedCompany);
+//            company.setEnabled(false);
+//            countryCode.setText(merchantShops.get(0).getCountryCode() != null ? merchantShops.get(0).getCountryCode() : usaCountryCode);
+//
+//            String point = String.valueOf(merchantShops.get(0).getStandardPoints() != 0 ? merchantShops.get(0).getStandardPoints() : "1");
+//            pointAmount.setText(point);
+//
+//            company.setTextColor(Color.GRAY);
+//            LayerDrawable border = UIDesignService.getBorders(
+//                    Color.WHITE, // Background color
+//                    Color.BLACK, // Border color
+//                    0, // Left border in pixels
+//                    0, // Top border in pixels
+//                    0, // Right border in pixels
+//                    1 // Bottom border in pixels
+//            );
+//            company.setBackground(border);
+//
+//        } else {
+//            company.setText(passedCompany);
+//
+//            pointAmount.setText(usaCountryCode);
+//            for (ShopAdminModel item : merchantShops) {
+//                if (passedCompany.equals(item.getCompany())) {
+//                    countryCode.setText(item.getCountryCode() != null ? item.getCountryCode() : usaCountryCode);
+//                    String point = String.valueOf(item.getStandardPoints() != 0 ? item.getStandardPoints() : "1");
+//                    pointAmount.setText(point);
+//                    break;
+//                }
+//            }
+//
+//            LayerDrawable border = UIDesignService.getBorders(
+//                    Color.WHITE, // Background color
+//                    Color.BLACK, // Border color
+//                    0, // Left border in pixels
+//                    0, // Top border in pixels
+//                    0, // Right border in pixels
+//                    1 // Bottom border in pixels
+//            );
+//            company.setBackground(border);
+//        }
 
-            String point = String.valueOf(merchantShops.get(0).getStandardPoints() != 0 ? merchantShops.get(0).getStandardPoints() : "1");
-            pointAmount.setText(point);
-
-            company.setTextColor(Color.GRAY);
-            LayerDrawable border = UIDesignService.getBorders(
-                    Color.WHITE, // Background color
-                    Color.BLACK, // Border color
-                    0, // Left border in pixels
-                    0, // Top border in pixels
-                    0, // Right border in pixels
-                    1 // Bottom border in pixels
-            );
-            company.setBackground(border);
-
-        } else {
-            company.setText(passedCompany);
-
-            pointAmount.setText(usaCountryCode);
-            for (ShopAdminModel item : merchantShops) {
-                if (passedCompany.equals(item.getCompany())) {
-                    countryCode.setText(item.getCountryCode() != null ? item.getCountryCode() : usaCountryCode);
-                    String point = String.valueOf(item.getStandardPoints() != 0 ? item.getStandardPoints() : "1");
-                    pointAmount.setText(point);
-                    break;
-                }
-            }
-
-            LayerDrawable border = UIDesignService.getBorders(
-                    Color.WHITE, // Background color
-                    Color.BLACK, // Border color
-                    0, // Left border in pixels
-                    0, // Top border in pixels
-                    0, // Right border in pixels
-                    1 // Bottom border in pixels
-            );
-            company.setBackground(border);
-        }
-
-        if (adminLevel != 0 && adminLevel <= 2) {
-            pointAmount.setEnabled(false);
-        }
+        // TODO: Change to shared preferences
+//        if (adminLevel != 0 && adminLevel <= 2) {
+//            pointAmount.setEnabled(false);
+//        }
 
         enablePostSubmit(false);
         setUpClickListeners();
         enableDeleteButton(false);
         getMerchantSubscription();
 
-        return view;
     }
 
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//
-//        // Show Keyboard
-//        phoneNumber.post(() -> {
-//            phoneNumber.requestFocus();
-//            InputMethodManager imm = (InputMethodManager)phoneNumber.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//            if (imm != null)
-//                imm.showSoftInput(phoneNumber, InputMethodManager.SHOW_IMPLICIT);
-//        });
-//    }
-//
-//    @Override
-//    public void onDismiss(@NonNull DialogInterface dialog) {
-//        hideKeyboard();
-//        super.onDismiss(dialog);
-//    }
 
     /**
      * Set Click Listeners
@@ -249,23 +230,14 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void setUpClickListeners() {
         key1.setOnClickListener(v -> keypadButtonInput("1"));
-
         key2.setOnClickListener(v -> keypadButtonInput("2"));
-
         key3.setOnClickListener(v -> keypadButtonInput("3"));
-
         key4.setOnClickListener(v -> keypadButtonInput("4"));
-
         key5.setOnClickListener(v -> keypadButtonInput("5"));
-
         key6.setOnClickListener(v -> keypadButtonInput("6"));
-
         key7.setOnClickListener(v -> keypadButtonInput("7"));
-
         key8.setOnClickListener(v -> keypadButtonInput("8"));
-
         key9.setOnClickListener(v -> keypadButtonInput("9"));
-
         key0.setOnClickListener(v -> keypadButtonInput("0"));
 
         deleteButton.setOnClickListener(v -> {
@@ -275,7 +247,11 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         enterButton.setOnClickListener(v -> {
-            if (UserKeypadActivity.this != null) {
+            // Prevent duplicates
+            enablePostSubmit(false);
+            int teamId = 0;
+            int adminLevel = 0;
+
                 if (SystemClock.elapsedRealtime() - lastClickTime < 2000) {
                     return;
                 }
@@ -283,168 +259,187 @@ public class UserKeypadActivity extends AppCompatActivity {
 
                 spinner.setVisibility(View.VISIBLE);
                 enablePostSubmit(false);
-//                hideKeyboard();
 
-                int timeout = 14400; // Initially set default time out
-                for (ShopAdminModel item : merchantShops) {
-                    if (passedCompany.equals(item.getCompany())) {
-                        timeout = item.getStandardPtTimeout();
-                        break;
-                    }
+//                int timeout = 14400; // Initially set default time out
+//                for (ShopAdminModel item : merchantShops) {
+//                    if (passedCompany.equals(item.getCompany())) {
+//                        timeout = item.getStandardPtTimeout();
+//                        break;
+//                    }
+//                }
+////
+//                String countryCodeInput = countryCode.getText().toString();
+//                String phoneFormatted = phoneNumber.getText().toString();
+//                String phone = phoneFormatted.replaceAll("[^0-9]", "");
+//                String formattedPoints = stripNumberFormatting(pointAmount.getText().toString());
+//                int amount;
+//                try {
+//                    amount = Integer.parseInt(formattedPoints);
+//                } catch (Throwable t) {
+//                    String errorMessage = "Give points Int Parse error";
+//                    LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.PARSING);
+//                    AlertHelper.showAlert(UserKeypadActivity.this, "com.jayurewards.tablet.models.Points Error", "Please make sure the amount of points are all numbers.");
+//                    return;
+//                }
+//
+//                String shop = company.getText().toString();
+//                String type = GlobalConstants.POINT_TYPE_GENERAL;
+//
+//                SharedPreferences sharedPreferences = UserKeypadActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+//                String userPhone = sharedPreferences.getString(GlobalConstants.PHONE, null);
+//
+//                if (userPhone != null && userPhone.equals(phone)) {
+//                    AlertHelper.showAlert(UserKeypadActivity.this, "Not Allowed", "You cannot give yourself reward points.");
+//                    spinner.setVisibility(View.GONE);
+//                    return;
+//                }
+//
+//                String day = DateFormatService.getDayString(new Date());
+//                String time = DateFormatService.getTimeString(new Date());
+//
+//                GivePointsRequest params = new GivePointsRequest(countryCodeInput, phone, selectedStoreId, shop, amount, pointMethod, type,
+//                        teamId, adminLevel, timeout, day, time);
+//
+//                Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestDashboardMerchant().merchantGivePoints(params);
+//                call.enqueue(new Callback<GivePointsResponse>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
+//                        GivePointsResponse result = response.body();
+//                        if (UserKeypadActivity.this != null) {
+//                            if (result != null) {
+//                                if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
+//                                    GlideApp.with(UserKeypadActivity.this)
+//                                            .load(result.getThumbnail())
+//                                            .placeholder(R.drawable.placeholder)
+//                                            .fallback(R.drawable.default_profile)
+//                                            .into(userImage);
+//                                } else {
+//                                    GlideApp.with(UserKeypadActivity.this)
+//                                            .load(R.drawable.default_profile)
+//                                            .into(userImage);
+//                                }
+//
+//                                if (result.getTimeLeft() != 0) {
+//                                    String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
+//                                    String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
+//
+//                                    header.setText(getString(R.string.unsuccessful));
+//                                    header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
+//                                    givePointsResult.setText(message);
+//
+//                                    spinner.setVisibility(View.GONE);
+//                                    resultsContainer.setVisibility(View.VISIBLE);
+//
+//                                    return;
+//                                }
+//
+//                                givePointsSuccess = true;
+//                                header.setText(getString(R.string.success));
+//
+//                                int pointTally = amount; // Set just in case a null response is received
+//                                if (result.getPointTally() != 0) {
+//                                    pointTally = result.getPointTally();
+//                                }
+//
+//                                String pointTallyString;
+//                                if (pointTally == 1) {
+//                                    pointTallyString = "1 point for rewards.";
+//                                } else {
+//                                    pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
+//                                }
+//
+//                                int pointsGiven = amount;
+//                                if (result.getPoints() != 0) {
+//                                    pointsGiven = result.getPoints();
+//                                }
+//
+//                                String points;
+//                                String success;
+//                                if (pointsGiven == 1) {
+//                                    points = "1";
+//                                    success = result.getName() + " was given " + points + " point and now has " + pointTallyString;
+//                                } else {
+//                                    points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
+//                                    success = result.getName() + " was given " + points + " points and now has " + pointTallyString;
+//                                }
+//
+//                                givePointsResult.setText(success);
+//
+//                            } else {
+//                                GlideApp.with(UserKeypadActivity.this)
+//                                        .load(R.drawable.default_profile_image)
+//                                        .into(userImage);
+//
+//                                header.setText(getString(R.string.no_match));
+//                                givePointsResult.setText(getString(R.string.give_points_incorrect_phone_result));
+//                                dismissButton.setText(getString(R.string.dismiss));
+//                            }
+//                        }
+//
+//                        spinner.setVisibility(View.GONE);
+//                        resultsContainer.setVisibility(View.VISIBLE);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
+//                        Log.e(TAG, "Merchant manually give com.jayurewards.tablet.models.Points Error: " + t.getMessage());
+//                        spinner.setVisibility(View.GONE);
+//                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+//                    }
+//                });
+
+            GivePointsRequest params = new GivePointsRequest("1", phoneNumber.getText().toString(), 1,
+                    "company", 2, "merchant_web", "general", teamId, adminLevel,
+                    1000, "Tuesday", "13:00");
+
+
+            Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
+            call.enqueue(new Callback<GivePointsResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
+
+                    Log.i(TAG, "Merchant data recieved: " + response.body());
+
                 }
 
-                String countryCodeInput = countryCode.getText().toString();
-                String phoneFormatted = phoneNumber.getText().toString();
-                String phone = phoneFormatted.replaceAll("[^0-9]", "");
-                String formattedPoints = stripNumberFormatting(pointAmount.getText().toString());
-                int amount;
-                try {
-                    amount = Integer.parseInt(formattedPoints);
-                } catch (Throwable t) {
-                    String errorMessage = "Give points Int Parse error";
-                    LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.PARSING);
-                    AlertHelper.showAlert(UserKeypadActivity.this, "com.jayurewards.tablet.models.Points Error", "Please make sure the amount of points are all numbers.");
-                    return;
+                @Override
+                public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
+                    Log.i(TAG, "Get merchant data error: " + t.getMessage());
+                    AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 }
-
-                String shop = company.getText().toString();
-                String type = GlobalConstants.POINT_TYPE_GENERAL;
-
-                SharedPreferences sharedPreferences = UserKeypadActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-                String userPhone = sharedPreferences.getString(GlobalConstants.PHONE, null);
-
-                if (userPhone != null && userPhone.equals(phone)) {
-                    AlertHelper.showAlert(UserKeypadActivity.this, "Not Allowed", "You cannot give yourself reward points.");
-                    spinner.setVisibility(View.GONE);
-                    return;
-                }
-
-                String day = DateFormatService.getDayString(new Date());
-                String time = DateFormatService.getTimeString(new Date());
-
-                GivePointsRequest params = new GivePointsRequest(countryCodeInput, phone, selectedStoreId, shop, amount, pointMethod, type,
-                        teamId, adminLevel, timeout, day, time);
-
-                Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestDashboardMerchant().merchantGivePoints(params);
-                call.enqueue(new Callback<GivePointsResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-                        GivePointsResponse result = response.body();
-                        if (UserKeypadActivity.this != null) {
-                            if (result != null) {
-                                if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
-                                    GlideApp.with(UserKeypadActivity.this)
-                                            .load(result.getThumbnail())
-                                            .placeholder(R.drawable.placeholder)
-                                            .fallback(R.drawable.default_profile)
-                                            .into(userImage);
-                                } else {
-                                    GlideApp.with(UserKeypadActivity.this)
-                                            .load(R.drawable.default_profile)
-                                            .into(userImage);
-                                }
-
-                                if (result.getTimeLeft() != 0) {
-                                    String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
-                                    String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
-
-                                    header.setText(getString(R.string.unsuccessful));
-                                    header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
-                                    givePointsResult.setText(message);
-
-                                    spinner.setVisibility(View.GONE);
-                                    resultsContainer.setVisibility(View.VISIBLE);
-
-                                    return;
-                                }
-
-                                givePointsSuccess = true;
-                                header.setText(getString(R.string.success));
-
-                                int pointTally = amount; // Set just in case a null response is received
-                                if (result.getPointTally() != 0) {
-                                    pointTally = result.getPointTally();
-                                }
-
-                                String pointTallyString;
-                                if (pointTally == 1) {
-                                    pointTallyString = "1 point for rewards.";
-                                } else {
-                                    pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
-                                }
-
-                                int pointsGiven = amount;
-                                if (result.getPoints() != 0) {
-                                    pointsGiven = result.getPoints();
-                                }
-
-                                String points;
-                                String success;
-                                if (pointsGiven == 1) {
-                                    points = "1";
-                                    success = result.getName() + " was given " + points + " point and now has " + pointTallyString;
-                                } else {
-                                    points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
-                                    success = result.getName() + " was given " + points + " points and now has " + pointTallyString;
-                                }
-
-                                givePointsResult.setText(success);
-
-                            } else {
-                                GlideApp.with(UserKeypadActivity.this)
-                                        .load(R.drawable.default_profile_image)
-                                        .into(userImage);
-
-                                header.setText(getString(R.string.no_match));
-                                givePointsResult.setText(getString(R.string.give_points_incorrect_phone_result));
-                                dismissButton.setText(getString(R.string.dismiss));
-                            }
-                        }
-
-                        spinner.setVisibility(View.GONE);
-                        resultsContainer.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-                        Log.e(TAG, "Merchant manually give com.jayurewards.tablet.models.Points Error: " + t.getMessage());
-                        spinner.setVisibility(View.GONE);
-                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-                    }
-                });
-            }
+            });
         });
 
-        company.setOnClickListener(view -> {
-            if (UserKeypadActivity.this != null && merchantShops.size() > 1) {
-                ArrayList<String> shops = new ArrayList<>();
-                ArrayList<Integer> shopStdPts = new ArrayList<>();
-                ArrayList<String> shopCountryCodes = new ArrayList<>();
-
-                for (ShopAdminModel shop : merchantShops) {
-                    shops.add(shop.getCompany());
-                    shopStdPts.add(shop.getStandardPoints());
-                    shopCountryCodes.add(shop.getCountryCode() != null ? shop.getCountryCode() : usaCountryCode);
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
-                builder.setTitle("Select Company");
-                builder.setItems(shops.toArray(new String[0]), (dialog, which) -> {
-
-                    if (shops.get(which).equals(company.getText().toString())) {
-                        return;
-                    }
-
-                    countryCodeChangePhoneEditTextFormatting();
-                    pointAmount.setText(String.valueOf(shopStdPts.get(which)));
-                    company.setText(shops.get(which));
-                    countryCode.setText(shopCountryCodes.get(which));
-                    selectedStoreId = merchantShops.get(which).getStoreId();
-                });
-
-                builder.show();
-            }
-        });
+//        company.setOnClickListener(view -> {
+//            if (UserKeypadActivity.this != null && merchantShops.size() > 1) {
+//                ArrayList<String> shops = new ArrayList<>();
+//                ArrayList<Integer> shopStdPts = new ArrayList<>();
+//                ArrayList<String> shopCountryCodes = new ArrayList<>();
+//
+//                for (ShopAdminModel shop : merchantShops) {
+//                    shops.add(shop.getCompany());
+//                    shopStdPts.add(shop.getStandardPoints());
+//                    shopCountryCodes.add(shop.getCountryCode() != null ? shop.getCountryCode() : usaCountryCode);
+//                }
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
+//                builder.setTitle("Select Company");
+//                builder.setItems(shops.toArray(new String[0]), (dialog, which) -> {
+//
+//                    if (shops.get(which).equals(company.getText().toString())) {
+//                        return;
+//                    }
+//
+//                    countryCodeChangePhoneEditTextFormatting();
+//                    pointAmount.setText(String.valueOf(shopStdPts.get(which)));
+//                    company.setText(shops.get(which));
+//                    countryCode.setText(shopCountryCodes.get(which));
+//                    selectedStoreId = merchantShops.get(which).getStoreId();
+//                });
+//
+//                builder.show();
+//            }
+//        });
 
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -482,19 +477,6 @@ public class UserKeypadActivity extends AppCompatActivity {
                 closeKeypadOptionsMenu();
             }
         });
-
-        dismissButton.setOnClickListener(view -> {
-            if (givePointsSuccess) {
-                if (listener != null) {
-                    listener.onSuccessfulPointsGiven(selectedStoreId, company.getText().toString());
-                    dismiss();
-                }
-            } else {
-                enablePostSubmit(true);
-                resultsContainer.setVisibility(View.GONE);
-            }
-        });
-
     }
 
     /**
@@ -519,81 +501,87 @@ public class UserKeypadActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
 //                Reset phone number and check phone number format if country code changed
-                if (countryCode.getText().hashCode() == s.hashCode()) {
-                    phoneNumber.setText(null);
-                    countryCodeChangePhoneEditTextFormatting();
-                } else if (pointAmount.getText().hashCode() == s.hashCode()) {
-                    pointAmount.removeTextChangedListener(this);
-                    String numberString = pointAmount.getText().toString();
-
-                    // Format number based on location (e.g add commas)
-                    if (!numberString.equals("")) {
-                        String numberStripped = stripNumberFormatting(numberString);
-
-                        double numberDouble;
-                        try {
-                            numberDouble = Double.parseDouble(numberStripped);
-                            String formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(numberDouble);
-                            pointAmount.setText(formattedNumber);
-                            pointAmount.setSelection(pointAmount.getText().toString().length());
-
-                        } catch (Throwable t) {
-                            String message = "Give points text listener parse points error";
-                            LogHelper.errorReport(TAG, message, t, LogHelper.ErrorReportType.PARSING);
-                        }
-                    }
-
-                    pointAmount.addTextChangedListener(this);
-                }
+//                if (countryCode.getText().hashCode() == s.hashCode()) {
+//                    phoneNumber.setText(null);
+//                    countryCodeChangePhoneEditTextFormatting();
+//                } else if (pointAmount.getText().hashCode() == s.hashCode()) {
+//                    pointAmount.removeTextChangedListener(this);
+//                    String numberString = pointAmount.getText().toString();
+//
+//                    // Format number based on location (e.g add commas)
+//                    if (!numberString.equals("")) {
+//                        String numberStripped = stripNumberFormatting(numberString);
+//
+//                        double numberDouble;
+//                        try {
+//                            numberDouble = Double.parseDouble(numberStripped);
+//                            String formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(numberDouble);
+//                            pointAmount.setText(formattedNumber);
+//                            pointAmount.setSelection(pointAmount.getText().toString().length());
+//
+//                        } catch (Throwable t) {
+//                            String message = "Give points text listener parse points error";
+//                            LogHelper.errorReport(TAG, message, t, LogHelper.ErrorReportType.PARSING);
+//                        }
+//                    }
+//
+//                    pointAmount.addTextChangedListener(this);
+//                }
                 checkForEmptyField();
 
             }
         };
     }
 
-    private void givePoints() {
-        GivePointsRequest params = new GivePointsRequest("1", "7578765083", 1, "company", 2, "merchant_web", "general", 0, 0, 1000, "Tuesday", "13:00");
-        Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
-        call.enqueue(new Callback<GivePointsResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-
-                Log.i(TAG, "Merchant data recieved: " + response.body());
-
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-                Log.i(TAG, "Get merchant data error: " + t.getMessage());
-                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-            }
-        });
-
-    }
-
     // Change state for submit button based on text entered
     private void checkForEmptyField() {
-        String amount = pointAmount.getText().toString();
-        String countryCallingCode = countryCode.getText().toString();
+//        String amount = pointAmount.getText().toString();
+//        String countryCallingCode = countryCode.getText().toString();
         String phone = phoneNumber.getText().toString();
 
         Log.i(TAG, "PHONE NUMBER: " + phone);
         boolean goEnableButton = phone.length() >= 1;
         enableDeleteButton(goEnableButton);
+//
+//        if ((pointAmount.isEnabled() && amount.isEmpty()) || phone.isEmpty() || countryCallingCode.isEmpty()) {
+//            enablePostSubmit(false);
+//
+//        } else if (usaCountryCode.equals(countryCallingCode) && phone.length() <= 13) {
+//            enablePostSubmit(false);
+//
+//        } else if (phone.length() < 6) {
+//            enablePostSubmit(false);
+//
+//        } else {
+//            enablePostSubmit(true);
+//        }
 
-        if ((pointAmount.isEnabled() && amount.isEmpty()) || phone.isEmpty() || countryCallingCode.isEmpty()) {
-            enablePostSubmit(false);
-
-        } else if (usaCountryCode.equals(countryCallingCode) &&  phone.length() <= 13) {
-            enablePostSubmit(false);
-
-        } else if (phone.length() < 6) {
-            enablePostSubmit(false);
-
-        } else {
+        if (phone.length() < 6) {
             enablePostSubmit(true);
+        } else {
+            enablePostSubmit(false);
         }
     }
+
+//    private void givePoints() {
+//        GivePointsRequest params = new GivePointsRequest("1", "7578765083", 1, "company", 2, "merchant_web", "general", 0, 0, 1000, "Tuesday", "13:00");
+//        Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
+//        call.enqueue(new Callback<GivePointsResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
+//
+//                Log.i(TAG, "Merchant data recieved: " + response.body());
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
+//                Log.i(TAG, "Get merchant data error: " + t.getMessage());
+//                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+//            }
+//        });
+//
+//    }
 
     /**
      * Network calls
@@ -626,7 +614,7 @@ public class UserKeypadActivity extends AppCompatActivity {
                     String subStatus = "inactive";
                     Log.w(TAG, "STATUS = FALSE");
 
-                    logoutMerchant();
+                    AuthHelper.logOut(UserKeypadActivity.this);
 
                     if (status != null && status.getStatus() != null) {
                         status.setStatus(subStatus);
@@ -670,7 +658,7 @@ public class UserKeypadActivity extends AppCompatActivity {
                 spinner.setVisibility(View.GONE);
 
                 if (t.getMessage() != null && t.getMessage().equals("timeout")) {
-                    logoutMerchant();
+                    AuthHelper.logOut(UserKeypadActivity.this);
                 }
             }
         });
@@ -679,15 +667,6 @@ public class UserKeypadActivity extends AppCompatActivity {
     private void getMerchantShops() {
         spinner.setVisibility(View.GONE);
 
-    }
-
-
-    private void logoutMerchant() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
-        AuthHelper.logOut(UserKeypadActivity.this);
-        sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
-        sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
-        sharedPref.edit().clear().apply();
     }
 
     private void keypadButtonInput(String number) {
@@ -753,10 +732,10 @@ public class UserKeypadActivity extends AppCompatActivity {
     // Change phone number length and format based on country code. Android's phone number format only works with phone input type
     private void countryCodeChangePhoneEditTextFormatting() {
         if (!usaCountryCode.equals(countryCode.getText().toString())) {
-            phoneNumber.setFilters(new InputFilter[] { new InputFilter.LengthFilter(20) });
+            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
             phoneNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else {
-            phoneNumber.setFilters(new InputFilter[] { new InputFilter.LengthFilter(14) });
+            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
             phoneNumber.setInputType(InputType.TYPE_CLASS_PHONE);
         }
     }
@@ -768,31 +747,5 @@ public class UserKeypadActivity extends AppCompatActivity {
         return numberStripped2.replaceAll(" ", "");
     }
 
-//    private void hideKeyboard() {
-//        InputMethodManager imm =
-//                (InputMethodManager)phoneNumber.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (imm.isActive())
-//            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-//
-//        imm.hideSoftInputFromWindow(phoneNumber.getWindowToken(), 0);
-//    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof GivePointsFragmentInterface) {
-            listener = (GivePointsFragmentInterface) context;
-
-        } else {
-            throw new RuntimeException(context.toString() + " must implement GivePointsFragmentInterface");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
 
 }

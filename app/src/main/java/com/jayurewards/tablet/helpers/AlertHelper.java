@@ -2,16 +2,20 @@ package com.jayurewards.tablet.helpers;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.jayurewards.tablet.screens.LoginMerchantActivity;
+import com.jayurewards.tablet.screens.SplashScreenActivity;
 
 import static android.content.ContentValues.TAG;
 
 public class AlertHelper {
 
     public static void showAlert(Context context, String setTitle, String setMessage) {
-        androidx.appcompat.app.AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setTitle(setTitle);
         builder1.setMessage(setMessage);
 
