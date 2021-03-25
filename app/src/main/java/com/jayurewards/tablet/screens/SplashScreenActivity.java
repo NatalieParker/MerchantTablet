@@ -17,21 +17,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        Log.i(TAG,"SPLASH SCREEN SHOWN");
-
         boolean userLoggedIn = AuthHelper.isUserLoggedIn(this);
 
         if (userLoggedIn) {
-            Log.i(TAG, "onCreate: \n USER IS LOGGED IN: " + userLoggedIn );
             AuthHelper.checkMerchantSubscription(SplashScreenActivity.this);
         } else {
-            Log.i(TAG, "onCreate: \n USER IS NOT LOGGED IN: " + userLoggedIn );
             Intent intent = new Intent(SplashScreenActivity.this, LoginMerchantActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
     }
-
 
 
 }
