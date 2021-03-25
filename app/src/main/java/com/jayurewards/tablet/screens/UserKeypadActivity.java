@@ -65,12 +65,6 @@ public class UserKeypadActivity extends AppCompatActivity {
     private static final String POINT_METHOD = "pointMethod";
     private static final String ADMIN_LEVEL = "adminLevel";
 
-    public interface GivePointsFragmentInterface {
-        void onSuccessfulPointsGiven(int storeId, String companyName);
-    }
-
-    private GivePointsFragmentInterface listener;
-
     private Button key1;
     private Button key2;
     private Button key3;
@@ -103,12 +97,9 @@ public class UserKeypadActivity extends AppCompatActivity {
 //    private TextView givePointsResult;
 //    private MaterialButton dismissButton;
 
-    private int teamId;
-    private ArrayList<ShopAdminModel> merchantShops = new ArrayList<>();
-    private String selectedCompany;
-    private int selectedStoreId;
+    private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
+    private ShopAdminModel shop;
     private String pointMethod;
-    private int adminLevel;
 
     private boolean givePointsSuccess = false;
     private String usaCountryCode = "1";
@@ -164,74 +155,52 @@ public class UserKeypadActivity extends AppCompatActivity {
         goToTeamLoginButton.setEnabled(false);
         constraintLayoutDarkenScreen.setEnabled(false);
 
-
-//        countryCode.addTextChangedListener(textWatcher);
         phoneNumber.addTextChangedListener(textWatcher);
-//        pointAmount.addTextChangedListener(textWatcher);
-
-//        // Phone number formatting based off user's device Locale (Country)
         phoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-
-//        if (merchantShops.size() <= 1) {
-//            company.setText(passedCompany);
-//            company.setEnabled(false);
-//            countryCode.setText(merchantShops.get(0).getCountryCode() != null ? merchantShops.get(0).getCountryCode() : usaCountryCode);
-//
-//            String point = String.valueOf(merchantShops.get(0).getStandardPoints() != 0 ? merchantShops.get(0).getStandardPoints() : "1");
-//            pointAmount.setText(point);
-//
-//            company.setTextColor(Color.GRAY);
-//            LayerDrawable border = UIDesignService.getBorders(
-//                    Color.WHITE, // Background color
-//                    Color.BLACK, // Border color
-//                    0, // Left border in pixels
-//                    0, // Top border in pixels
-//                    0, // Right border in pixels
-//                    1 // Bottom border in pixels
-//            );
-//            company.setBackground(border);
-//
-//        } else {
-//            company.setText(passedCompany);
-//
-//            pointAmount.setText(usaCountryCode);
-//            for (ShopAdminModel item : merchantShops) {
-//                if (passedCompany.equals(item.getCompany())) {
-//                    countryCode.setText(item.getCountryCode() != null ? item.getCountryCode() : usaCountryCode);
-//                    String point = String.valueOf(item.getStandardPoints() != 0 ? item.getStandardPoints() : "1");
-//                    pointAmount.setText(point);
-//                    break;
-//                }
-//            }
-//
-//            LayerDrawable border = UIDesignService.getBorders(
-//                    Color.WHITE, // Background color
-//                    Color.BLACK, // Border color
-//                    0, // Left border in pixels
-//                    0, // Top border in pixels
-//                    0, // Right border in pixels
-//                    1 // Bottom border in pixels
-//            );
-//            company.setBackground(border);
-//        }
-
-        // TODO: Change to shared preferences
-//        if (adminLevel != 0 && adminLevel <= 2) {
-//            pointAmount.setEnabled(false);
-//        }
-
         enablePostSubmit(false);
-        setUpClickListeners();
         enableDeleteButton(false);
+        setUpClickListeners();
         getMerchantShops();
+    }
 
+    /**
+     * Network calls
+     */
+    private void getMerchantShops() {
+        int merchantId = preferences.getInt(GlobalConstants.MERCHANT_ID, 0);
+
+        Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestShops().getMerchantShops(merchantId);
+        call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
+                shopList = response.body();
+                Log.i(TAG, "MERCHANT SHOPS CALL: " + shopList);
+
+                if (shopList != null && shopList.size() >= 1) {
+                    shop = shopList.get(0);
+                } else {
+                    String errorMessage = "Get Merchant shops Server Error";
+                    LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
+                    AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+                }
+
+                spinner.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
+                String errorMessage = "Get Merchant shops Error";
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+            }
+        });
     }
 
 
     /**
      * Set Click Listeners
      */
-
     private void setUpClickListeners() {
         key1.setOnClickListener(v -> keypadButtonInput("1"));
         key2.setOnClickListener(v -> keypadButtonInput("2"));
@@ -251,395 +220,182 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         enterButton.setOnClickListener(v -> {
-            // Prevent duplicates
+            if (SystemClock.elapsedRealtime() - lastClickTime < 2000) {
+                return;
+            }
+            lastClickTime = SystemClock.elapsedRealtime();
+
+            if (shop == null) return;
+
+            spinner.setVisibility(View.VISIBLE);
             enablePostSubmit(false);
+
             int teamId = 0;
             int adminLevel = 0;
 
-                if (SystemClock.elapsedRealtime() - lastClickTime < 2000) {
-                    return;
-                }
-                lastClickTime = SystemClock.elapsedRealtime();
+            String company = shop.getCompany();
+            int storeId = shop.getStoreId();
 
-                spinner.setVisibility(View.VISIBLE);
-                enablePostSubmit(false);
+            String cc = shop.getCountryCode();
+            String phoneFormatted = phoneNumber.getText().toString();
+            String phone = phoneFormatted.replaceAll("[^0-9]", "");
 
-                int timeout = 14400; // Initially set default time out
-                for (ShopAdminModel item : merchantShops) {
-                    if (selectedCompany.equals(item.getCompany())) {
-                        timeout = item.getStandardPtTimeout();
-                        break;
-                    }
-                }
+            int points = shop.getStandardPoints();
+            int timeout = shop.getStandardPtTimeout() != 0 ? shop.getStandardPtTimeout() : 14400;
 
-//                String countryCodeInput = countryCode.getText().toString();
-                String phoneFormatted = phoneNumber.getText().toString();
-                String phone = phoneFormatted.replaceAll("[^0-9]", "");
-//                String formattedPoints = stripNumberFormatting(pointAmount.getText().toString());
-//                int amount;
-//                try {
-//                    amount = Integer.parseInt(formattedPoints);
-//                } catch (Throwable t) {
-//                    String errorMessage = "Give points Int Parse error";
-//                    LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.PARSING);
-//                    AlertHelper.showAlert(UserKeypadActivity.this, "com.jayurewards.tablet.models.Points Error", "Please make sure the amount of points are all numbers.");
-//                    return;
-//                }
+            String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
+            String type = GlobalConstants.POINT_TYPE_GENERAL;
 
-//                String shop = company.getText().toString();
-                String type = GlobalConstants.POINT_TYPE_GENERAL;
-
-//                String day = DateFormatService.getDayString(new Date());
-//                String time = DateFormatService.getTimeString(new Date());
-
-//                GivePointsRequest params = new GivePointsRequest(countryCodeInput, phone, selectedStoreId, shop, amount, pointMethod, type,
-//                        teamId, adminLevel, timeout, day, time);
-//
-//                Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestShops().merchantGivePoints(params);
-//                call.enqueue(new Callback<GivePointsResponse>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-//                        GivePointsResponse result = response.body();
-//                        if (UserKeypadActivity.this != null) {
-//                            if (result != null) {
-//                                if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
-//                                    GlideApp.with(UserKeypadActivity.this)
-//                                            .load(result.getThumbnail())
-//                                            .placeholder(R.drawable.placeholder)
-//                                            .fallback(R.drawable.default_profile)
-//                                            .into(userImage);
-//                                } else {
-//                                    GlideApp.with(UserKeypadActivity.this)
-//                                            .load(R.drawable.default_profile)
-//                                            .into(userImage);
-//                                }
-//
-//                                if (result.getTimeLeft() != 0) {
-//                                    String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
-//                                    String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
-//
-//                                    header.setText(getString(R.string.unsuccessful));
-//                                    header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
-//                                    givePointsResult.setText(message);
-//
-//                                    spinner.setVisibility(View.GONE);
-//                                    resultsContainer.setVisibility(View.VISIBLE);
-//
-//                                    return;
-//                                }
-//
-//                                givePointsSuccess = true;
-//                                header.setText(getString(R.string.success));
-//
-//                                int pointTally = amount; // Set just in case a null response is received
-//                                if (result.getPointTally() != 0) {
-//                                    pointTally = result.getPointTally();
-//                                }
-//
-//                                String pointTallyString;
-//                                if (pointTally == 1) {
-//                                    pointTallyString = "1 point for rewards.";
-//                                } else {
-//                                    pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
-//                                }
-//
-//                                int pointsGiven = amount;
-//                                if (result.getPoints() != 0) {
-//                                    pointsGiven = result.getPoints();
-//                                }
-//
-//                                String points;
-//                                String success;
-//                                if (pointsGiven == 1) {
-//                                    points = "1";
-//                                    success = result.getName() + " was given " + points + " point and now has " + pointTallyString;
-//                                } else {
-//                                    points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
-//                                    success = result.getName() + " was given " + points + " points and now has " + pointTallyString;
-//                                }
-//
-//                                givePointsResult.setText(success);
-//
-//                            } else {
-//                                GlideApp.with(UserKeypadActivity.this)
-//                                        .load(R.drawable.default_profile_image)
-//                                        .into(userImage);
-//
-//                                header.setText(getString(R.string.no_match));
-//                                givePointsResult.setText(getString(R.string.give_points_incorrect_phone_result));
-//                                dismissButton.setText(getString(R.string.dismiss));
-//                            }
-//                        }
-//
-//                        spinner.setVisibility(View.GONE);
-//                        resultsContainer.setVisibility(View.VISIBLE);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-//                        Log.e(TAG, "Merchant manually give com.jayurewards.tablet.models.Points Error: " + t.getMessage());
-//                        spinner.setVisibility(View.GONE);
-//                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-//                    }
-//                });
-
-            String cc = merchantShops.get(0).getCountryCode();
-            int points = merchantShops.get(0).getStandardPoints();
-            int pointTimeout = merchantShops.get(0).getStandardPtTimeout();
+//            String day = DateFormatService.getDayString(new Date());
+//            String time = DateFormatService.getTimeString(new Date());
             String time = "10:00";
             String day = "friday";
 
-            GivePointsRequest params = new GivePointsRequest(cc, phone, selectedStoreId,
-                    selectedCompany, points, GlobalConstants.MERCHANT_TABLET_KEYPAD, GlobalConstants.POINT_TYPE_GENERAL, teamId, adminLevel,
-                    pointTimeout, day, time);
+            GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, points, method,
+                    type, teamId, adminLevel, timeout, day, time);
 
             Log.i(TAG, "GIVE POINTS PARAMS: " + params);
-
 
             Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
             call.enqueue(new Callback<GivePointsResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
 
-                    Log.i(TAG, "Merchant data recieved: " + response.body());
+                    Log.i(TAG, "Merchant data received: " + response.body());
 
+                    GivePointsResponse result = response.body();
+                    if (result != null) {
+//                        if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
+//                            GlideApp.with(UserKeypadActivity.this)
+//                                    .load(result.getThumbnail())
+//                                    .placeholder(R.drawable.placeholder)
+//                                    .fallback(R.drawable.default_profile)
+//                                    .into(userImage);
+//                        } else {
+//                            GlideApp.with(UserKeypadActivity.this)
+//                                    .load(R.drawable.default_profile)
+//                                    .into(userImage);
+//                        }
+
+//                        if (result.getTimeLeft() != 0) {
+//                            String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
+//                            String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
+//
+//                            header.setText(getString(R.string.unsuccessful));
+//                            header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
+//                            givePointsResult.setText(message);
+//
+//                            spinner.setVisibility(View.GONE);
+//                            resultsContainer.setVisibility(View.VISIBLE);
+//
+//                            return;
+//                        }
+
+//                        givePointsSuccess = true;
+//                        header.setText(getString(R.string.success));
+//
+//                        int pointTally = amount; // Set just in case a null response is received
+//                        if (result.getPointTally() != 0) {
+//                            pointTally = result.getPointTally();
+//                        }
+//
+//                        String pointTallyString;
+//                        if (pointTally == 1) {
+//                            pointTallyString = "1 point for rewards.";
+//                        } else {
+//                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
+//                        }
+
+//                        int pointsGiven = amount;
+//                        if (result.getPoints() != 0) {
+//                            pointsGiven = result.getPoints();
+//                        }
+
+//                        String points;
+//                        String success;
+//                        if (pointsGiven == 1) {
+//                            points = "1";
+//                            success = result.getName() + " was given " + points + " point and now has " + pointTallyString;
+//                        } else {
+//                            points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
+//                            success = result.getName() + " was given " + points + " points and now has " + pointTallyString;
+//                        }
+
+//                        givePointsResult.setText(success);
+
+                    } else {
+//                        GlideApp.with(UserKeypadActivity.this)
+//                                .load(R.drawable.default_profile_image)
+//                                .into(userImage);
+//
+//                        header.setText(getString(R.string.no_match));
+//                        givePointsResult.setText(getString(R.string.give_points_incorrect_phone_result));
+//                        dismissButton.setText(getString(R.string.dismiss));
+                    }
+
+//                    resultsContainer.setVisibility(View.VISIBLE);
                     spinner.setVisibility(View.GONE);
 
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-                    Log.i(TAG, "Get merchant data error: " + t.getMessage());
+                    String errorMessage = "Get merchant data error: ";
+                    LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                     AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+                    spinner.setVisibility(View.GONE);
                 }
             });
         });
 
-//        company.setOnClickListener(view -> {
-//            if (UserKeypadActivity.this != null && merchantShops.size() > 1) {
-//                ArrayList<String> shops = new ArrayList<>();
-//                ArrayList<Integer> shopStdPts = new ArrayList<>();
-//                ArrayList<String> shopCountryCodes = new ArrayList<>();
-//
-//                for (ShopAdminModel shop : merchantShops) {
-//                    shops.add(shop.getCompany());
-//                    shopStdPts.add(shop.getStandardPoints());
-//                    shopCountryCodes.add(shop.getCountryCode() != null ? shop.getCountryCode() : usaCountryCode);
-//                }
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
-//                builder.setTitle("Select Company");
-//                builder.setItems(shops.toArray(new String[0]), (dialog, which) -> {
-//
-//                    if (shops.get(which).equals(company.getText().toString())) {
-//                        return;
-//                    }
-//
-//                    countryCodeChangePhoneEditTextFormatting();
-//                    pointAmount.setText(String.valueOf(shopStdPts.get(which)));
-//                    company.setText(shops.get(which));
-//                    countryCode.setText(shopCountryCodes.get(which));
-//                    selectedStoreId = merchantShops.get(which).getStoreId();
-//                });
-//
-//                builder.show();
-//            }
-//        });
-
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "SIGN OUT BUTTON PRESSED");
-                AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
-                builder.setTitle("Logout");
-                builder.setMessage("Are you sure you want to log out?");
-
-                builder.setPositiveButton("Log out", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AuthHelper.logOut(UserKeypadActivity.this);
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", null);
-
-                builder.show();
-            }
+        signOutButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
+            builder.setTitle("Logout");
+            builder.setMessage("Are you sure you want to log out?");
+            builder.setPositiveButton("Log out", (dialog, which) -> AuthHelper.logOut(UserKeypadActivity.this));
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
         });
 
-        goToTeamLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "SENT TO LOGIN TEAM SCREEN");
-
-                Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
-                startActivity(intent);
-            }
+        goToTeamLoginButton.setOnClickListener(v -> {
+            Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
+            startActivity(intent);
         });
 
         buttonUpdatePoints.setOnClickListener(v -> Log.i(TAG, "UPDATE POINTS BUTTON CLICKED"));
-
         buttonLockScreen.setOnClickListener(v -> Log.i(TAG, "LOCK SCREEN BUTTON CLICKED"));
-
-        buttonOptionsMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openKeypadOptionsMenu();
-                Log.i(TAG, "OPTIONS MENU BUTTON CLICKED");
-            }
-        });
-
-        constraintLayoutDarkenScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeKeypadOptionsMenu();
-            }
-        });
+        buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
+        constraintLayoutDarkenScreen.setOnClickListener(v -> closeKeypadOptionsMenu());
     }
 
     /**
      * Edit Text Functions
      */
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    private final TextWatcher textWatcher;
+        }
 
-    {
-        textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkForEmptyField();
+        }
+    };
 
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-//                Reset phone number and check phone number format if country code changed
-//                if (countryCode.getText().hashCode() == s.hashCode()) {
-//                    phoneNumber.setText(null);
-//                    countryCodeChangePhoneEditTextFormatting();
-//                } else if (pointAmount.getText().hashCode() == s.hashCode()) {
-//                    pointAmount.removeTextChangedListener(this);
-//                    String numberString = pointAmount.getText().toString();
-//
-//                    // Format number based on location (e.g add commas)
-//                    if (!numberString.equals("")) {
-//                        String numberStripped = stripNumberFormatting(numberString);
-//
-//                        double numberDouble;
-//                        try {
-//                            numberDouble = Double.parseDouble(numberStripped);
-//                            String formattedNumber = NumberFormat.getNumberInstance(Locale.getDefault()).format(numberDouble);
-//                            pointAmount.setText(formattedNumber);
-//                            pointAmount.setSelection(pointAmount.getText().toString().length());
-//
-//                        } catch (Throwable t) {
-//                            String message = "Give points text listener parse points error";
-//                            LogHelper.errorReport(TAG, message, t, LogHelper.ErrorReportType.PARSING);
-//                        }
-//                    }
-//
-//                    pointAmount.addTextChangedListener(this);
-//                }
-                checkForEmptyField();
-
-            }
-        };
-    }
-
-    // Change state for submit button based on text entered
     private void checkForEmptyField() {
-//        String amount = pointAmount.getText().toString();
-//        String countryCallingCode = countryCode.getText().toString();
         String phone = phoneNumber.getText().toString();
 
-        Log.i(TAG, "PHONE NUMBER: " + phone);
-        boolean goEnableButton = phone.length() >= 1;
-        enableDeleteButton(goEnableButton);
-//
-//        if ((pointAmount.isEnabled() && amount.isEmpty()) || phone.isEmpty() || countryCallingCode.isEmpty()) {
-//            enablePostSubmit(false);
-//
-//        } else if (usaCountryCode.equals(countryCallingCode) && phone.length() <= 13) {
-//            enablePostSubmit(false);
-//
-//        } else if (phone.length() < 6) {
-//            enablePostSubmit(false);
-//
-//        } else {
-//            enablePostSubmit(true);
-//        }
+        boolean enableDelete = phone.length() >= 1;
+        enableDeleteButton(enableDelete);
 
-        enablePostSubmit(true);
-
-//        if (phone.length() < 6) {
-//            enablePostSubmit(true);
-//        } else {
-//            enablePostSubmit(false);
-//        }
-    }
-
-//    private void givePoints() {
-//        GivePointsRequest params = new GivePointsRequest("1", "7578765083", 1, "company", 2, "merchant_web", "general", 0, 0, 1000, "Tuesday", "13:00");
-//        Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
-//        call.enqueue(new Callback<GivePointsResponse>() {
-//            @Override
-//            public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-//
-//                Log.i(TAG, "Merchant data recieved: " + response.body());
-//
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-//                Log.i(TAG, "Get merchant data error: " + t.getMessage());
-//                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-//            }
-//        });
-//
-//    }
-
-    /**
-     * Network calls
-     */
-
-    private void getMerchantShops() {
-        int merchantId = preferences.getInt(GlobalConstants.MERCHANT_ID, 0);
-
-        Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestShops().getMerchantShops(merchantId);
-        call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
-                merchantShops = response.body();
-                Log.i(TAG, "MERCHANT SHOPS CALL: " + merchantShops);
-
-                if (merchantShops != null) {
-                    selectedStoreId = merchantShops.get(0).getStoreId();
-                    selectedCompany = merchantShops.get(0).getCompany();
-
-                } else {
-                    spinner.setVisibility(View.GONE);
-                    Log.e(TAG, "Get Merchant shops Server Error!");
-                    AlertHelper.showAlert(UserKeypadActivity.this, "Server Error",
-                            "Unable to connect to the server. Please try again later.");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Get merchant shops Error: " + t.getMessage());
-
-                spinner.setVisibility(View.GONE);
-                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-            }
-        });
-
-        spinner.setVisibility(View.GONE);
-
+        boolean enableSubmit = phone.length() > 6;
+        enablePostSubmit(enableSubmit);
     }
 
     private void keypadButtonInput(String number) {
@@ -649,10 +405,10 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void enableDeleteButton(boolean enabled) {
         if (!enabled) {
-            deleteButton.setBackgroundTintList(ColorStateList.valueOf(UserKeypadActivity.this.getColor(R.color.colorPrimaryLight)));
+            deleteButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
             deleteButton.setEnabled(false);
         } else {
-            deleteButton.setBackgroundTintList(ColorStateList.valueOf(UserKeypadActivity.this.getColor(R.color.colorPrimary)));
+            deleteButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
             deleteButton.setEnabled(true);
         }
     }
@@ -660,18 +416,17 @@ public class UserKeypadActivity extends AppCompatActivity {
     private void enablePostSubmit(Boolean enabled) {
         if (UserKeypadActivity.this != null) {
             if (!enabled) {
-                enterButton.setBackgroundTintList(ColorStateList.valueOf(UserKeypadActivity.this.getColor(R.color.colorPrimaryLight)));
+                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
                 enterButton.setEnabled(false);
 
             } else {
-                enterButton.setBackgroundTintList(ColorStateList.valueOf(UserKeypadActivity.this.getColor(R.color.colorPrimary)));
+                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
                 enterButton.setEnabled(true);
             }
         }
     }
 
     private void openKeypadOptionsMenu() {
-
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_option_menu_open);
         linearLayoutOptionsMenu.setVisibility(View.VISIBLE);
         linearLayoutOptionsMenu.startAnimation(animation);
@@ -687,7 +442,6 @@ public class UserKeypadActivity extends AppCompatActivity {
     }
 
     private void closeKeypadOptionsMenu() {
-
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_option_menu_close);
         linearLayoutOptionsMenu.startAnimation(animation);
         linearLayoutOptionsMenu.setVisibility(View.GONE);

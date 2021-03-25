@@ -307,11 +307,11 @@ public class LoginMerchantActivity extends AppCompatActivity {
 
     private void enableEmailSubmit(boolean enabled) {
         if (!enabled) {
-            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.black)));
+            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
             emailLoginButton.setEnabled(false);
 
         } else {
-            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.purple_500)));
+            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
             emailLoginButton.setEnabled(true);
         }
     }
