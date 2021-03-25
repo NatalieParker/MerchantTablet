@@ -219,7 +219,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         enablePostSubmit(false);
         setUpClickListeners();
         enableDeleteButton(false);
-        getMerchantSubscription();
+//        getMerchantSubscription();
 
     }
 
