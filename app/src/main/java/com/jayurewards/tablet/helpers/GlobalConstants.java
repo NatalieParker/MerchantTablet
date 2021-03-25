@@ -11,9 +11,9 @@ public class GlobalConstants {
     public static final String CANCELED_STRIPE = "canceled";
     public static final String UNPAID_STRIPE = "unpaid";
 
-
     // Intents/Shared preferences
     public static final String SHARED_PREF = "sharedPref";
+    public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
     public static final String MERCHANT_ID = "merchantId";
     public static final String MERCHANT_FIREBASE_UID = "firebaseUid";
@@ -40,6 +40,10 @@ public class GlobalConstants {
     public static final String USER_TERMS_AND_CONDITIONS_LINK = "userTermsAndConditionsLink";
     public static final String POINT_TYPE_GENERAL = "pointTypeGeneral";
     public static final String MERCHANT_TABLET_KEYPAD = "merchant_tablet_keypad";
+
+
+    public static final String WEB_URL_PORTAL_SIGNUP = "https://portal.jayu.us/auth/signup";
+    public static final String WEB_URL_PORTAL_FORGOT_PASSWORD = "https://portal.jayu.us/auth/forgot-password";
 
 
 }

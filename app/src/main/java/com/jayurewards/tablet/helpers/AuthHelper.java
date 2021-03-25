@@ -1,15 +1,12 @@
 package com.jayurewards.tablet.helpers;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,8 +39,8 @@ public class AuthHelper {
 
     public static void checkMerchantSubscription(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        String stripeId = sharedPref.getString("stripeId", null);
-        String subscriptionId = sharedPref.getString("subscriptionId", null);
+        String stripeId = sharedPref.getString(GlobalConstants.STRIPE_ID, null);
+        String subscriptionId = sharedPref.getString(GlobalConstants.SUBSCRIPTION_ID, null);
 
         CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
         Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
@@ -76,27 +73,27 @@ public class AuthHelper {
                         callUpdate.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-
+                                // Success
                             }
 
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
-
+                                String errorMessage = "Update subscription status error: ";
+                                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                             }
                         });
                     }
 
                     Intent intent = new Intent(context, InactiveAccountActivity.class);
                     context.startActivity(intent);
-
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
-
-                Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
+                String errorMessage = "Check subscription network error: ";
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                AlertHelper.showNetworkAlert(context);
 
                 if (t.getMessage() != null && t.getMessage().equals("timeout")) {
                     AuthHelper.logOut(context);
@@ -106,7 +103,6 @@ public class AuthHelper {
     }
 
     public static void logOut(Context currentScreen) {
-
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(currentScreen);
         sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
         sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
@@ -116,7 +112,6 @@ public class AuthHelper {
         sharedPref.edit().clear().apply();
 
         FirebaseAuth.getInstance().signOut();
-        Date date = new Date();
         Intent intent = new Intent(currentScreen, LoginMerchantActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         currentScreen.startActivity(intent);

@@ -25,22 +25,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
+import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.MerchantModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
-
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +46,6 @@ import retrofit2.Response;
 public class LoginMerchantActivity extends AppCompatActivity {
     private static final String TAG = "LoginScreen";
     private static final int RC_SIGN_IN = 1;
-    private long lastClickTime = 0;
 
     private EditText emailEditText;
     private EditText passwordEditText;
@@ -59,9 +55,11 @@ public class LoginMerchantActivity extends AppCompatActivity {
     private MaterialButton buttonSignUp;
     private MaterialButton buttonForgotPassword;
     private FirebaseAuth auth;
-    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInClient googleSignInClient;
     private SharedPreferences preferences;
-    private ConstraintLayout constraintLayoutSpinner;
+    private ConstraintLayout spinner;
+
+    private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,248 +73,112 @@ public class LoginMerchantActivity extends AppCompatActivity {
         buttonApple = findViewById(R.id.buttonLoginMerchantApple);
         buttonSignUp = findViewById(R.id.buttonLoginMerchantSignUp);
         buttonForgotPassword = findViewById(R.id.buttonLoginMerchantForgotPassword);
+        spinner = findViewById(R.id.spinnerLoginMerchant);
 
-
-        emailEditText.addTextChangedListener(textWatcher);
-        passwordEditText.addTextChangedListener(textWatcher);
-        emailEditText.requestFocus();
         auth = FirebaseAuth.getInstance();
-        enableEmailSubmit(false);
-        setUpClickListeners();
-        constraintLayoutSpinner = findViewById(R.id.spinnerLoginMerchant);
-        constraintLayoutSpinner.setVisibility(View.GONE);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        emailEditText.addTextChangedListener(textWatcher);
+        passwordEditText.addTextChangedListener(textWatcher);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(LoginMerchantActivity.this);
-        Log.i(TAG, "Email: " + preferences.getString("email", null));
-        Log.i(TAG, "Firebase UID: " + preferences.getString("firebaseUid", null));
-        Log.i(TAG, "Merchant ID: " + preferences.getInt("merchantId", 0));
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = auth.getCurrentUser();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-        if (currentUser != null) {
-            Log.i(TAG, "User" + currentUser.toString());
-            goToKeypadPage();
-        } else {
-            Log.i(TAG, "No Current User");
-        }
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-        }
-    }
-
-
-
-    private void preventDuplicateClicks() {
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
-            return;
-        }
-        lastClickTime = SystemClock.elapsedRealtime();
+        enableEmailSubmit(false);
+        setUpClickListeners();
     }
 
     /**
-     * EDIT TEXT METHODS
+     * Click Listeners
      */
-    private final TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            checkForEmptyField();
-        }
-    };
-
-    private void checkForEmptyField() {
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-
-        Log.i(TAG, "EMAIL: " + email);
-        Log.i(TAG, "PASSWORD: " + password);
-        boolean goEnableButton = email.length() >= 1 && password.length() >= 1;
-        enableEmailSubmit(goEnableButton);
-    }
-
-    private void enableEmailSubmit(boolean enabled) {
-        if (!enabled) {
-            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.black)));
-            emailLoginButton.setEnabled(false);
-
-        } else {
-            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.purple_500)));
-            emailLoginButton.setEnabled(true);
-        }
-    }
-
-    private boolean isValidEmail(CharSequence target) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-    }
-
     private void setUpClickListeners() {
-        emailLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
-                preventDuplicateClicks();
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                signIn(email, password);
-                constraintLayoutSpinner.setVisibility(View.GONE);
-            }
-        });
-        buttonGoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
-                preventDuplicateClicks();
-                switch (v.getId()) {
-                    case R.id.buttonLoginMerchantGoogle:
-                        googleSignIn();
-                        constraintLayoutSpinner.setVisibility(View.GONE);
-                        break;
+        emailLoginButton.setOnClickListener(v -> {
+            preventDuplicateClicks();
+            spinner.setVisibility(View.VISIBLE);
+            hideKeyboard();
+
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+
+            if (!email.isEmpty()) {
+                if (!isValidEmail(email)) {
+                    emailEditText.setError("Please enter a valid email.");
+                    emailEditText.requestFocus();
+                    return;
                 }
-
             }
-        });
 
-        buttonApple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OAuthProvider.Builder provider = OAuthProvider.newBuilder("apple.com");
-                Log.i(TAG,"SIGN IN WITH APPLE BUTTON PRESSED");
-
-                Task<AuthResult> pending = auth.getPendingAuthResult();
-                if (pending != null) {
-                    pending.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            authResult.getUser();
-                            authResult.getAdditionalUserInfo();
-                            authResult.getCredential();
-                            Log.d(TAG,"CHECKPENDING:ONSUCCESS:" + authResult);
-                        }
-
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG,"CHECKPENDING:ONFAILURE", e);
-                        }
-                    });
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful() && auth.getCurrentUser() != null) {
+                    String firebaseUid = auth.getCurrentUser().getUid();
+                    getMerchantData(firebaseUid);
                 } else {
-                    Log.d(TAG,"PENDING: NULL");
-
-                    auth.startActivityForSignInWithProvider(LoginMerchantActivity.this, provider.build())
-                            .addOnSuccessListener(
-                                    new OnSuccessListener<AuthResult>() {
-                                        @Override
-                                        public void onSuccess(AuthResult authResult) {
-                                            Log.d(TAG, "ACTIVITYSIGNIN:ONSUCCESS:" + authResult.getUser());
-                                            FirebaseUser user = authResult.getUser();
-                                        }
-                                    }
-                            )
-                            .addOnFailureListener(
-                                    new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
-                                            Log.w(TAG,"ACTIVITYSIGNIN:ONFAILURE", e);
-                                        }
-                                    }
-                            );
+                    Log.e(TAG, "Firebase email and password auth error: ", task.getException());
+                    AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error",
+                            "This email does not exist, or the password is incorrect. Please check and try again.");
                 }
+            });
+        });
+
+        buttonGoogle.setOnClickListener(v -> {
+            preventDuplicateClicks();
+            spinner.setVisibility(View.VISIBLE);
+            hideKeyboard();
+
+            if (v.getId() == R.id.buttonLoginMerchantGoogle) {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
-                preventDuplicateClicks();
-                website("https://portal.jayu.us/auth/signup");
-                constraintLayoutSpinner.setVisibility(View.GONE);
-            }
-        });
-        buttonForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                constraintLayoutSpinner.setVisibility(View.VISIBLE);
-                preventDuplicateClicks();
-                website("https://portal.jayu.us/auth/forgot-password");
-                constraintLayoutSpinner.setVisibility(View.GONE);
-            }
-        });
-    }
 
-    private void goToKeypadPage() {
-        Date date = new Date();
+        buttonApple.setOnClickListener(v -> {
+            preventDuplicateClicks();
+            spinner.setVisibility(View.VISIBLE);
+            hideKeyboard();
 
-        Log.i(TAG, "LOGIN SUBMITTED AT: " + date);
+            OAuthProvider.Builder provider = OAuthProvider.newBuilder("apple.com");
+            Task<AuthResult> pending = auth.getPendingAuthResult();
+            if (pending != null) {
+                pending.addOnSuccessListener(authResult -> {
+                    String firebaseUid = authResult.getUser().getUid();
+                    getMerchantData(firebaseUid);
 
-        Intent intent = new Intent(LoginMerchantActivity.this, UserKeypadActivity.class);
-        startActivity(intent);
-    }
-
-    private void googleSignIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void signIn(String email, String password) {
-
-        if (!email.isEmpty()) {
-            if (!isValidEmail(email)) {
-                emailEditText.setError("Please enter a valid email.");
-                emailEditText.requestFocus();
-                return;
-            }
-        }
-
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful() && auth.getCurrentUser() != null) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = auth.getCurrentUser();
-                            String firebaseUid = auth.getCurrentUser().getUid();
-                            Log.i(TAG, "Firebase ID: " + firebaseUid);
-                            getMerchantData(firebaseUid);
-                        } else {
-                            Log.e(TAG, "signInWithEmail:failure", task.getException());
-
-                            AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error", "This email does not exist, or the password is incorrect. Please check and try again.");
-                        }
-
-                        hideKeyboard();
-
-                    }
+                }).addOnFailureListener(e -> {
+                    Log.e(TAG, "Check Apple pending auth error: ", e);
+                    AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
                 });
+
+            } else {
+                auth.startActivityForSignInWithProvider(LoginMerchantActivity.this, provider.build())
+                        .addOnSuccessListener(authResult -> {
+                                    String firebaseUid = authResult.getUser().getUid();
+                                    getMerchantData(firebaseUid);
+                                }
+                        )
+                        .addOnFailureListener(e -> {
+                                    Log.e(TAG, "Sign in with Apple error: ", e);
+                                    AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
+                                }
+                        );
+            }
+        });
+
+        buttonSignUp.setOnClickListener(v -> {
+            preventDuplicateClicks();
+            website(GlobalConstants.WEB_URL_PORTAL_SIGNUP);
+        });
+
+        buttonForgotPassword.setOnClickListener(v -> {
+            preventDuplicateClicks();
+            website(GlobalConstants.WEB_URL_PORTAL_FORGOT_PASSWORD);
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
@@ -326,11 +188,21 @@ public class LoginMerchantActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            goToKeypadPage();
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            auth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    String firebaseUid = auth.getCurrentUser().getUid();
+                    getMerchantData(firebaseUid);
+                } else {
+                    Log.e(TAG, "Firebase email and password auth error: ", task.getException());
+                    AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error",
+                            "This email does not exist, or the password is incorrect. Please check and try again.");
+                }
+            });
 
         } catch (ApiException e) {
-            Log.w(TAG, "signInResult:failed code=" + e);
-//
+            Log.e(TAG, "Google signin error: " + e);
+
             switch (e.getStatusCode()) {
                 case 12501:
                     Log.w(TAG, "User canceled the Google Sign in");
@@ -359,17 +231,9 @@ public class LoginMerchantActivity extends AppCompatActivity {
         hideKeyboard();
     }
 
-    private void website(String setWebsite) {
-        Intent openWebsite = new Intent(Intent.ACTION_VIEW);
-        try {
-            openWebsite.setData(Uri.parse(setWebsite));
-            startActivity(openWebsite);
-        } catch (ActivityNotFoundException e) {
-            Log.i(TAG, "Website error");
-            AlertHelper.showAlert(this, "Error", "Something went wrong, please check your internet connection and try again.");
-        }
-    }
-
+    /**
+     * Networking
+     */
     private void getMerchantData(String firebaseUid) {
         Call<MerchantModel> call = RetrofitClient.getInstance().getRestAuth().getMerchant(firebaseUid);
         call.enqueue(new Callback<MerchantModel>() {
@@ -381,30 +245,94 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 String firebaseUid = merchant.getFirebaseUid();
                 String stripeId = merchant.getStripeId();
                 String subscriptionId = merchant.getSubscriptionId();
-//                String status = merchant.getStatus();
                 int merchantId = merchant.getMerchantId();
 
-                Log.i(TAG, "Merchant data response retrieved: " + firstName);
-                Log.i(TAG, "Merchant data retrieved: " + merchant);
-
                 SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(GlobalConstants.FIRST_NAME, firstName);
                 editor.putString(GlobalConstants.EMAIL, email);
                 editor.putString(GlobalConstants.MERCHANT_FIREBASE_UID, firebaseUid);
                 editor.putInt(GlobalConstants.MERCHANT_ID, merchantId);
                 editor.putString(GlobalConstants.STRIPE_ID, stripeId);
                 editor.putString(GlobalConstants.SUBSCRIPTION_ID, subscriptionId);
-//                editor.putString(GlobalConstants.STRIPE_STATUS, stripeStatus);
                 editor.apply();
-                goToKeypadPage();
+
+                AuthHelper.checkMerchantSubscription(LoginMerchantActivity.this);
             }
 
             @Override
             public void onFailure(@NonNull Call<MerchantModel> call, @NonNull Throwable t) {
-
                 Log.e(TAG, "Get merchant data error: " + t.getMessage());
                 AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
             }
         });
+    }
+
+    private void website(String setWebsite) {
+        Intent openWebsite = new Intent(Intent.ACTION_VIEW);
+        try {
+            openWebsite.setData(Uri.parse(setWebsite));
+            startActivity(openWebsite);
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Open website link error: " + e.getMessage());
+            AlertHelper.showNetworkAlert(this);
+        }
+    }
+
+    /**
+     * EDIT TEXT METHODS
+     */
+    private final TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            checkForEmptyField();
+        }
+    };
+
+    private void checkForEmptyField() {
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        boolean goEnableButton = email.length() >= 1 && password.length() >= 1;
+        enableEmailSubmit(goEnableButton);
+    }
+
+    private void enableEmailSubmit(boolean enabled) {
+        if (!enabled) {
+            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.black)));
+            emailLoginButton.setEnabled(false);
+
+        } else {
+            emailLoginButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.purple_500)));
+            emailLoginButton.setEnabled(true);
+        }
+    }
+
+    private boolean isValidEmail(CharSequence target) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        }
+    }
+
+
+    private void preventDuplicateClicks() {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return;
+        }
+        lastClickTime = SystemClock.elapsedRealtime();
     }
 
 }

@@ -18,11 +18,7 @@ public class AlertHelper {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setTitle(setTitle);
         builder1.setMessage(setMessage);
-
-        builder1.setPositiveButton(
-                "OK",
-                (dialog, id) -> Log.i(TAG, "OK button pressed"));
-
+        builder1.setPositiveButton( "OK", (dialog, id) -> Log.i(TAG, "OK button pressed"));
         builder1.show();
     }
 
