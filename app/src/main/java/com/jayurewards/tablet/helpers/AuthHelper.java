@@ -54,7 +54,7 @@ public class AuthHelper {
                 CheckSubscriptionResponse status = response.body();
 
                 if (status != null &&
-                        (!status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
+                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
 

@@ -92,6 +92,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private ConstraintLayout spinner;
     private ConstraintLayout constraintLayoutDarkenScreen;
     private TextView phoneNumber;
+    private SharedPreferences preferences;
 
     private EditText countryCode;
     private EditText pointAmount;
@@ -152,7 +153,9 @@ public class UserKeypadActivity extends AppCompatActivity {
 //        givePointsResult = view.findViewById(R.id.textGivePointsResult);
 //        dismissButton = view.findViewById(R.id.buttonGivePointsDismiss);
 
-        spinner.setVisibility(View.GONE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
+
+        spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         linearLayoutOptionsMenu.setVisibility(View.GONE);
 
@@ -221,7 +224,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         enablePostSubmit(false);
         setUpClickListeners();
         enableDeleteButton(false);
-//        getMerchantSubscription();
+        getMerchantShops();
 
     }
 
@@ -302,7 +305,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                GivePointsRequest params = new GivePointsRequest(countryCodeInput, phone, selectedStoreId, shop, amount, pointMethod, type,
 //                        teamId, adminLevel, timeout, day, time);
 //
-//                Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestDashboardMerchant().merchantGivePoints(params);
+//                Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestShops().merchantGivePoints(params);
 //                call.enqueue(new Callback<GivePointsResponse>() {
 //                    @Override
 //                    public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
@@ -601,85 +604,37 @@ public class UserKeypadActivity extends AppCompatActivity {
     /**
      * Network calls
      */
-//    private void getMerchantSubscription() {
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
-//        String stripeId = sharedPref.getString("stripeId", null);
-//        String subscriptionId = sharedPref.getString("subscriptionId", null);
-//
-//        Log.i(TAG, "STRIPE ID: " + sharedPref.getString("stripeId", null));
-//        Log.i(TAG, "SUBSCRIPTION ID: " + sharedPref.getString("subscriptionId", null));
-//
-//        CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
-//        Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
-//
-//        call.enqueue(new Callback<CheckSubscriptionResponse>() {
-//            @Override
-//            public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
-//                CheckSubscriptionResponse status = response.body();
-//
-//                if (status != null &&
-//                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
-//                                || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
-//                                || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
-//
-//                    Log.i(TAG, "\n\n SUBSCRIPTION STATUS PASSED: " + status);
-//                    getMerchantShops();
-//
-//                } else {
-//                    String subStatus = "inactive";
-//                    Log.w(TAG, "STATUS = FALSE");
-//
-//                    AuthHelper.logOut(UserKeypadActivity.this);
-//
-//                    if (status != null && status.getStatus() != null) {
-//                        status.setStatus(subStatus);
-//
-//                        // TODO: Check and verify this network call works
-//
-//                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
-//                        Call<String> callUpdate = RetrofitClient.getInstance().getRestAuth().updateSubscriptionStatus(uss);
-//                        callUpdate.enqueue(new Callback<String>() {
-//                            @Override
-//                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-//                                Log.i(TAG, "UPDATE STATUS RESPONSE: " + response.body());
-//
-//
-//                            }
-//
-//                            @Override
-//                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-//                                Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
-//
-//
-//                            }
-//                        });
-//                    }
-//
-//
-//                    Intent intent = new Intent(UserKeypadActivity.this, InactiveAccountActivity.class);
-//                    startActivity(intent);
-//
-//
-//                }
-//
-//
-//                Log.i(TAG, "STATUS: " + status);
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
-//
-//                Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
-//                spinner.setVisibility(View.GONE);
-//
-//                if (t.getMessage() != null && t.getMessage().equals("timeout")) {
-//                    AuthHelper.logOut(UserKeypadActivity.this);
-//                }
-//            }
-//        });
-//    }
 
     private void getMerchantShops() {
+        int merchantId = preferences.getInt(GlobalConstants.MERCHANT_ID, 0);
+
+        Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestShops().getMerchantShops(merchantId);
+        call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
+                merchantShops = response.body();
+                Log.i(TAG, "MERCHANT SHOPS CALL: " + merchantShops);
+
+                if (merchantShops != null) {
+                    selectedStoreId = merchantShops.get(0).getStoreId();
+
+                } else {
+                    spinner.setVisibility(View.GONE);
+                    Log.e(TAG, "Get Merchant shops Server Error!");
+                    AlertHelper.showAlert(UserKeypadActivity.this, "Server Error",
+                            "Unable to connect to the server. Please try again later.");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
+                Log.e(TAG, "Get merchant shops Error: " + t.getMessage());
+
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+            }
+        });
+
         spinner.setVisibility(View.GONE);
 
     }
