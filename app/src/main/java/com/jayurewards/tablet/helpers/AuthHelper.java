@@ -30,7 +30,6 @@ import retrofit2.Response;
 public class AuthHelper {
     private static final String TAG = "Auth Helper";
 
-    // TODO: Test if this works with user logged in our out
     public static boolean isUserLoggedIn(Context currentScreen) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -40,7 +39,6 @@ public class AuthHelper {
             return false;
         }
     }
-
 
     public static void checkMerchantSubscription(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
