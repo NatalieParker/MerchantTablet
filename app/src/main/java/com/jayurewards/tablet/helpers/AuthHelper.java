@@ -28,19 +28,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AuthHelper {
-
-    private static final String TAG = "log out";
-
-
-    public static void logInCheck(Context currentScreen) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) logOut(currentScreen);
-    }
+    private static final String TAG = "Auth Helper";
 
     // TODO: Test if this works with user logged in our out
     public static boolean isUserLoggedIn(Context currentScreen) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.i(TAG, "USER: " + user);
         if (user != null) {
             return true;
         } else {
@@ -55,9 +47,6 @@ public class AuthHelper {
         String stripeId = sharedPref.getString("stripeId", null);
         String subscriptionId = sharedPref.getString("subscriptionId", null);
 
-        Log.i(TAG, "STRIPE ID: " + sharedPref.getString("stripeId", null));
-        Log.i(TAG, "SUBSCRIPTION ID: " + sharedPref.getString("subscriptionId", null));
-
         CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
         Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
 
@@ -67,30 +56,28 @@ public class AuthHelper {
                 CheckSubscriptionResponse status = response.body();
 
                 if (status != null &&
-                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
+                        (!status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
 
-                    Log.i(TAG, "\n\n SUBSCRIPTION STATUS PASSED: " + status);
+                    Intent intent = new Intent(context, UserKeypadActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
+
 
                 } else {
                     String subStatus = "inactive";
-                    Log.w(TAG, "STATUS = FALSE");
 
                     AuthHelper.logOut(context);
 
                     if (status != null && status.getStatus() != null) {
                         status.setStatus(subStatus);
 
-                        // TODO: Check and verify this network call works
-
                         UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
                         Call<String> callUpdate = RetrofitClient.getInstance().getRestAuth().updateSubscriptionStatus(uss);
                         callUpdate.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                Log.i(TAG, "UPDATE STATUS RESPONSE: " + response.body());
-
 
                             }
 
@@ -98,21 +85,14 @@ public class AuthHelper {
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
 
-
                             }
                         });
                     }
 
-
-                    Intent intent = new Intent(context, UserKeypadActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    Intent intent = new Intent(context, InactiveAccountActivity.class);
                     context.startActivity(intent);
 
-
                 }
-
-
-                Log.i(TAG, "STATUS: " + status);
             }
 
             @Override
@@ -125,47 +105,22 @@ public class AuthHelper {
                 }
             }
         });
-
-//        Intent intent = new Intent(context, UserKeypadActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        context.startActivity(intent);
-
     }
 
     public static void logOut(Context currentScreen) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(currentScreen);
-        builder.setTitle("Logout");
-        builder.setMessage("Are you sure you want to log out?");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(currentScreen);
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
+        sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
 
-        builder.setPositiveButton("Log out", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(currentScreen);
-                sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
-                sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
+        //TODO: Manually remove all team member values from shared preferences
 
-                //TODO: Manually remove all team member values from shared preferences
+        sharedPref.edit().clear().apply();
 
-                sharedPref.edit().clear().apply();
-
-                FirebaseAuth.getInstance().signOut();
-                Date date = new Date();
-                Intent intent = new Intent(currentScreen, LoginMerchantActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                currentScreen.startActivity(intent);
-
-                Log.i(TAG, "USER SIGNED OUT AT: " + date);
-            }
-        });
-
-        builder.setNegativeButton("Cancel", null);
-
-        builder.show();
+        FirebaseAuth.getInstance().signOut();
+        Date date = new Date();
+        Intent intent = new Intent(currentScreen, LoginMerchantActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        currentScreen.startActivity(intent);
     }
-
-
-
-
-
 }

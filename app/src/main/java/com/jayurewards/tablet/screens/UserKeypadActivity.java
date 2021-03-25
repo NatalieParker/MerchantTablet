@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
@@ -150,7 +152,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 //        givePointsResult = view.findViewById(R.id.textGivePointsResult);
 //        dismissButton = view.findViewById(R.id.buttonGivePointsDismiss);
 
-        spinner.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.GONE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         linearLayoutOptionsMenu.setVisibility(View.GONE);
 
@@ -444,8 +446,21 @@ public class UserKeypadActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AuthHelper.logOut(UserKeypadActivity.this);
                 Log.i(TAG, "SIGN OUT BUTTON PRESSED");
+                AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
+                builder.setTitle("Logout");
+                builder.setMessage("Are you sure you want to log out?");
+
+                builder.setPositiveButton("Log out", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AuthHelper.logOut(UserKeypadActivity.this);
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", null);
+
+                builder.show();
             }
         });
 
@@ -586,83 +601,83 @@ public class UserKeypadActivity extends AppCompatActivity {
     /**
      * Network calls
      */
-    private void getMerchantSubscription() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
-        String stripeId = sharedPref.getString("stripeId", null);
-        String subscriptionId = sharedPref.getString("subscriptionId", null);
-
-        Log.i(TAG, "STRIPE ID: " + sharedPref.getString("stripeId", null));
-        Log.i(TAG, "SUBSCRIPTION ID: " + sharedPref.getString("subscriptionId", null));
-
-        CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
-        Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
-
-        call.enqueue(new Callback<CheckSubscriptionResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
-                CheckSubscriptionResponse status = response.body();
-
-                if (status != null &&
-                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
-                                || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
-                                || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
-
-                    Log.i(TAG, "\n\n SUBSCRIPTION STATUS PASSED: " + status);
-                    getMerchantShops();
-
-                } else {
-                    String subStatus = "inactive";
-                    Log.w(TAG, "STATUS = FALSE");
-
-                    AuthHelper.logOut(UserKeypadActivity.this);
-
-                    if (status != null && status.getStatus() != null) {
-                        status.setStatus(subStatus);
-
-                        // TODO: Check and verify this network call works
-
-                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
-                        Call<String> callUpdate = RetrofitClient.getInstance().getRestAuth().updateSubscriptionStatus(uss);
-                        callUpdate.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                Log.i(TAG, "UPDATE STATUS RESPONSE: " + response.body());
-
-
-                            }
-
-                            @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
-
-
-                            }
-                        });
-                    }
-
-
-                    Intent intent = new Intent(UserKeypadActivity.this, InactiveAccountActivity.class);
-                    startActivity(intent);
-
-
-                }
-
-
-                Log.i(TAG, "STATUS: " + status);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
-
-                Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
-                spinner.setVisibility(View.GONE);
-
-                if (t.getMessage() != null && t.getMessage().equals("timeout")) {
-                    AuthHelper.logOut(UserKeypadActivity.this);
-                }
-            }
-        });
-    }
+//    private void getMerchantSubscription() {
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
+//        String stripeId = sharedPref.getString("stripeId", null);
+//        String subscriptionId = sharedPref.getString("subscriptionId", null);
+//
+//        Log.i(TAG, "STRIPE ID: " + sharedPref.getString("stripeId", null));
+//        Log.i(TAG, "SUBSCRIPTION ID: " + sharedPref.getString("subscriptionId", null));
+//
+//        CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
+//        Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
+//
+//        call.enqueue(new Callback<CheckSubscriptionResponse>() {
+//            @Override
+//            public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
+//                CheckSubscriptionResponse status = response.body();
+//
+//                if (status != null &&
+//                        (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
+//                                || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
+//                                || status.getStatus().equals(GlobalConstants.TRIAL_STRIPE))) {
+//
+//                    Log.i(TAG, "\n\n SUBSCRIPTION STATUS PASSED: " + status);
+//                    getMerchantShops();
+//
+//                } else {
+//                    String subStatus = "inactive";
+//                    Log.w(TAG, "STATUS = FALSE");
+//
+//                    AuthHelper.logOut(UserKeypadActivity.this);
+//
+//                    if (status != null && status.getStatus() != null) {
+//                        status.setStatus(subStatus);
+//
+//                        // TODO: Check and verify this network call works
+//
+//                        UpdateSubscriptionStatus uss = new UpdateSubscriptionStatus(stripeId, subStatus);
+//                        Call<String> callUpdate = RetrofitClient.getInstance().getRestAuth().updateSubscriptionStatus(uss);
+//                        callUpdate.enqueue(new Callback<String>() {
+//                            @Override
+//                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                                Log.i(TAG, "UPDATE STATUS RESPONSE: " + response.body());
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                                Log.e(TAG, "Update status error: " + t.getLocalizedMessage());
+//
+//
+//                            }
+//                        });
+//                    }
+//
+//
+//                    Intent intent = new Intent(UserKeypadActivity.this, InactiveAccountActivity.class);
+//                    startActivity(intent);
+//
+//
+//                }
+//
+//
+//                Log.i(TAG, "STATUS: " + status);
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
+//
+//                Log.e(TAG, "GET MERCHANT ERROR: " + t.getMessage());
+//                spinner.setVisibility(View.GONE);
+//
+//                if (t.getMessage() != null && t.getMessage().equals("timeout")) {
+//                    AuthHelper.logOut(UserKeypadActivity.this);
+//                }
+//            }
+//        });
+//    }
 
     private void getMerchantShops() {
         spinner.setVisibility(View.GONE);
