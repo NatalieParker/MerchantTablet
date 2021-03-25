@@ -75,6 +75,8 @@ public class LoginMerchantActivity extends AppCompatActivity {
         buttonApple = findViewById(R.id.buttonLoginMerchantApple);
         buttonSignUp = findViewById(R.id.buttonLoginMerchantSignUp);
         buttonForgotPassword = findViewById(R.id.buttonLoginMerchantForgotPassword);
+
+
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
         emailEditText.requestFocus();
