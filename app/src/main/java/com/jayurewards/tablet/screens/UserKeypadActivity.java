@@ -94,19 +94,18 @@ public class UserKeypadActivity extends AppCompatActivity {
     private TextView phoneNumber;
     private SharedPreferences preferences;
 
-    private EditText countryCode;
-    private EditText pointAmount;
-    private TextView header;
-    private TextView company;
-    private ConstraintLayout resultsContainer;
-    private ImageView userImage;
-    private TextView givePointsResult;
-    private MaterialButton dismissButton;
+//    private EditText countryCode;
+//    private EditText pointAmount;
+//    private TextView header;
+//    private TextView company;
+//    private ConstraintLayout resultsContainer;
+//    private ImageView userImage;
+//    private TextView givePointsResult;
+//    private MaterialButton dismissButton;
 
-    // Passed data
     private int teamId;
     private ArrayList<ShopAdminModel> merchantShops = new ArrayList<>();
-    private String passedCompany;
+    private String selectedCompany;
     private int selectedStoreId;
     private String pointMethod;
     private int adminLevel;
@@ -265,17 +264,17 @@ public class UserKeypadActivity extends AppCompatActivity {
                 spinner.setVisibility(View.VISIBLE);
                 enablePostSubmit(false);
 
-//                int timeout = 14400; // Initially set default time out
-//                for (ShopAdminModel item : merchantShops) {
-//                    if (passedCompany.equals(item.getCompany())) {
-//                        timeout = item.getStandardPtTimeout();
-//                        break;
-//                    }
-//                }
-////
+                int timeout = 14400; // Initially set default time out
+                for (ShopAdminModel item : merchantShops) {
+                    if (selectedCompany.equals(item.getCompany())) {
+                        timeout = item.getStandardPtTimeout();
+                        break;
+                    }
+                }
+
 //                String countryCodeInput = countryCode.getText().toString();
-//                String phoneFormatted = phoneNumber.getText().toString();
-//                String phone = phoneFormatted.replaceAll("[^0-9]", "");
+                String phoneFormatted = phoneNumber.getText().toString();
+                String phone = phoneFormatted.replaceAll("[^0-9]", "");
 //                String formattedPoints = stripNumberFormatting(pointAmount.getText().toString());
 //                int amount;
 //                try {
@@ -286,22 +285,13 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                    AlertHelper.showAlert(UserKeypadActivity.this, "com.jayurewards.tablet.models.Points Error", "Please make sure the amount of points are all numbers.");
 //                    return;
 //                }
-//
+
 //                String shop = company.getText().toString();
-//                String type = GlobalConstants.POINT_TYPE_GENERAL;
-//
-//                SharedPreferences sharedPreferences = UserKeypadActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-//                String userPhone = sharedPreferences.getString(GlobalConstants.PHONE, null);
-//
-//                if (userPhone != null && userPhone.equals(phone)) {
-//                    AlertHelper.showAlert(UserKeypadActivity.this, "Not Allowed", "You cannot give yourself reward points.");
-//                    spinner.setVisibility(View.GONE);
-//                    return;
-//                }
-//
+                String type = GlobalConstants.POINT_TYPE_GENERAL;
+
 //                String day = DateFormatService.getDayString(new Date());
 //                String time = DateFormatService.getTimeString(new Date());
-//
+
 //                GivePointsRequest params = new GivePointsRequest(countryCodeInput, phone, selectedStoreId, shop, amount, pointMethod, type,
 //                        teamId, adminLevel, timeout, day, time);
 //
@@ -393,9 +383,17 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                    }
 //                });
 
-            GivePointsRequest params = new GivePointsRequest("1", phoneNumber.getText().toString(), 1,
-                    "company", 2, "merchant_web", "general", teamId, adminLevel,
-                    1000, "Tuesday", "13:00");
+            String cc = merchantShops.get(0).getCountryCode();
+            int points = merchantShops.get(0).getStandardPoints();
+            int pointTimeout = merchantShops.get(0).getStandardPtTimeout();
+            String time = "10:00";
+            String day = "friday";
+
+            GivePointsRequest params = new GivePointsRequest(cc, phone, selectedStoreId,
+                    selectedCompany, points, GlobalConstants.MERCHANT_TABLET_KEYPAD, GlobalConstants.POINT_TYPE_GENERAL, teamId, adminLevel,
+                    pointTimeout, day, time);
+
+            Log.i(TAG, "GIVE POINTS PARAMS: " + params);
 
 
             Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
@@ -404,6 +402,8 @@ public class UserKeypadActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
 
                     Log.i(TAG, "Merchant data recieved: " + response.body());
+
+                    spinner.setVisibility(View.GONE);
 
                 }
 
@@ -574,11 +574,13 @@ public class UserKeypadActivity extends AppCompatActivity {
 //            enablePostSubmit(true);
 //        }
 
-        if (phone.length() < 6) {
-            enablePostSubmit(true);
-        } else {
-            enablePostSubmit(false);
-        }
+        enablePostSubmit(true);
+
+//        if (phone.length() < 6) {
+//            enablePostSubmit(true);
+//        } else {
+//            enablePostSubmit(false);
+//        }
     }
 
 //    private void givePoints() {
@@ -617,6 +619,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 
                 if (merchantShops != null) {
                     selectedStoreId = merchantShops.get(0).getStoreId();
+                    selectedCompany = merchantShops.get(0).getCompany();
 
                 } else {
                     spinner.setVisibility(View.GONE);
@@ -700,15 +703,15 @@ public class UserKeypadActivity extends AppCompatActivity {
     }
 
     // Change phone number length and format based on country code. Android's phone number format only works with phone input type
-    private void countryCodeChangePhoneEditTextFormatting() {
-        if (!usaCountryCode.equals(countryCode.getText().toString())) {
-            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
-            phoneNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-        } else {
-            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
-            phoneNumber.setInputType(InputType.TYPE_CLASS_PHONE);
-        }
-    }
+//    private void countryCodeChangePhoneEditTextFormatting() {
+//        if (!usaCountryCode.equals(countryCode.getText().toString())) {
+//            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+//            phoneNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+//        } else {
+//            phoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
+//            phoneNumber.setInputType(InputType.TYPE_CLASS_PHONE);
+//        }
+//    }
 
     // Stripping commas, periods, and spaces to support international number formatting
     private String stripNumberFormatting(String number) {
