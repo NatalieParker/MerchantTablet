@@ -138,7 +138,6 @@
                     android:id="@+id/ccpLoginTeamEnterPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:ccp_autoDetectCountry="true"
                     app:ccp_countryPreference="US,KR"
                     app:ccp_textSize="15sp" />
@@ -151,12 +150,10 @@
                     android:drawableStart="@drawable/ic_phone_"
                     android:drawablePadding="10dp"
                     android:drawableTint="#CDCDCD"
-                    android:ems="10"
                     android:hint="@string/enter_phone_number"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:maxLength="14"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColorHint="@color/colorGray" />
 
             </LinearLayout>

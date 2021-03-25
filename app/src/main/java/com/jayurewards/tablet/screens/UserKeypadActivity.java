@@ -13,6 +13,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -21,9 +22,11 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,10 +36,12 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
+import com.jayurewards.tablet.helpers.DateFormatHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.CheckSubscriptionParams;
@@ -85,8 +90,9 @@ public class UserKeypadActivity extends AppCompatActivity {
     private LinearLayout linearLayoutOptionsMenu;
     private ConstraintLayout spinner;
     private ConstraintLayout constraintLayoutDarkenScreen;
-    private TextView phoneNumber;
+    private EditText phoneNumber;
     private SharedPreferences preferences;
+    private CountryCodePicker ccp;
 
 //    private EditText countryCode;
 //    private EditText pointAmount;
@@ -101,6 +107,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private ShopAdminModel shop;
     private String pointMethod;
 
+    private boolean isPhoneValid = false;
     private boolean givePointsSuccess = false;
     private String usaCountryCode = "1";
 
@@ -112,7 +119,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
 
-        phoneNumber = findViewById(R.id.textViewUserKeypadInput);
+        phoneNumber = findViewById(R.id.editTextUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
         key3 = findViewById(R.id.buttonUserKeypadKey3);
@@ -133,6 +140,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         linearLayoutOptionsMenu = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
+        ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
 
 //        header = view.findViewById(R.id.textGivePointsTitle);
 //        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
@@ -155,8 +163,13 @@ public class UserKeypadActivity extends AppCompatActivity {
         goToTeamLoginButton.setEnabled(false);
         constraintLayoutDarkenScreen.setEnabled(false);
 
+        ccp.registerCarrierNumberEditText(phoneNumber);
+        ccp.setPhoneNumberValidityChangeListener(isValidNumber -> isPhoneValid = isValidNumber);
+
         phoneNumber.addTextChangedListener(textWatcher);
-        phoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+//        phoneNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        phoneNumber.setEnabled(false);
+//        phoneNumber.setClickable(false);
         enablePostSubmit(false);
         enableDeleteButton(false);
         setUpClickListeners();
@@ -214,9 +227,19 @@ public class UserKeypadActivity extends AppCompatActivity {
         key0.setOnClickListener(v -> keypadButtonInput("0"));
 
         deleteButton.setOnClickListener(v -> {
-            String str = phoneNumber.getText().toString();
-            String strNew = str.substring(0, str.length() - 1);
-            phoneNumber.setText(strNew);
+            phoneNumber.setEnabled(true);
+            phoneNumber.requestFocus();
+
+            // Stimulate delete key pressed
+            BaseInputConnection textFieldInputConnection = new BaseInputConnection(phoneNumber, true);
+            textFieldInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+
+            new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        phoneNumber.clearFocus();
+                        phoneNumber.setEnabled(false);
+                    }, 10);
+
+
         });
 
         enterButton.setOnClickListener(v -> {
@@ -246,10 +269,8 @@ public class UserKeypadActivity extends AppCompatActivity {
             String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
             String type = GlobalConstants.POINT_TYPE_GENERAL;
 
-//            String day = DateFormatService.getDayString(new Date());
-//            String time = DateFormatService.getTimeString(new Date());
-            String time = "10:00";
-            String day = "friday";
+            String day = DateFormatHelper.getDayString(new Date());
+            String time = DateFormatHelper.getTimeString(new Date());
 
             GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, points, method,
                     type, teamId, adminLevel, timeout, day, time);
@@ -385,11 +406,21 @@ public class UserKeypadActivity extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             checkForEmptyField();
+            enablePostSubmit(isPhoneValid);
         }
     };
 
     private void checkForEmptyField() {
         String phone = phoneNumber.getText().toString();
+
+        String countryCode = ccp.getSelectedCountryCode();
+        String phoneFormatted = ccp.getFormattedFullNumber(); // Get formatted number with country code from ccp
+
+        Log.i(TAG, "\nCOUNTRY CODE: " + countryCode);
+        Log.i(TAG, "CCP PHONE: " + phoneFormatted);
+        Log.i(TAG, "CCP PHONE 2: " + ccp.getFullNumber());
+        Log.i(TAG, "PHONE: " + phone);
+
 
         boolean enableDelete = phone.length() >= 1;
         enableDeleteButton(enableDelete);
@@ -399,8 +430,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     }
 
     private void keypadButtonInput(String number) {
-        String digit = phoneNumber.getText() + number;
-        phoneNumber.setText(digit);
+        phoneNumber.append(number);
     }
 
     private void enableDeleteButton(boolean enabled) {

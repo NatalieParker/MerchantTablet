@@ -42,6 +42,7 @@ public class AuthHelper {
         String stripeId = sharedPref.getString(GlobalConstants.STRIPE_ID, null);
         String subscriptionId = sharedPref.getString(GlobalConstants.SUBSCRIPTION_ID, null);
 
+
         CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
         Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
 
@@ -49,7 +50,7 @@ public class AuthHelper {
             @Override
             public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
                 CheckSubscriptionResponse status = response.body();
-
+                Log.i(TAG, "DTHGRSYJT");
                 if (status != null &&
                         (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
