@@ -4,15 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BF4949">
+    android:background="@drawable/login_screen_bkg">
 
-    <!--    Background image-->
-    <!--    TODO: Change background image and make it wider.-->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/login_screen_bkg" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,9 +19,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:minWidth="500dp"
                 android:layout_marginTop="80dp"
                 android:background="@drawable/bg_rounded_corners_white"
+                android:minWidth="500dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

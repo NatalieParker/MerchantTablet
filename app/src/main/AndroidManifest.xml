@@ -26,7 +26,8 @@
             android:name=".screens.LoginMerchantActivity"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name=".screens.UserKeypadActivity"
             android:screenOrientation="sensorLandscape" />
