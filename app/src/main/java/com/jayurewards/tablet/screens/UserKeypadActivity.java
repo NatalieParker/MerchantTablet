@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Looper;
@@ -87,12 +88,17 @@ public class UserKeypadActivity extends AppCompatActivity {
     private MaterialButton buttonOptionsMenu;
     private MaterialButton buttonLockScreen;
     private MaterialButton buttonUpdatePoints;
+    private MaterialButton buttonPointScreenBack;
     private LinearLayout linearLayoutOptionsMenu;
     private ConstraintLayout spinner;
     private ConstraintLayout constraintLayoutDarkenScreen;
+    private ConstraintLayout constraintLayoutBackgroundAnimation;
+    private ConstraintLayout constraintLayoutPointSuccessScreen;
+    private ConstraintLayout constraintLayoutKeys;
     private EditText phoneNumber;
     private SharedPreferences preferences;
     private CountryCodePicker ccp;
+    private ImageView profilePicture;
 
 //    private EditText countryCode;
 //    private EditText pointAmount;
@@ -112,6 +118,8 @@ public class UserKeypadActivity extends AppCompatActivity {
     private String usaCountryCode = "1";
 
     private long lastClickTime = 0;
+
+    private AnimationDrawable animationDrawable;
 
 
     @Override
@@ -134,13 +142,18 @@ public class UserKeypadActivity extends AppCompatActivity {
         enterButton = findViewById(R.id.enterButton);
         signOutButton = findViewById(R.id.buttonUserKeypadSignOut);
         goToTeamLoginButton = findViewById(R.id.buttonUserKeypadSwitchToEmployeeAccount);
+        buttonPointScreenBack = findViewById(R.id.buttonUserKeypadBackButton);
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
         linearLayoutOptionsMenu = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
+        constraintLayoutBackgroundAnimation = findViewById(R.id.constraintLayoutUserKeypadBackground);
+        constraintLayoutPointSuccessScreen = findViewById(R.id.constraintLayoutUserKeypadPointSuccessScreen);
+        constraintLayoutKeys = findViewById(R.id.constraintLayoutUserKeypadKeypadButtons);
         ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
+        profilePicture = findViewById(R.id.imageViewUserKeypadProfilePicture);
 
 //        header = view.findViewById(R.id.textGivePointsTitle);
 //        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
@@ -153,14 +166,21 @@ public class UserKeypadActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
 
+        animationDrawable = (AnimationDrawable) constraintLayoutBackgroundAnimation.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+
         spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         linearLayoutOptionsMenu.setVisibility(View.GONE);
+        constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
 
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
         signOutButton.setEnabled(false);
         goToTeamLoginButton.setEnabled(false);
+        buttonPointScreenBack.setEnabled(false);
         constraintLayoutDarkenScreen.setEnabled(false);
 
         ccp.registerCarrierNumberEditText(phoneNumber);
@@ -286,17 +306,21 @@ public class UserKeypadActivity extends AppCompatActivity {
 
                     GivePointsResponse result = response.body();
                     if (result != null) {
-//                        if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
-//                            GlideApp.with(UserKeypadActivity.this)
-//                                    .load(result.getThumbnail())
-//                                    .placeholder(R.drawable.placeholder)
-//                                    .fallback(R.drawable.default_profile)
-//                                    .into(userImage);
-//                        } else {
-//                            GlideApp.with(UserKeypadActivity.this)
-//                                    .load(R.drawable.default_profile)
-//                                    .into(userImage);
-//                        }
+
+
+
+
+                        if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
+                            GlideApp.with(UserKeypadActivity.this)
+                                    .load(result.getThumbnail())
+                                    .fallback(R.drawable.default_profile)
+                                    .override(profilePicture.getWidth(),profilePicture.getHeight())
+                                    .into(profilePicture);
+                        } else {
+                            GlideApp.with(UserKeypadActivity.this)
+                                    .load(R.drawable.default_profile)
+                                    .into(profilePicture);
+                        }
 
 //                        if (result.getTimeLeft() != 0) {
 //                            String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
@@ -355,8 +379,17 @@ public class UserKeypadActivity extends AppCompatActivity {
                     }
 
 //                    resultsContainer.setVisibility(View.VISIBLE);
+                    openPointSuccessScreen();
+                    phoneNumber.getText().clear();
                     spinner.setVisibility(View.GONE);
 
+//                    if (!buttonPointScreenBack.isEnabled()) {
+//                        return;
+//                    } else {
+//                        new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
+//                            closePointSuccessScreen();
+//                        }, 10000);
+//                    }
                 }
 
                 @Override
@@ -381,6 +414,10 @@ public class UserKeypadActivity extends AppCompatActivity {
         goToTeamLoginButton.setOnClickListener(v -> {
             Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
             startActivity(intent);
+        });
+
+        buttonPointScreenBack.setOnClickListener(v -> {
+            closePointSuccessScreen();
         });
 
         buttonUpdatePoints.setOnClickListener(v -> Log.i(TAG, "UPDATE POINTS BUTTON CLICKED"));
@@ -484,6 +521,26 @@ public class UserKeypadActivity extends AppCompatActivity {
         buttonOptionsMenu.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         constraintLayoutDarkenScreen.setEnabled(false);
+    }
+
+    private void openPointSuccessScreen() {
+        Animation animationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_enter);
+        constraintLayoutPointSuccessScreen.setVisibility(View.VISIBLE);
+        constraintLayoutPointSuccessScreen.startAnimation(animationOpen);
+        buttonPointScreenBack.setEnabled(true);
+
+        constraintLayoutKeys.setEnabled(false);
+    }
+
+    private void closePointSuccessScreen() {
+        Animation animationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_exit);
+        constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
+        constraintLayoutPointSuccessScreen.startAnimation(animationClose);
+        buttonPointScreenBack.setEnabled(false);
+
+        constraintLayoutKeys.setEnabled(true);
+
+        Log.i(TAG, "ANIMATION CLOSED");
     }
 
     // Change phone number length and format based on country code. Android's phone number format only works with phone input type
