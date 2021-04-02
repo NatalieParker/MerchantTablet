@@ -166,10 +166,10 @@ public class UserKeypadActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
 
-        animationDrawable = (AnimationDrawable) constraintLayoutBackgroundAnimation.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
-        animationDrawable.start();
+//        animationDrawable = (AnimationDrawable) constraintLayoutBackgroundAnimation.getBackground();
+//        animationDrawable.setEnterFadeDuration(2000);
+//        animationDrawable.setExitFadeDuration(4000);
+//        animationDrawable.start();
 
         spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
@@ -472,10 +472,8 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void enableDeleteButton(boolean enabled) {
         if (!enabled) {
-            deleteButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
             deleteButton.setEnabled(false);
         } else {
-            deleteButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
             deleteButton.setEnabled(true);
         }
     }
@@ -483,7 +481,8 @@ public class UserKeypadActivity extends AppCompatActivity {
     private void enablePostSubmit(Boolean enabled) {
         if (UserKeypadActivity.this != null) {
             if (!enabled) {
-                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
+                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+                enterButton.setTextColor(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
                 enterButton.setEnabled(false);
 
             } else {

@@ -119,6 +119,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error",
                             "This email does not exist, or the password is incorrect. Please check and try again.");
                 }
+                spinner.setVisibility(View.GONE);
             });
         });
 
@@ -149,6 +150,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     Log.e(TAG, "Check Apple pending auth error: ", e);
                     AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
                 });
+                spinner.setVisibility(View.GONE);
 
             } else {
                 auth.startActivityForSignInWithProvider(LoginMerchantActivity.this, provider.build())
@@ -162,6 +164,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                                     AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
                                 }
                         );
+                spinner.setVisibility(View.GONE);
             }
         });
 
@@ -229,6 +232,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
 
         }
         hideKeyboard();
+        spinner.setVisibility(View.GONE);
     }
 
     /**
