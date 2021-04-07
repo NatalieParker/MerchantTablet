@@ -150,6 +150,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     Log.e(TAG, "Check Apple pending auth error: ", e);
                     AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
                 });
+
                 spinner.setVisibility(View.GONE);
 
             } else {
@@ -164,6 +165,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                                     AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
                                 }
                         );
+
                 spinner.setVisibility(View.GONE);
             }
         });
@@ -193,7 +195,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             auth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && auth.getCurrentUser() != null) {
                     String firebaseUid = auth.getCurrentUser().getUid();
                     getMerchantData(firebaseUid);
                 } else {
@@ -201,10 +203,12 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error",
                             "This email does not exist, or the password is incorrect. Please check and try again.");
                 }
+
+                spinner.setVisibility(View.GONE);
             });
 
         } catch (ApiException e) {
-            Log.e(TAG, "Google signin error: " + e);
+            Log.e(TAG, "Google sign in error: " + e);
 
             switch (e.getStatusCode()) {
                 case 12501:
@@ -230,9 +234,8 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     break;
             }
 
+            spinner.setVisibility(View.GONE);
         }
-        hideKeyboard();
-        spinner.setVisibility(View.GONE);
     }
 
     /**
@@ -261,12 +264,14 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 editor.apply();
 
                 AuthHelper.checkMerchantSubscription(LoginMerchantActivity.this);
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(@NonNull Call<MerchantModel> call, @NonNull Throwable t) {
                 Log.e(TAG, "Get merchant data error: " + t.getMessage());
                 AlertHelper.showNetworkAlert(LoginMerchantActivity.this);
+                spinner.setVisibility(View.GONE);
             }
         });
     }

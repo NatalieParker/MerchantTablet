@@ -5,38 +5,30 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
@@ -45,19 +37,16 @@ import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateFormatHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
-import com.jayurewards.tablet.models.CheckSubscriptionParams;
-import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
-import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -154,6 +143,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         constraintLayoutKeys = findViewById(R.id.constraintLayoutUserKeypadKeypadButtons);
         ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
         profilePicture = findViewById(R.id.imageViewUserKeypadProfilePicture);
+        BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
 
 //        header = view.findViewById(R.id.textGivePointsTitle);
 //        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
@@ -191,9 +181,21 @@ public class UserKeypadActivity extends AppCompatActivity {
         phoneNumber.setEnabled(false);
 //        phoneNumber.setClickable(false);
         enablePostSubmit(false);
-        enableDeleteButton(false);
+        deleteButton.setEnabled(false);
         setUpClickListeners();
         getMerchantShops();
+
+        // Blur keypad background
+        float radius = 5f;
+        View decorView = getWindow().getDecorView();
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        Drawable windowBackground = decorView.getBackground();
+        blurView.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setBlurAutoUpdate(true)
+                .setHasFixedTransformationMatrix(true);
     }
 
     /**
@@ -459,8 +461,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         Log.i(TAG, "PHONE: " + phone);
 
 
-        boolean enableDelete = phone.length() >= 1;
-        enableDeleteButton(enableDelete);
+        deleteButton.setEnabled(phone.length() >= 1);
 
         boolean enableSubmit = phone.length() > 6;
         enablePostSubmit(enableSubmit);
@@ -471,24 +472,18 @@ public class UserKeypadActivity extends AppCompatActivity {
     }
 
     private void enableDeleteButton(boolean enabled) {
-        if (!enabled) {
-            deleteButton.setEnabled(false);
-        } else {
-            deleteButton.setEnabled(true);
-        }
+        deleteButton.setEnabled(enabled);
     }
 
     private void enablePostSubmit(Boolean enabled) {
-        if (UserKeypadActivity.this != null) {
-            if (!enabled) {
-                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-                enterButton.setTextColor(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
-                enterButton.setEnabled(false);
+        if (!enabled) {
+            enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+            enterButton.setTextColor(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
+            enterButton.setEnabled(false);
 
-            } else {
-                enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
-                enterButton.setEnabled(true);
-            }
+        } else {
+            enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
+            enterButton.setEnabled(true);
         }
     }
 

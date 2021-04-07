@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/user_keypad_bkg"
     tools:context=".screens.UserKeypadActivity">
+
+    <ImageView
+        android:id="@+id/imageUserKeypadBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/user_keypad_bkg" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineUserKeypadContainerSplit"
@@ -41,293 +47,299 @@
             android:layout_height="60dp"
             android:layout_marginStart="40dp"
             android:layout_marginTop="25dp"
-            android:background="#00000000"
+            android:background="@android:color/transparent"
             app:icon="@drawable/ic_ellipsis_vertical"
             app:iconGravity="end"
             app:iconTint="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="30dp"
-        app:cardBackgroundColor="#40E3E3F4"
-        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayoutUserKeypadKeypadBackground"
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/layoutUserKeypadContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.hbb20.CountryCodePicker
-                android:id="@+id/ccpUserKeypadPhoneNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:visibility="gone"
-                app:ccp_autoDetectCountry="true"
-                app:ccp_countryPreference="US,KR"
-                app:layout_constraintBottom_toTopOf="@id/constraintLayoutUserKeypadKeypadButtons"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewUserKeypadPhoneNumberComment"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:gravity="center"
-                android:text="Enter your phone number to claim exclusive rewards."
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@id/editTextUserKeypadInput"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/editTextUserKeypadInput"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:backgroundTint="#00000000"
-                android:hint="@string/enter_otp"
-                android:inputType="phone"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="40dp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayoutUserKeypadKeypadButtons"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadPhoneNumberComment" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineUserKeypadKeys"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintGuide_percent="0.33"
-                app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#40E3E3F4">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutUserKeypadKeypadButtons"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/colorPrimaryLight"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guidelineUserKeypadKeys">
+                android:id="@+id/constraintLayoutUserKeypadKeypadBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccpUserKeypadPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:visibility="gone"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_countryPreference="US,KR"
+                    app:layout_constraintBottom_toTopOf="@id/constraintLayoutUserKeypadKeypadButtons"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewUserKeypadPhoneNumberComment"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_margin="20dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:gravity="center"
+                    android:text="Enter your phone number to claim exclusive rewards."
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    app:layout_constraintBottom_toTopOf="@id/editTextUserKeypadInput"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editTextUserKeypadInput"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:backgroundTint="@android:color/transparent"
+                    android:hint="@string/enter_otp"
+                    android:inputType="phone"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="40sp"
+                    app:layout_constraintBottom_toTopOf="@+id/constraintLayoutUserKeypadKeypadButtons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadPhoneNumberComment" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guidelineUserKeypadKeys"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintGuide_percent="0.33"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayoutUserKeypadKeypadButtons"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/colorPrimaryLight"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/guidelineUserKeypadKeys">
 
                     <LinearLayout
-                        android:id="@+id/linearLayoutUserKeypadKeyRow1"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:layout_margin="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutUserKeypadKeyRow1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="1"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="2"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey3"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="3"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutUserKeypadKeyRow2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey4"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="4"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey5"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="5"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey6"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="6"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutUserKeypadKeyRow3"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey7"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="7"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey8"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="8"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey9"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="9"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutUserKeypadKeyRow4"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/buttonUserKeypadKey0"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/white"
+                                android:text="0"
+                                android:textColor="@color/colorGray"
+                                app:autoSizeTextType="uniform" />
+
+                            <View
+                                android:layout_width="15dp"
+                                android:layout_height="1dp" />
+
+                            <Button
+                                android:id="@+id/deleteButton"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2.1"
+                                android:backgroundTint="@color/white"
+                                android:text="Delete"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorGray" />
+
+
+                        </LinearLayout>
 
                         <Button
-                            android:id="@+id/buttonUserKeypadKey1"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:id="@+id/enterButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            app:autoSizeTextType="uniform"
-                            android:text="1"
-                            android:textColor="@color/colorGray" />
+                            android:backgroundTint="@color/colorPrimary"
+                            android:fontFamily="@font/soleil_bold"
+                            android:text="Submit"
+                            android:textSize="20sp" />
 
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey2"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="2"
-                            app:autoSizeTextType="uniform"
-                            android:textColor="@color/colorGray" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey3"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="3"
-                            app:autoSizeTextType="uniform"
-                            android:textColor="@color/colorGray" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/linearLayoutUserKeypadKeyRow2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey4"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="4"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey5"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="5"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey6"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="6"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutUserKeypadKeyRow3"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey7"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="7"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey8"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="8"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey9"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="9"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutUserKeypadKeyRow4"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/buttonUserKeypadKey0"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/white"
-                            android:text="0"
-                            android:textColor="@color/colorGray"
-                            app:autoSizeTextType="uniform" />
-
-                        <View
-                            android:layout_width="15dp"
-                            android:layout_height="1dp" />
-
-                        <Button
-                            android:id="@+id/deleteButton"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="2.1"
-                            android:backgroundTint="@color/white"
-                            android:text="Delete"
-                            android:textAllCaps="false"
-                            android:textColor="@color/colorGray"/>
-
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/enterButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:textSize="20sp"
-                        android:fontFamily="@font/soleil_bold"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:text="Submit" />
-
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </eightbitlab.com.blurview.BlurView>
 
     </androidx.cardview.widget.CardView>
 
