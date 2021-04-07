@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="center"
-        android:src="@drawable/user_keypad_bkg" />
+        android:src="@drawable/user_keypad_bkg"
+        android:contentDescription="@string/image_bkg" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineUserKeypadContainerSplit"
@@ -23,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutUserKeypadBackground"
+        android:id="@+id/layoutUserKeypadLeftContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +75,7 @@
             app:blurOverlayColor="#40E3E3F4">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutUserKeypadKeypadBackground"
+                android:id="@+id/layoutUserKeypadRightContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -158,7 +159,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey1"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -172,7 +173,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey2"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -186,7 +187,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey3"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -204,7 +205,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey4"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -218,7 +219,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey5"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -232,7 +233,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey6"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -250,7 +251,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey7"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -264,7 +265,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey8"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -278,7 +279,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey9"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -296,7 +297,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/buttonUserKeypadKey0"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -310,7 +311,7 @@
                                 android:layout_width="15dp"
                                 android:layout_height="1dp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/deleteButton"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
@@ -323,7 +324,7 @@
 
                         </LinearLayout>
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/enterButton"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -351,7 +352,6 @@
         android:layout_margin="30dp"
         android:background="@drawable/bg_rounded_corners_white"
         android:elevation="1dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit"
@@ -375,13 +375,13 @@
             android:layout_marginTop="50dp"
             android:layout_marginEnd="100dp"
             android:src="@drawable/default_profile"
-            app:layout_constraintBottom_toTopOf="@id/textViewUserKeypadYouEarnedAPoint"
+            app:layout_constraintBottom_toTopOf="@id/textUserKeypadPtResponseHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewUserKeypadYouEarnedAPoint"
+            android:id="@+id/textUserKeypadPtResponseHeader"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
@@ -399,6 +399,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+<!--    Options Menu-->
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
         android:layout_width="200dp"

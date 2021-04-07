@@ -11,6 +11,8 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
@@ -60,18 +63,18 @@ public class UserKeypadActivity extends AppCompatActivity {
     private static final String POINT_METHOD = "pointMethod";
     private static final String ADMIN_LEVEL = "adminLevel";
 
-    private Button key1;
-    private Button key2;
-    private Button key3;
-    private Button key4;
-    private Button key5;
-    private Button key6;
-    private Button key7;
-    private Button key8;
-    private Button key9;
-    private Button key0;
-    private Button deleteButton;
-    private Button enterButton;
+    private MaterialButton key1;
+    private MaterialButton key2;
+    private MaterialButton key3;
+    private MaterialButton key4;
+    private MaterialButton key5;
+    private MaterialButton key6;
+    private MaterialButton key7;
+    private MaterialButton key8;
+    private MaterialButton key9;
+    private MaterialButton key0;
+    private MaterialButton deleteButton;
+    private MaterialButton enterButton;
     private MaterialButton signOutButton;
     private MaterialButton goToTeamLoginButton;
     private MaterialButton buttonOptionsMenu;
@@ -88,6 +91,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private CountryCodePicker ccp;
     private ImageView profilePicture;
+    private TextView ptsResponseHeader;
 
 //    private EditText countryCode;
 //    private EditText pointAmount;
@@ -138,12 +142,13 @@ public class UserKeypadActivity extends AppCompatActivity {
         linearLayoutOptionsMenu = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
-        constraintLayoutBackgroundAnimation = findViewById(R.id.constraintLayoutUserKeypadBackground);
+        constraintLayoutBackgroundAnimation = findViewById(R.id.layoutUserKeypadLeftContainer);
         constraintLayoutPointSuccessScreen = findViewById(R.id.constraintLayoutUserKeypadPointSuccessScreen);
-        constraintLayoutKeys = findViewById(R.id.constraintLayoutUserKeypadKeypadButtons);
+        constraintLayoutKeys = findViewById(R.id.layoutUserKeypadRightContainer);
         ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
         profilePicture = findViewById(R.id.imageViewUserKeypadProfilePicture);
         BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
+        ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
 
 //        header = view.findViewById(R.id.textGivePointsTitle);
 //        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
@@ -384,14 +389,6 @@ public class UserKeypadActivity extends AppCompatActivity {
                     openPointSuccessScreen();
                     phoneNumber.getText().clear();
                     spinner.setVisibility(View.GONE);
-
-//                    if (!buttonPointScreenBack.isEnabled()) {
-//                        return;
-//                    } else {
-//                        new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
-//                            closePointSuccessScreen();
-//                        }, 10000);
-//                    }
                 }
 
                 @Override
@@ -471,10 +468,6 @@ public class UserKeypadActivity extends AppCompatActivity {
         phoneNumber.append(number);
     }
 
-    private void enableDeleteButton(boolean enabled) {
-        deleteButton.setEnabled(enabled);
-    }
-
     private void enablePostSubmit(Boolean enabled) {
         if (!enabled) {
             enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
@@ -524,6 +517,12 @@ public class UserKeypadActivity extends AppCompatActivity {
         buttonPointScreenBack.setEnabled(true);
 
         constraintLayoutKeys.setEnabled(false);
+
+        new Handler().postDelayed(() -> {
+            if (buttonPointScreenBack.isEnabled()) {
+                closePointSuccessScreen();
+            }
+        }, 10000);
     }
 
     private void closePointSuccessScreen() {

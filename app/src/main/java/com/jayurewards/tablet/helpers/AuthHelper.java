@@ -18,8 +18,6 @@ import com.jayurewards.tablet.screens.InactiveAccountActivity;
 import com.jayurewards.tablet.screens.LoginMerchantActivity;
 import com.jayurewards.tablet.screens.UserKeypadActivity;
 
-import java.util.Date;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
