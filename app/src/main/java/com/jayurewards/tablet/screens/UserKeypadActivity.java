@@ -11,7 +11,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.BaseInputConnection;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,7 +35,7 @@ import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
-import com.jayurewards.tablet.helpers.DateFormatHelper;
+import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
@@ -296,8 +294,8 @@ public class UserKeypadActivity extends AppCompatActivity {
             String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
             String type = GlobalConstants.POINT_TYPE_GENERAL;
 
-            String day = DateFormatHelper.getDayString(new Date());
-            String time = DateFormatHelper.getTimeString(new Date());
+            String day = DateTimeHelper.getDayString(new Date());
+            String time = DateTimeHelper.getTimeString(new Date());
 
             GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, points, method,
                     type, teamId, adminLevel, timeout, day, time);
@@ -329,10 +327,10 @@ public class UserKeypadActivity extends AppCompatActivity {
                                     .into(profilePicture);
                         }
 
-//                        if (result.getTimeLeft() != 0) {
-//                            String timeLeftString = DateDifferenceService.dateDifferenceString(result.getTimeLeft());
-//                            String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
-//
+                        if (result.getTimeLeft() != 0) {
+                            String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
+                            String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
+
 //                            header.setText(getString(R.string.unsuccessful));
 //                            header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
 //                            givePointsResult.setText(message);
@@ -341,7 +339,9 @@ public class UserKeypadActivity extends AppCompatActivity {
 //                            resultsContainer.setVisibility(View.VISIBLE);
 //
 //                            return;
-//                        }
+
+                            ptsResponseHeader.setText(message);
+                        }
 
 //                        givePointsSuccess = true;
 //                        header.setText(getString(R.string.success));

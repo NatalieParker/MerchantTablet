@@ -29,6 +29,12 @@ public class GlobalConstants {
     public static final String PHOTO_URL = "photoUrl";
     public static final String THUMBNAIL_URL = "thumbnailUrl";
 
+    // MySQL date formats
+    public static final String MYSQL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    public static final String MYSQL_DATE_FORMAT_LEGACY = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    public static final String MYSQL_FIREBASE_DATE_FORMAT = "yyyy-MM-dd HH:mm:ssZ";
+    public static final String MYSQL_CUSTOM_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss'Z'";
+
 
     public static final String IMAGE_DIRECTORY = "imageDirectory";
     public static final String IMAGE_PATH_CHILD = "imagePathChild";
