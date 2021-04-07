@@ -50,7 +50,6 @@ public class AuthHelper {
             @Override
             public void onResponse(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Response<CheckSubscriptionResponse> response) {
                 CheckSubscriptionResponse status = response.body();
-                Log.i(TAG, "DTHGRSYJT");
                 if (status != null &&
                         (status.getStatus().equals(GlobalConstants.ACTIVE_STRIPE)
                                 || status.getStatus().equals(GlobalConstants.PAST_DUE_STRIPE)
@@ -59,7 +58,6 @@ public class AuthHelper {
                     Intent intent = new Intent(context, UserKeypadActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(intent);
-
 
                 } else {
                     String subStatus = "inactive";

@@ -42,6 +42,10 @@ public class GlobalConstants {
     public static final String MERCHANT_TABLET_KEYPAD = "merchant_tablet_keypad";
 
 
+    // URLS
+    public static final String INTENT_ENDING_URL = "endingUrl";
+    public static final String URL_PORTAL_LOGIN_TAIL = "/auth/login";
+    public static final String URL_PORTAL_SIGNUP_TAIL = "/auth/signup";
     public static final String WEB_URL_PORTAL_SIGNUP = "https://portal.jayu.us/auth/signup";
     public static final String WEB_URL_PORTAL_FORGOT_PASSWORD = "https://portal.jayu.us/auth/forgot-password";
 

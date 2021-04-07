@@ -32,6 +32,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
+import com.jayurewards.tablet.BuildConfig;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
@@ -77,6 +78,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(BuildConfig.googleSigninWebClientId)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -193,6 +195,9 @@ public class LoginMerchantActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            Log.i(TAG, "handleSignInResult: \n ACCOUNT: " + account.getEmail() + "\n" + account.getId() + "\n " + account.getIdToken());
+
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             auth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
                 if (task.isSuccessful() && auth.getCurrentUser() != null) {

@@ -10,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MerchantTablet">
+
         <activity
             android:name=".screens.SplashScreenActivity"
             android:configChanges="orientation"
@@ -21,17 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".screens.LoginMerchantActivity"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
-            tools:ignore="LockedOrientationActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".screens.UserKeypadActivity"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+            android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
             android:name=".screens.InactiveAccountActivity"
             android:screenOrientation="sensorLandscape" />
@@ -42,10 +42,17 @@
             android:name=".screens.RegistrationTeamActivity"
             android:screenOrientation="sensorLandscape" />
 
+
+
+        <!-- Helper Screens -->
+        <activity
+            android:name=".screens.WebViewActivity"
+            android:screenOrientation="sensorLandscape"/>
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!-- Firebase Messaging (Push Notifications) -->
         <service
@@ -56,28 +63,23 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <!--
 Set custom default icon. This is used when no icon is set for incoming notification messages.
  See README(https://goo.gl/l4GJaQ) for more.
--->
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/default_profile" />
-
         <!--
             Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimary" />
-
-        <!-- FCM will use this value whenever incoming messages do not explicitly set a notification channel Id. -->
+            android:resource="@color/colorPrimary" /> <!-- FCM will use this value whenever incoming messages do not explicitly set a notification channel Id. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/CHANNEL_DEFAULT" />
-
     </application>
 
 </manifest>

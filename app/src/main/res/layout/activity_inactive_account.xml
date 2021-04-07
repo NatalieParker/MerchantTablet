@@ -6,13 +6,121 @@
     android:layout_height="match_parent"
     tools:context=".screens.InactiveAccountActivity">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutInactiveMerchantTop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/holo_blue_light"
-        android:textSize="60sp"
-        android:gravity="center"
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonInactiveMerchantBack"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:text="@string/back"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/logo"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textInactiveMerchantHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/soleil_bold"
-        android:text="INACTIVE SCREEN"/>
+        android:gravity="center"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:text="@string/no_active_subscription_exists_for_this_account"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/layoutInactiveMerchantTop" />
+
+    <TextView
+        android:id="@+id/textInactiveMerchantLoginSite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/log_into_your_web_portal_to_update_your_account"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/textInactiveMerchantHeader" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonInactiveMerchantLoginSite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:text="@string/portal_login"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInactiveMerchantLoginSite" />
+
+    <TextView
+        android:id="@+id/textInactiveMerchantSignUpSite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/soleil_book"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/not_a_customer_create_an_account"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/buttonInactiveMerchantLoginSite" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonInactiveMerchantSignUpSite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:text="@string/sign_up_today"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInactiveMerchantSignUpSite" />
+
+    <TextView
+        android:id="@+id/textInactiveMerchantDisclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="400dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/soleil_book"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+       android:text="@string/inactive_screen_disclaimer"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/buttonInactiveMerchantSignUpSite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

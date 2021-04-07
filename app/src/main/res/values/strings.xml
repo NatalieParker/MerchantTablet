@@ -31,4 +31,11 @@
     <string name="sign_in_with_apple">Sign in with Apple</string>
     <string name="logo">logo</string>
     <string name="enter_otp"><font size="15">Enter your mobile number</font></string>
+    <string name="back">Back</string>
+    <string name="no_active_subscription_exists_for_this_account">No active subscription exists for this account</string>
+    <string name="sign_up_today">Sign up today</string>
+    <string name="not_a_customer_create_an_account">Not a customer? Create an account.</string>
+    <string name="portal_login">Portal login</string>
+    <string name="log_into_your_web_portal_to_update_your_account">Log into your web portal to update your account.</string>
+    <string name="inactive_screen_disclaimer">Your account subscription may have been canceled, or you may have not been registered as a customer. Please contact support if help is needed.</string>
 </resources>

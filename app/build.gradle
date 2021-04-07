@@ -22,9 +22,27 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Allow http traffic (for the local host only!)
+            manifestPlaceholders = [usesCleartextTraffic: "true"]
+
+            // Must use double quotations to enforce a string for values that start with an integer
+            buildConfigField "String", 'googleSigninWebClientId', '"336479330285-rsu2kcpr34v39el6qh9oid1kli137s45.apps.googleusercontent.com"'
+            buildConfigField "String", 'restApiUrl', '"https://api-dev-restricted.jayu.us"'
+            buildConfigField "String", 'merchantPortalurl', '"https://portal-dev-restricted.jayu.us"'
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Only allow https traffic
+            manifestPlaceholders = [usesCleartextTraffic: "false"]
+
+            // Google sign in may only work on the production build.
+            buildConfigField "String", 'googleSigninWebClientId', '"754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com"'
+            buildConfigField "String", 'restApiUrl', '"https://d7eead3c-d79c-403a-b4f6-ad2d1928184b.jayu.us"'
+            buildConfigField "String", 'merchantPortalurl', '"https://portal.jayu.us"'
         }
     }
     compileOptions {
