@@ -43,8 +43,11 @@ import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -89,7 +92,10 @@ public class UserKeypadActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private CountryCodePicker ccp;
     private ImageView profilePicture;
+    private TextView ptsResponseName;
     private TextView ptsResponseHeader;
+    private TextView ptsResponseDesc;
+    private TextView ptsResponseMoreInfo;
 
 //    private EditText countryCode;
 //    private EditText pointAmount;
@@ -146,7 +152,10 @@ public class UserKeypadActivity extends AppCompatActivity {
         ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
         profilePicture = findViewById(R.id.imageViewUserKeypadProfilePicture);
         BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
+        ptsResponseName = findViewById(R.id.textUserKeypadPtsResponseName);
         ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
+        ptsResponseDesc = findViewById(R.id.textUserKeypadPtsResponseDesc);
+        ptsResponseMoreInfo = findViewById(R.id.textUserKeypadPtsResponseMoreInfo);
 
 //        header = view.findViewById(R.id.textGivePointsTitle);
 //        countryCode = view.findViewById(R.id.editTextGivePointsCountryCode);
@@ -268,10 +277,13 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         enterButton.setOnClickListener(v -> {
+            Log.i(TAG, " \n SHOP DATA 2323: " + shop);
             if (SystemClock.elapsedRealtime() - lastClickTime < 2000) {
                 return;
             }
             lastClickTime = SystemClock.elapsedRealtime();
+
+            Log.i(TAG, "setUpClickListeners: \n SHOP DATA: " + shop);
 
             if (shop == null) return;
 
@@ -279,7 +291,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             enablePostSubmit(false);
 
             int teamId = 0;
-            int adminLevel = 0;
+            int adminLevel = 1;
 
             String company = shop.getCompany();
             int storeId = shop.getStoreId();
@@ -310,82 +322,74 @@ public class UserKeypadActivity extends AppCompatActivity {
                     Log.i(TAG, "Merchant data received: " + response.body());
 
                     GivePointsResponse result = response.body();
+
                     if (result != null) {
+                        GlideApp.with(UserKeypadActivity.this)
+                                .load(result.getThumbnail())
+                                .fallback(R.drawable.default_profile)
+                                .override(profilePicture.getWidth(),profilePicture.getHeight())
+                                .into(profilePicture);
 
+                        String greeting = "Hello " + result.getName();
+                        ptsResponseName.setText(greeting);
 
-
-
-                        if (result.getThumbnail() != null && !"".equals(result.getThumbnail())) {
-                            GlideApp.with(UserKeypadActivity.this)
-                                    .load(result.getThumbnail())
-                                    .fallback(R.drawable.default_profile)
-                                    .override(profilePicture.getWidth(),profilePicture.getHeight())
-                                    .into(profilePicture);
-                        } else {
-                            GlideApp.with(UserKeypadActivity.this)
-                                    .load(R.drawable.default_profile)
-                                    .into(profilePicture);
-                        }
-
+                        // Check point timeout
                         if (result.getTimeLeft() != 0) {
                             String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
                             String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
 
-//                            header.setText(getString(R.string.unsuccessful));
-//                            header.setTextColor(UserKeypadActivity.this.getColor(R.color.colorDanger));
-//                            givePointsResult.setText(message);
-//
-//                            spinner.setVisibility(View.GONE);
-//                            resultsContainer.setVisibility(View.VISIBLE);
-//
-//                            return;
+                            ptsResponseHeader.setText("Too soon");
+                            ptsResponseDesc.setText(message);
+                            ptsResponseMoreInfo.setVisibility(View.GONE);
 
-                            ptsResponseHeader.setText(message);
+                        } else {
+
+                            int pointTally = result.getPointTally();
+
+                            String pointTallyString;
+                            if (pointTally == 1) {
+                                pointTallyString = "1 point for rewards.";
+                            } else {
+                                pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
+                            }
+
+                            int pointsGiven = result.getPoints();
+
+                            String points;
+                            if (pointsGiven == 1) {
+                                points = "1 point";
+                            } else {
+                                points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven) + " points";
+                            }
+
+                            String desc = "You just got " + points + " from " + shop.getCompany() + " and now have " + pointTallyString;
+
+//                        TODO: Determine if user is anonymous and retrieve gift card credits
+                            int isAnonymous = 0;
+
+                            String moreInfo;
+                            if (isAnonymous == 1) {
+                                moreInfo = "Download Jayu to start getting free gift cards!";
+                            } else {
+                                double credits = 5.50;
+                                DecimalFormat numFormat = new DecimalFormat("0.00");
+                                moreInfo = "You also have " + numFormat.format(credits) + " available for gift cards you can redeem in the Jayu app.";
+                            }
+
+
+                            ptsResponseHeader.setText(points);
+                            ptsResponseDesc.setText(desc);
+
+                            ptsResponseMoreInfo.setVisibility(View.VISIBLE);
+                            ptsResponseMoreInfo.setText(moreInfo);
                         }
 
-//                        givePointsSuccess = true;
-//                        header.setText(getString(R.string.success));
-//
-//                        int pointTally = amount; // Set just in case a null response is received
-//                        if (result.getPointTally() != 0) {
-//                            pointTally = result.getPointTally();
-//                        }
-//
-//                        String pointTallyString;
-//                        if (pointTally == 1) {
-//                            pointTallyString = "1 point for rewards.";
-//                        } else {
-//                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
-//                        }
-
-//                        int pointsGiven = amount;
-//                        if (result.getPoints() != 0) {
-//                            pointsGiven = result.getPoints();
-//                        }
-
-//                        String points;
-//                        String success;
-//                        if (pointsGiven == 1) {
-//                            points = "1";
-//                            success = result.getName() + " was given " + points + " point and now has " + pointTallyString;
-//                        } else {
-//                            points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
-//                            success = result.getName() + " was given " + points + " points and now has " + pointTallyString;
-//                        }
-
-//                        givePointsResult.setText(success);
-
                     } else {
-//                        GlideApp.with(UserKeypadActivity.this)
-//                                .load(R.drawable.default_profile_image)
-//                                .into(userImage);
-//
-//                        header.setText(getString(R.string.no_match));
-//                        givePointsResult.setText(getString(R.string.give_points_incorrect_phone_result));
-//                        dismissButton.setText(getString(R.string.dismiss));
+                        String errorMessage = "Give user points null response";
+                        LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
+                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                     }
 
-//                    resultsContainer.setVisibility(View.VISIBLE);
                     openPointSuccessScreen();
                     phoneNumber.getText().clear();
                     spinner.setVisibility(View.GONE);
@@ -415,10 +419,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        buttonPointScreenBack.setOnClickListener(v -> {
-            closePointSuccessScreen();
-        });
-
+        buttonPointScreenBack.setOnClickListener(v -> closePointSuccessScreen());
         buttonUpdatePoints.setOnClickListener(v -> Log.i(TAG, "UPDATE POINTS BUTTON CLICKED"));
         buttonLockScreen.setOnClickListener(v -> Log.i(TAG, "LOCK SCREEN BUTTON CLICKED"));
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
@@ -456,6 +457,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         Log.i(TAG, "CCP PHONE: " + phoneFormatted);
         Log.i(TAG, "CCP PHONE 2: " + ccp.getFullNumber());
         Log.i(TAG, "PHONE: " + phone);
+        Log.i(TAG, "SUBMIT ENABLED: " + enterButton.isEnabled());
 
 
         deleteButton.setEnabled(phone.length() >= 1);
@@ -514,7 +516,9 @@ public class UserKeypadActivity extends AppCompatActivity {
         Animation animationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_enter);
         constraintLayoutPointSuccessScreen.setVisibility(View.VISIBLE);
         constraintLayoutPointSuccessScreen.startAnimation(animationOpen);
+
         buttonPointScreenBack.setEnabled(true);
+        buttonPointScreenBack.setVisibility(View.VISIBLE);
 
         constraintLayoutKeys.setEnabled(false);
 
@@ -529,7 +533,9 @@ public class UserKeypadActivity extends AppCompatActivity {
         Animation animationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_exit);
         constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
         constraintLayoutPointSuccessScreen.startAnimation(animationClose);
+
         buttonPointScreenBack.setEnabled(false);
+        buttonPointScreenBack.setVisibility(View.GONE);
 
         constraintLayoutKeys.setEnabled(true);
 

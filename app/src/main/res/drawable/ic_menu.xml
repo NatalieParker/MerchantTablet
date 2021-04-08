@@ -5,21 +5,21 @@
     android:viewportHeight="24">
     <path
         android:fillColor="#00000000"
-        android:pathData="M9,21H5a2,2 0,0 1,-2 -2V5a2,2 0,0 1,2 -2h4"
+        android:pathData="M3,12L21,12"
         android:strokeWidth="2"
         android:strokeColor="#ffffff"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
         android:fillColor="#00000000"
-        android:pathData="M16,17l5,-5l-5,-5"
+        android:pathData="M3,6L21,6"
         android:strokeWidth="2"
         android:strokeColor="#ffffff"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
         android:fillColor="#00000000"
-        android:pathData="M21,12L9,12"
+        android:pathData="M3,18L21,18"
         android:strokeWidth="2"
         android:strokeColor="#ffffff"
         android:strokeLineCap="round"

@@ -39,4 +39,9 @@
     <string name="log_into_your_web_portal_to_update_your_account">Log into your web portal to update your account.</string>
     <string name="inactive_screen_disclaimer">Your account subscription may have been canceled, or you may have not been registered as a customer. Please contact support if help is needed.</string>
     <string name="image_bkg">image_bkg</string>
+    <string name="company">Company</string>
+    <string name="lock_screen">Lock screen</string>
+    <string name="update_points">Update points</string>
+    <string name="team_member">Team member</string>
+    <string name="log_out">Log out</string>
 </resources>

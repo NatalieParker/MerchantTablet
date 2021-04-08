@@ -10,9 +10,9 @@
         android:id="@+id/imageUserKeypadBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/image_bkg"
         android:scaleType="center"
-        android:src="@drawable/user_keypad_bkg"
-        android:contentDescription="@string/image_bkg" />
+        android:src="@drawable/user_keypad_bkg" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineUserKeypadContainerSplit"
@@ -23,6 +23,7 @@
         app:layout_constraintGuide_percent="0.60"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--    Left container-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutUserKeypadLeftContainer"
         android:layout_width="0dp"
@@ -39,24 +40,23 @@
             android:layout_marginStart="60dp"
             android:layout_marginTop="50dp"
             android:text="Rewards"
-            android:autoSizeTextType="uniform"
-            android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/white"
+            app:autoSizeTextType="uniform"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonUserKeypadOptionsMenu"/>
+            app:layout_constraintTop_toBottomOf="@id/buttonUserKeypadOptionsMenu" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewUserKeypadRewardsCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="60dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUserKeypadRewards"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/textViewUserKeypadSpecials"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserKeypadRewards">
 
         </androidx.cardview.widget.CardView>
 
@@ -67,13 +67,13 @@
             android:layout_marginStart="60dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="300dp"
-            android:text="Specials"
             android:autoSizeTextType="uniform"
-            android:textColor="@color/white"
+            android:text="Specials"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@id/cardViewUserKeypadSpecialsCard"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardViewUserKeypadRewardsCard"/>
+            app:layout_constraintTop_toBottomOf="@id/cardViewUserKeypadRewardsCard" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewUserKeypadSpecialsCard"
@@ -83,9 +83,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="70dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent">
 
 
         </androidx.cardview.widget.CardView>
@@ -102,18 +102,17 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonUserKeypadOptionsMenu"
-            android:layout_width="140dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:icon="@drawable/ic_ellipsis_vertical"
-            app:iconGravity="end"
+            app:icon="@drawable/ic_menu"
+            app:iconSize="35dp"
             app:iconTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewUserKeypadJayuLogo"
+            app:layout_constraintStart_toEndOf="@+id/imageViewUserKeypadJayuLogo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--    Right container-->
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -163,6 +162,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/textViewUserKeypadPhoneNumberComment"-->
+                <!--                    android:layout_width="100dp"-->
+                <!--                    android:layout_height="60dp"-->
+                <!--                    android:layout_marginStart="30dp"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:layout_marginEnd="30dp"-->
+                <!--                    app:layout_constraintBottom_toTopOf="@id/editTextUserKeypadInput"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"-->
+                <!--                    app:srcCompat="@drawable/logo_white" />-->
 
                 <EditText
                     android:id="@+id/editTextUserKeypadInput"
@@ -375,11 +387,11 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="2.1"
                                 android:backgroundTint="@color/white"
-                                android:text="Delete"
-                                android:textAllCaps="false"
-                                android:textColor="@color/colorGray" />
-
-
+                                app:icon="@drawable/ic_delete"
+                                app:iconGravity="textStart"
+                                app:iconPadding="10dp"
+                                app:iconSize="40dp"
+                                app:iconTint="@color/colorGray" />
                         </LinearLayout>
 
                         <com.google.android.material.button.MaterialButton
@@ -402,127 +414,128 @@
 
     </androidx.cardview.widget.CardView>
 
-
+    <!-- Give points response-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutUserKeypadPointSuccessScreen"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_margin="30dp"
         android:background="@drawable/bg_rounded_corners_white"
         android:elevation="1dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonUserKeypadBackButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="25dp"
-            app:cornerRadius="10dp"
-            android:text="OK"
-            android:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit">
 
         <TextView
-            android:id="@+id/textViewUserKeypadHelloUser"
-            android:layout_width="wrap_content"
+            android:id="@+id/textUserKeypadPtsResponseName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Hello, N/A"
-            android:textColor="@color/black"
             android:fontFamily="@font/soleil_bold"
+            android:text="Hello"
             android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewUserKeypadProfilePicture"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="100dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="100dp"
+            android:layout_marginEnd="40dp"
             android:src="@drawable/default_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadHelloUser"
-            app:layout_constraintBottom_toTopOf="@id/textUserKeypadPtResponseHeader"/>
+            app:layout_constraintTop_toBottomOf="@+id/textUserKeypadPtsResponseName" />
 
         <TextView
             android:id="@+id/textUserKeypadPtResponseHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="35dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/soleil_bold"
             android:gravity="center"
             android:text="99999 points"
             android:textAlignment="center"
-            android:autoSizeTextType="uniform"
-            android:textSize="28sp"
             android:textColor="@color/black"
-            android:fontFamily="@font/soleil_bold"
+            android:textSize="28sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadProfilePicture" />
 
         <TextView
-            android:id="@+id/textViewUserKeypadTotalPts"
+            android:id="@+id/textUserKeypadPtsResponseDesc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="50dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="50dp"
-            android:autoSizeTextType="uniform"
-            android:textAlignment="center"
-            android:textSize="12sp"
-            android:textColor="@color/black"
             android:text="You just got 5 points from Go Get Yogurt and now have 45 points for rewards."
-            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtResponseHeader"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtResponseHeader" />
 
         <TextView
-            android:id="@+id/textViewUserKeypadAdditionalInfo"
+            android:id="@+id/textUserKeypadPtsResponseMoreInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="96dp"
-            android:autoSizeTextType="uniform"
+            android:text="You also have $5.00 available for gift cards you can redeem in the Jayu app."
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:text="You also have $5.00 available for gift cards you can redeem in the Jayu app."
-            app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadTotalPts"
+            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toTopOf="@id/buttonUserKeypadBackButton"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtsResponseDesc" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadBackButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="25dp"
+            android:text="OK"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--    Options Menu-->
+    <!--    Options menu-->
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/bg_rounded_corners_white"
         android:elevation="3dp"
         android:orientation="vertical"
+        android:padding="10dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textUserKeypadOptionsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/soleil_book"
+            android:text="@string/company" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonUserKeypadLockScreen"
@@ -530,11 +543,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/soleil_bold"
-            android:text="Lock Screen"
+            android:text="@string/lock_screen"
             android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAllCaps="false"
             android:textColor="@color/colorGray"
-            app:icon="@drawable/ic_lock_solid"
+            app:icon="@drawable/ic_lock"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
 
@@ -544,11 +557,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/soleil_bold"
-            android:text="Update Points"
+            android:text="@string/update_points"
             android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAllCaps="false"
             android:textColor="@color/colorGray"
-            app:icon="@drawable/ic_coins_solid"
+            app:icon="@drawable/ic_edit_2"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
 
@@ -558,11 +571,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/soleil_bold"
-            android:text="Team Member"
+            android:text="@string/team_member"
             android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAllCaps="false"
             android:textColor="@color/colorGray"
-            app:icon="@drawable/ic_username_icon"
+            app:icon="@drawable/ic_users"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
 
@@ -572,9 +585,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/soleil_bold"
-            android:text="Log Out"
+            android:text="@string/log_out"
             android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAllCaps="false"
             android:textColor="@color/colorGray"
             app:icon="@drawable/ic_log_out"
             app:iconPadding="15dp"

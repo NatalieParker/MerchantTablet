@@ -26,12 +26,11 @@
             android:name=".screens.LoginMerchantActivity"
             android:configChanges="orientation"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:windowSoftInputMode="stateHidden"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".screens.UserKeypadActivity"
-            android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".screens.InactiveAccountActivity"
             android:screenOrientation="sensorLandscape" />
