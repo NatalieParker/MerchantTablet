@@ -522,7 +522,7 @@ public class UserKeypadActivity extends AppCompatActivity {
             if (buttonPointScreenBack.isEnabled()) {
                 closePointSuccessScreen();
             }
-        }, 10000);
+        }, 30000);
     }
 
     private void closePointSuccessScreen() {
