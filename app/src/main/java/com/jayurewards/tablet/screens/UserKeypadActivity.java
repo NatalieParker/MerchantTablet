@@ -82,7 +82,8 @@ public class UserKeypadActivity extends AppCompatActivity {
     private MaterialButton buttonLockScreen;
     private MaterialButton buttonUpdatePoints;
     private MaterialButton buttonPointScreenBack;
-    private LinearLayout linearLayoutOptionsMenu;
+    private LinearLayout optionsMenuContainer;
+    private TextView optionsCompanyName;
     private ConstraintLayout spinner;
     private ConstraintLayout constraintLayoutDarkenScreen;
     private ConstraintLayout constraintLayoutBackgroundAnimation;
@@ -143,7 +144,8 @@ public class UserKeypadActivity extends AppCompatActivity {
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
-        linearLayoutOptionsMenu = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
+        optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
+        optionsCompanyName = findViewById(R.id.textUserKeypadOptionsHeader);
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
         constraintLayoutBackgroundAnimation = findViewById(R.id.layoutUserKeypadLeftContainer);
@@ -175,7 +177,7 @@ public class UserKeypadActivity extends AppCompatActivity {
 
         spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
-        linearLayoutOptionsMenu.setVisibility(View.GONE);
+        optionsMenuContainer.setVisibility(View.GONE);
         constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
 
         buttonLockScreen.setEnabled(false);
@@ -225,6 +227,9 @@ public class UserKeypadActivity extends AppCompatActivity {
 
                 if (shopList != null && shopList.size() >= 1) {
                     shop = shopList.get(0);
+
+                    optionsCompanyName.setText(shop.getCompany());
+
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
                     LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
@@ -484,8 +489,8 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void openKeypadOptionsMenu() {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_option_menu_open);
-        linearLayoutOptionsMenu.setVisibility(View.VISIBLE);
-        linearLayoutOptionsMenu.startAnimation(animation);
+        optionsMenuContainer.setVisibility(View.VISIBLE);
+        optionsMenuContainer.startAnimation(animation);
         buttonLockScreen.setEnabled(true);
         buttonUpdatePoints.setEnabled(true);
         signOutButton.setEnabled(true);
@@ -499,8 +504,8 @@ public class UserKeypadActivity extends AppCompatActivity {
 
     private void closeKeypadOptionsMenu() {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_option_menu_close);
-        linearLayoutOptionsMenu.startAnimation(animation);
-        linearLayoutOptionsMenu.setVisibility(View.GONE);
+        optionsMenuContainer.startAnimation(animation);
+        optionsMenuContainer.setVisibility(View.GONE);
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
         signOutButton.setEnabled(false);
