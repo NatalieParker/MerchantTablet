@@ -30,7 +30,7 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_in_with_apple">Sign in with Apple</string>
     <string name="logo">logo</string>
-    <string name="enter_otp"><font size="15">Enter your mobile number</font></string>
+    <string name="enter_otp"><font size="20">Enter your mobile number</font></string>
     <string name="back">Back</string>
     <string name="no_active_subscription_exists_for_this_account">No active subscription exists for this account</string>
     <string name="sign_up_today">Sign up today</string>
@@ -46,4 +46,5 @@
     <string name="log_out">Log out</string>
     <string name="header">Header</string>
     <string name="description">Description</string>
+    <string name="placeholder">Placeholder</string>
 </resources>
