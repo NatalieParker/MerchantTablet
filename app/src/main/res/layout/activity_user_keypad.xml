@@ -580,6 +580,20 @@
             app:iconTint="@color/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadOptionsPortal"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="Web portal"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_external_link"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonUserKeypadSignOut"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
@@ -592,7 +606,6 @@
             app:icon="@drawable/ic_log_out"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
-
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

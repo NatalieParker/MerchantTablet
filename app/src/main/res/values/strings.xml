@@ -44,4 +44,6 @@
     <string name="update_points">Update points</string>
     <string name="team_member">Team member</string>
     <string name="log_out">Log out</string>
+    <string name="header">Header</string>
+    <string name="description">Description</string>
 </resources>

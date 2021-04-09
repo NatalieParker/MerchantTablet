@@ -5,11 +5,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,6 +44,7 @@ import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
+import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -84,6 +87,7 @@ public class UserKeypadActivity extends AppCompatActivity {
     private MaterialButton buttonPointScreenBack;
     private LinearLayout optionsMenuContainer;
     private TextView optionsCompanyName;
+    private TextView optionsPortalBtn;
     private ConstraintLayout spinner;
     private ConstraintLayout constraintLayoutDarkenScreen;
     private ConstraintLayout constraintLayoutBackgroundAnimation;
@@ -125,6 +129,8 @@ public class UserKeypadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_keypad);
 
+        hideSystemUI();
+
         phoneNumber = findViewById(R.id.editTextUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
@@ -146,6 +152,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         optionsCompanyName = findViewById(R.id.textUserKeypadOptionsHeader);
+        optionsPortalBtn = findViewById(R.id.buttonUserKeypadOptionsPortal);
         spinner = findViewById(R.id.spinnerUserKeypad);
         constraintLayoutDarkenScreen = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
         constraintLayoutBackgroundAnimation = findViewById(R.id.layoutUserKeypadLeftContainer);
@@ -210,6 +217,26 @@ public class UserKeypadActivity extends AppCompatActivity {
                 .setBlurRadius(radius)
                 .setBlurAutoUpdate(true)
                 .setHasFixedTransformationMatrix(true);
+    }
+
+    /**
+     * Fullscreen mode
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    private void hideSystemUI() {
+        int uiOptions =
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
     }
 
     /**
@@ -411,6 +438,7 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         signOutButton.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
             AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
             builder.setTitle("Logout");
             builder.setMessage("Are you sure you want to log out?");
@@ -420,12 +448,33 @@ public class UserKeypadActivity extends AppCompatActivity {
         });
 
         goToTeamLoginButton.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
             Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
             startActivity(intent);
         });
 
+        buttonUpdatePoints.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+            UpdatePointsPopup popup = new UpdatePointsPopup();
+            Bundle args = new Bundle();
+            popup.setArguments(args);
+            popup.show(getSupportFragmentManager(), "Update Points");
+        });
+
+        optionsPortalBtn.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+
+            Intent openWebsite = new Intent(Intent.ACTION_VIEW);
+            try {
+                openWebsite.setData(Uri.parse(GlobalConstants.WEB_URL_PORTAL_LOGIN));
+                startActivity(openWebsite);
+            } catch (ActivityNotFoundException e) {
+                Log.e(TAG, "Open website link error: " + e.getMessage());
+                AlertHelper.showNetworkAlert(this);
+            }
+        });
+
         buttonPointScreenBack.setOnClickListener(v -> closePointSuccessScreen());
-        buttonUpdatePoints.setOnClickListener(v -> Log.i(TAG, "UPDATE POINTS BUTTON CLICKED"));
         buttonLockScreen.setOnClickListener(v -> Log.i(TAG, "LOCK SCREEN BUTTON CLICKED"));
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
         constraintLayoutDarkenScreen.setOnClickListener(v -> closeKeypadOptionsMenu());

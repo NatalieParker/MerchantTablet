@@ -29,6 +29,10 @@ public class GivePointsResponse {
     @Expose
     private int timeLeft;
 
+    @SerializedName("is_anonymous")
+    @Expose
+    private int isAnonymous;
+
     public int getUserId() {
         return userId;
     }
@@ -77,6 +81,14 @@ public class GivePointsResponse {
         this.timeLeft = timeLeft;
     }
 
+    public int getIsAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setIsAnonymous(int isAnonymous) {
+        this.isAnonymous = isAnonymous;
+    }
+
     @Override
     public String toString() {
         return "GivePointsResponse{" +
@@ -86,6 +98,7 @@ public class GivePointsResponse {
                 ", points=" + points +
                 ", pointTally=" + pointTally +
                 ", timeLeft=" + timeLeft +
+                ", isAnonymous=" + isAnonymous +
                 '}';
     }
 }
