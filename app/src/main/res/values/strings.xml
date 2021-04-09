@@ -25,6 +25,7 @@
     <string name="username">Username</string>
     <string name="change_photo">Change photo</string>
     <string name="or">or</string>
+    <string name="phone_input_hint">Enter your phone number to claim rewards.</string>
     <string name="login">Login</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_up">Sign up</string>
@@ -47,4 +48,13 @@
     <string name="header">Header</string>
     <string name="description">Description</string>
     <string name="placeholder">Placeholder</string>
+    <string name="web_portal">Web portal</string>
+    <string name="update">Update</string>
+    <string name="update_points_pts_desc">Adjust points to give the next customer - points will reset afterwards.</string>
+    <string name="number_of_points">Number of points</string>
+    <string name="points_per_customer">## points per customer</string>
+    <string name="update_points_timeout_desc">Turning off point timeout allows customers to get points back to back without waiting the default timeout period.</string>
+    <string name="points_timeout">Points timeout</string>
+    <string name="update_points_popup_disclaimer">Update default points and default point timeout periods in your web portal.</string>
+    <string name="ok">OK</string>
 </resources>
