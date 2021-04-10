@@ -88,13 +88,12 @@ public class UpdatePointsPopup extends DialogFragment {
             String pointsFormatted = ptsTextInput.getEditText().getText().toString();
             String points = stripNumberFormatting(pointsFormatted);
 
-
             int amount;
             try {
                 amount = Integer.parseInt(points);
             } catch (Throwable t) {
                 Log.e(TAG, "Parsing point amount to integer error");
-                AlertHelper.showAlert(getActivity(), "Parsing Error", "Please the points field only has numbers.");
+                AlertHelper.showAlert(getActivity(), "Parsing Error", "Please ensure the points field only has numbers.");
                 return;
             }
 
@@ -103,33 +102,8 @@ public class UpdatePointsPopup extends DialogFragment {
                 return;
             }
 
-            String timeoutString;
-            if (adminLevel == 1) {
-                timeoutString = "turn on point timeout";
-            } else {
-                timeoutString = "turn off point timeout";
-            }
-
-            String pointsString;
-            if (amount == 1) {
-                pointsString = "1 point";
-            } else {
-                pointsString = pointsFormatted + " points";
-            }
-
-            String message = "Update to " + pointsString + " and " + timeoutString +
-                    "? Updated points change back to default after the next customer.";
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Proceed?");
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", (dialog, which) -> {
-                listener.onUpdate(amount, adminLevel);
-                dismiss();
-            });
-
-            builder.setNegativeButton("Cancel", null);
-            builder.show();
+            listener.onUpdate(amount, adminLevel);
+            dismiss();
         });
 
         cancelBtn.setOnClickListener(v -> dismiss());

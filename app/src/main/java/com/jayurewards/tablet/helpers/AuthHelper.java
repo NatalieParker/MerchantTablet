@@ -103,6 +103,7 @@ public class AuthHelper {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(currentScreen);
         sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
         sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
+        sharedPref.edit().remove(GlobalConstants.PIN_CODE).apply();
 
         //TODO: Manually remove all team member values from shared preferences
 

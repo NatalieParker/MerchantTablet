@@ -31,7 +31,6 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_in_with_apple">Sign in with Apple</string>
     <string name="logo">logo</string>
-    <string name="enter_otp"><font size="20">Enter your mobile number</font></string>
     <string name="back">Back</string>
     <string name="no_active_subscription_exists_for_this_account">No active subscription exists for this account</string>
     <string name="sign_up_today">Sign up today</string>
@@ -57,4 +56,9 @@
     <string name="points_timeout">Points timeout</string>
     <string name="update_points_popup_disclaimer">Update default points and default point timeout periods in your web portal.</string>
     <string name="ok">OK</string>
+    <string name="pin_number">Pin number</string>
+    <string name="submit">Submit</string>
+    <string name="lock_screen_popup_desc_lock">This will prevent others from making any changes on this device.\nEnter a 4 digit pin to unlock this device later.</string>
+    <string name="lock_screen_popup_desc_unlock">Enter the 4 digit pin to unlock this device.</string>
+    <string name="unlock_screen">Unlock Screen</string>
 </resources>

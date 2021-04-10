@@ -28,6 +28,9 @@ public class GlobalConstants {
     public static final String USER_FIREBASE_UID = "userFirebaseUid";
     public static final String PHOTO_URL = "photoUrl";
     public static final String THUMBNAIL_URL = "thumbnailUrl";
+    public static final String ADMIN_LEVEL = "adminLevel";
+    public static final String PIN_CODE = "pin_code";
+    public static final String POINT_AMOUNT = "pointAmount";
 
     // MySQL date formats
     public static final String MYSQL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";

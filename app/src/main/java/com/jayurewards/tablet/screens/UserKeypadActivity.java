@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
+import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
 import java.text.DecimalFormat;
@@ -58,7 +60,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserKeypadActivity extends AppCompatActivity implements UpdatePointsPopup.UpdatePtsPopupInterface {
+public class UserKeypadActivity extends AppCompatActivity
+        implements UpdatePointsPopup.UpdatePtsPopupInterface, LockScreenPopup.LockScreenInterface {
     private static final String TAG = "KeypadScreen";
     private static final String TEAM_ID = "team_id";
     private static final String MERCHANT_SHOPS = "merchantShops";
@@ -199,6 +202,9 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
                 .setBlurRadius(radius)
                 .setBlurAutoUpdate(true)
                 .setHasFixedTransformationMatrix(true);
+
+        int pin = preferences.getInt(GlobalConstants.PIN_CODE, 0);
+        onUpdate(pin != 0);
     }
 
     /**
@@ -430,10 +436,10 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
             closeKeypadOptionsMenu();
             UpdatePointsPopup popup = new UpdatePointsPopup();
             Bundle args = new Bundle();
-            args.putInt("pointAmount", pointAmount);
-            args.putInt("adminLevel", adminLevel);
+            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
+            args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
             popup.setArguments(args);
-            popup.show(getSupportFragmentManager(), "Update Points");
+            popup.show(getSupportFragmentManager(), "update_points_popup");
         });
 
         optionsPortalBtn.setOnClickListener(v -> {
@@ -449,8 +455,18 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
             }
         });
 
+        buttonLockScreen.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+            LockScreenPopup popup = new LockScreenPopup();
+//            Bundle args = new Bundle();
+//            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
+//            args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
+//            popup.setArguments(args);
+            popup.show(getSupportFragmentManager(), "lock_screen_popup");
+
+        });
+
         buttonPointScreenBack.setOnClickListener(v -> closePointSuccessScreen());
-        buttonLockScreen.setOnClickListener(v -> Log.i(TAG, "LOCK SCREEN BUTTON CLICKED"));
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
         constraintLayoutDarkenScreen.setOnClickListener(v -> closeKeypadOptionsMenu());
     }
@@ -559,7 +575,6 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
 
     private void closePointSuccessScreen() {
         Animation animationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_exit);
-        constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
         constraintLayoutPointSuccessScreen.startAnimation(animationClose);
 
         buttonPointScreenBack.setEnabled(false);
@@ -568,6 +583,10 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
         constraintLayoutKeys.setEnabled(true);
     }
 
+
+    /**
+     * Interfaces
+     */
     @Override
     public void onUpdate(int points, int adminLvl) {
         pointAmount = points;
@@ -590,5 +609,26 @@ public class UserKeypadActivity extends AppCompatActivity implements UpdatePoint
         editor.putInt("adminLevel", adminLvl);
         editor.apply();
 
+    }
+
+    @Override
+    public void onUpdate(boolean isLocked) {
+        Log.i(TAG, "IS LOCKED: " + isLocked);
+
+        if (isLocked) {
+            buttonUpdatePoints.setVisibility(View.GONE);
+            goToTeamLoginButton.setVisibility(View.GONE);
+            optionsPortalBtn.setVisibility(View.GONE);
+
+            buttonLockScreen.setText("Unlock Screen");
+            buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_unlock));
+        } else if (!isLocked) {
+            buttonUpdatePoints.setVisibility(View.VISIBLE);
+            goToTeamLoginButton.setVisibility(View.VISIBLE);
+            optionsPortalBtn.setVisibility(View.VISIBLE);
+
+            buttonLockScreen.setText("Lock Screen");
+            buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
+        }
     }
 }

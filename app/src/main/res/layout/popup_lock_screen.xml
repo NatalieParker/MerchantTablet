@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    app:cardPreventCornerOverlap="false"
-    tools:context=".screens.popups.UpdatePointsPopup">
+    tools:context=".screens.popups.LockScreenPopup">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textPopupUpdatePtsHeader"
+            android:id="@+id/textPopupLockScreenHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -21,89 +20,43 @@
             android:layout_marginEnd="25dp"
             android:fontFamily="@font/soleil_bold"
             android:gravity="center"
-            android:text="@string/update_points"
+            android:text="@string/lock_screen"
             android:textColor="@android:color/black"
             android:textSize="25sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textPopupUpdatePtsAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="50dp"
-            android:fontFamily="@font/soleil_book"
-            android:text="@string/points_per_customer"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/textPopupUpdatePtsHeader" />
-
-        <TextView
-            android:id="@+id/textUpdatePtsPopupDesc"
+            android:id="@+id/textPopupLockScreenDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
-            android:text="@string/update_points_pts_desc"
-            android:textAlignment="textStart"
-            app:layout_constraintTop_toBottomOf="@+id/textPopupUpdatePtsAmount" />
+            android:text="@string/lock_screen_popup_desc_lock"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/textPopupLockScreenHeader" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputPopupUpdatePtsAmount"
+            android:id="@+id/textInputPopupLockScreen"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/textUpdatePtsPopupDesc">
+            app:layout_constraintTop_toBottomOf="@+id/textPopupLockScreenDesc">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextLockScreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/number_of_points"
+                android:hint="@string/pin_number"
                 android:imeOptions="actionDone"
                 android:inputType="number"
-                android:maxLength="13"
+                android:maxLength="4"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textUpdatePtsPopupTimeoutDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="20dp"
-            android:text="@string/update_points_timeout_desc"
-            app:layout_constraintTop_toBottomOf="@+id/textInputPopupUpdatePtsAmount" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchUpdatePtsPopup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/soleil_bold"
-            android:text="@string/points_timeout"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textUpdatePtsPopupTimeoutDesc"
-            app:thumbTint="@color/switch_thumb_selector"
-            app:trackTint="@color/switch_track_selector" />
-
-        <TextView
-            android:id="@+id/textUpdatePtsPopupDisclaimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="100dp"
-            android:text="@string/update_points_popup_disclaimer"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/switchUpdatePtsPopup" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,10 +68,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textUpdatePtsPopupDisclaimer">
+            app:layout_constraintTop_toBottomOf="@+id/textInputPopupLockScreen">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonUpdatePtsPopupCancel"
+                android:id="@+id/buttonPopupLockScreenCancel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -135,16 +88,18 @@
                 android:layout_height="0dp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonUpdatePtsPopupSubmit"
+                android:id="@+id/buttonPopupLockScreenSubmit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="@font/soleil_bold"
                 android:stateListAnimator="@null"
-                android:text="@string/update"
+                android:text="@string/submit"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
