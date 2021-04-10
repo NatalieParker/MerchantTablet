@@ -221,6 +221,12 @@ public class UserKeypadActivity extends AppCompatActivity
     private void hideSystemUI() {
         int uiOptions =
                 View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Resize screen when out of focus (e.g. popup)
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+                        // Make full screen
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
