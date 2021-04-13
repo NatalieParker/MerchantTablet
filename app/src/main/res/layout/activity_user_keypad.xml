@@ -33,158 +33,184 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textViewUserKeypadRewards"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollViewUserKeypadCards"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
+            android:layout_height="0dp"
             android:layout_marginTop="100dp"
-            android:layout_marginBottom="5dp"
-            android:text="Rewards"
-            android:textSize="33sp"
-            android:textColor="@color/white"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewUserKeypadRewardsCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="60dp"
-            app:cardCornerRadius="10dp"
-            app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadRewards"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/white_card">
-
-                    <TextView
-                        android:id="@+id/imageViewUserKeypadPurpleCoin"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="25dp"
-                        android:text="99999"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorPrimaryLight"
-                        android:gravity="center"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:background="@drawable/purple_coin"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginStart="10dp"
-                        android:text="Pts"
-                        android:textSize="24dp"
-                        android:textColor="@color/colorPrimary"
-                        android:fontFamily="@font/soleil_bold"
-                        android:autoSizeTextType="uniform"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/imageViewUserKeypadPurpleCoin"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="80dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/placeholder"
-                    android:textSize="20dp"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadPurpleCoin"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textViewUserKeypadSpecials"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="5dp"
-            android:autoSizeTextType="uniform"
-            android:text="Specials"
-            android:textSize="33sp"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/cardViewUserKeypadSpecialsCard"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewUserKeypadSpecialsCard"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="70dp"
-            app:cardCornerRadius="10dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/purple_card">
-
-                    <TextView
-                        android:id="@+id/imageViewUserKeypadWhiteCoin"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="20dp"
-                        android:text="99999"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
-                        android:gravity="center"
-                        android:background="@drawable/white_coin"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginStart="10dp"
-                        android:text="Pts"
-                        android:textSize="24dp"
-                        android:textColor="@color/colorPrimaryLight"
-                        android:fontFamily="@font/soleil_bold"
-                        android:autoSizeTextType="uniform"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/imageViewUserKeypadWhiteCoin"/>
+                android:layout_height="match_parent" >
 
                 <TextView
+                    android:id="@+id/textViewUserKeypadRewards"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="33sp"
+                    android:text="Enter your phone number to claim rewards. Enter your phone number to claim rewards. Enter your phone number to claim rewards."
+                    android:textColor="@color/white"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewUserKeypadCards"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="80dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/placeholder"
-                    android:textSize="20dp"
-                    android:textColor="@color/colorPrimaryLight"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadWhiteCoin"/>
+                    android:layout_marginTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadRewards"/>
 
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:id="@+id/cardViewUserKeypadRewardsCard"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    app:cardCornerRadius="10dp"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadRewards"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent">-->
+
+<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:background="@drawable/white_card">-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/imageViewUserKeypadPurpleCoin"-->
+<!--                            android:layout_width="50dp"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:layout_marginTop="20dp"-->
+<!--                            android:layout_marginStart="25dp"-->
+<!--                            android:text="99999"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="@color/colorPrimaryLight"-->
+<!--                            android:gravity="center"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            android:background="@drawable/purple_coin"/>-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="30dp"-->
+<!--                            android:layout_marginStart="10dp"-->
+<!--                            android:text="Pts"-->
+<!--                            android:textSize="24dp"-->
+<!--                            android:textColor="@color/colorPrimary"-->
+<!--                            android:fontFamily="@font/soleil_bold"-->
+<!--                            android:autoSizeTextType="uniform"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintStart_toEndOf="@id/imageViewUserKeypadPurpleCoin"/>-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="30dp"-->
+<!--                            android:layout_marginEnd="80dp"-->
+<!--                            android:layout_marginBottom="10dp"-->
+<!--                            android:layout_marginTop="10dp"-->
+<!--                            android:text="@string/placeholder"-->
+<!--                            android:textSize="20dp"-->
+<!--                            android:textColor="@color/colorPrimary"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadPurpleCoin"/>-->
+
+<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--                </androidx.cardview.widget.CardView>  -->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/textViewUserKeypadSpecials"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="60dp"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:autoSizeTextType="uniform"-->
+<!--            android:text="Specials"-->
+<!--            android:textSize="33sp"-->
+<!--            android:textColor="@color/white"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/cardViewUserKeypadSpecialsCard"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/cardViewUserKeypadSpecialsCard"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="60dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="60dp"-->
+<!--            android:layout_marginBottom="70dp"-->
+<!--            app:cardCornerRadius="10dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent">-->
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@drawable/purple_card">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/imageViewUserKeypadWhiteCoin"-->
+<!--                        android:layout_width="50dp"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:layout_marginStart="20dp"-->
+<!--                        android:text="99999"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:textColor="@color/colorPrimary"-->
+<!--                        android:gravity="center"-->
+<!--                        android:background="@drawable/white_coin"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"/>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_marginTop="30dp"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:text="Pts"-->
+<!--                        android:textSize="24dp"-->
+<!--                        android:textColor="@color/colorPrimaryLight"-->
+<!--                        android:fontFamily="@font/soleil_bold"-->
+<!--                        android:autoSizeTextType="uniform"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintStart_toEndOf="@id/imageViewUserKeypadWhiteCoin"/>-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="30dp"-->
+<!--                    android:layout_marginEnd="80dp"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:text="@string/placeholder"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:textColor="@color/colorPrimaryLight"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadWhiteCoin"/>-->
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--        </androidx.cardview.widget.CardView>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

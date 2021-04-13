@@ -41,5 +41,6 @@ public class RetrofitClient {
     public RestPoints getRestPoints(){return retrofit.create(RestPoints.class);}
     public RestUser getRestUser(){return retrofit.create(RestUser.class);}
     public RestShops getRestShops(){return retrofit.create(RestShops.class);}
+    public RestOffers getRestOffers(){return retrofit.create(RestOffers.class);}
 
 }

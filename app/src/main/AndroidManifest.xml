@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jayurewards.tablet">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MerchantTablet">
-
         <activity
             android:name=".screens.SplashScreenActivity"
             android:configChanges="orientation"
@@ -39,21 +40,14 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".screens.RegistrationTeamActivity"
-            android:screenOrientation="sensorLandscape" />
-
-
-
-        <!-- Helper Screens -->
+            android:screenOrientation="sensorLandscape" /> <!-- Helper Screens -->
         <activity
             android:name=".screens.WebViewActivity"
-            android:screenOrientation="sensorLandscape"/>
-
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <!-- Firebase Messaging (Push Notifications) -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- Firebase Messaging (Push Notifications) -->
         <service
             android:name=".helpers.FCMHelper"
             android:exported="false"

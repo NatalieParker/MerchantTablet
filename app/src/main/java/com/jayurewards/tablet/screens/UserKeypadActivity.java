@@ -5,6 +5,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -41,6 +43,7 @@ import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
+import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
@@ -109,6 +112,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private ShopAdminModel shop;
     private int pointAmount;
     private int adminLevel;
+
+    private ArrayList<OffersModel> offers = new ArrayList<>();
 
     private boolean isPhoneValid = false;
 
@@ -205,6 +210,8 @@ public class UserKeypadActivity extends AppCompatActivity
 
         int pin = preferences.getInt(GlobalConstants.PIN_CODE, 0);
         onUpdate(pin != 0);
+
+        startRecyclerView();
     }
 
     /**
@@ -256,12 +263,35 @@ public class UserKeypadActivity extends AppCompatActivity
                     AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 }
 
-                spinner.setVisibility(View.GONE);
+                getBusinessOffers(shop.getStoreId());
             }
 
             @Override
             public void onFailure(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Throwable t) {
                 String errorMessage = "Get Merchant shops Error";
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+            }
+        });
+    }
+
+    private void getBusinessOffers(int storeId) {
+        Call<ArrayList<OffersModel>> call = RetrofitClient.getInstance().getRestOffers().getBusinessOffers(storeId);
+        call.enqueue(new Callback<ArrayList<OffersModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<OffersModel>> call, Response<ArrayList<OffersModel>> response) {
+                offers = response.body();
+                Log.i(TAG, "BUSINESS OFFERS CALL: " + offers);
+
+                spinner.setVisibility(View.GONE);
+                startRecyclerView();
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<OffersModel>> call, Throwable t) {
+                String errorMessage = "Get Business Offers Error";
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 spinner.setVisibility(View.GONE);
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
@@ -636,5 +666,13 @@ public class UserKeypadActivity extends AppCompatActivity
             buttonLockScreen.setText("Lock Screen");
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
         }
+    }
+
+    private void startRecyclerView() {
+        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
+        RA_UserKeypad adapter = new RA_UserKeypad(offers, this);
+        LinearLayoutManager lm = new LinearLayoutManager(this);
+        rv.setLayoutManager(lm);
+        rv.setAdapter(adapter);
     }
 }

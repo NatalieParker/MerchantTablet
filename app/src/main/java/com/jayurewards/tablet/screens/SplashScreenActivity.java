@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AuthHelper;
