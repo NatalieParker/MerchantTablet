@@ -54,7 +54,10 @@ import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import eightbitlab.com.blurview.BlurView;
@@ -211,7 +214,7 @@ public class UserKeypadActivity extends AppCompatActivity
         int pin = preferences.getInt(GlobalConstants.PIN_CODE, 0);
         onUpdate(pin != 0);
 
-        startRecyclerView();
+        startRecyclerView(offers);
     }
 
     /**
@@ -284,9 +287,35 @@ public class UserKeypadActivity extends AppCompatActivity
                 offers = response.body();
                 Log.i(TAG, "BUSINESS OFFERS CALL: " + offers);
 
-                spinner.setVisibility(View.GONE);
-                startRecyclerView();
+                List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
+                ArrayList<OffersModel> rewards = new ArrayList<>();
+                ArrayList<OffersModel> specials = new ArrayList<>();
 
+                for (int i = 0; i < offers.size(); i++) {
+
+//                    Log.i(TAG, "OFFER NUMBER " + i + " \n OFFER DESCRIPTION: " + offers.get(i).getDescription());
+                    OffersModel offer = offers.get(i);
+
+                    Log.i(TAG, "OFFER: " + offers.get(i).getType().equals(GlobalConstants.OFFER_TYPE_GENERAL));
+
+
+                    if (offers.get(i).getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
+                        rewards.add(offer);
+                    } else {
+                        specials.add(offer);
+                    }
+                }
+                rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
+                specials.sort((o1, o2) -> types.indexOf(o1.getType()) - types.indexOf(o2.getType()));
+                Log.i(TAG, "REWARDS: " + rewards);
+                Log.i(TAG, "SPECIALS: " + specials);
+
+                ArrayList<OffersModel> of = new ArrayList<>();
+                of.addAll(rewards);
+                of.addAll(specials);
+
+                startRecyclerView(of);
+                spinner.setVisibility(View.GONE);
             }
 
             @Override
@@ -668,11 +697,12 @@ public class UserKeypadActivity extends AppCompatActivity
         }
     }
 
-    private void startRecyclerView() {
+    private void startRecyclerView(ArrayList<OffersModel> offersList) {
         RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
-        RA_UserKeypad adapter = new RA_UserKeypad(offers, this);
+        RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
         rv.setAdapter(adapter);
+
     }
 }

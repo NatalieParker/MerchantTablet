@@ -59,5 +59,20 @@ public class GlobalConstants {
     public static final String WEB_URL_PORTAL_SIGNUP = "https://portal.jayu.us/auth/signup";
     public static final String WEB_URL_PORTAL_FORGOT_PASSWORD = "https://portal.jayu.us/auth/forgot-password";
 
+    public static final String OFFER_TYPE_GENERAL = "general";
+    public static final String OFFER_TYPE_SIGNUP = "signup";
+    public static final String OFFER_TYPE_BIRTHDAY = "birthday";
+    public static final String OFFER_TYPE_REFERRAL = "referral";
+    public static final String OFFER_TYPE_PROMOTION = "promotion";
+    public static final String OFFER_TYPE_PROMO_HOURS = "promo_hours";
+
+    public static final String[] OFFER_TYPES_ARRAY = {
+            OFFER_TYPE_SIGNUP,
+            OFFER_TYPE_BIRTHDAY,
+            OFFER_TYPE_PROMOTION,
+            OFFER_TYPE_REFERRAL,
+            OFFER_TYPE_PROMO_HOURS
+    };
+
 
 }
