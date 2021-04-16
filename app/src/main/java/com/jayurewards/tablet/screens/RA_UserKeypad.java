@@ -74,10 +74,39 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (holder instanceof VH_Specials) {
             VH_Specials specialsVH = (VH_Specials) holder;
 
-            String type = offer.getType().substring(0, 1).toUpperCase() + offer.getType().substring(1).replaceAll("[_]"," ");
+            String type = offer.getType().substring(0, 1).toUpperCase() + offer.getType().substring(1).replaceAll("[_]", " ");
 
             specialsVH.cardTextSpecials.setText(offer.getDescription());
             specialsVH.ptsSpecials.setText(type);
+
+            if (offer.getType().equals(GlobalConstants.OFFER_TYPE_PROMO_HOURS)) {
+                specialsVH.ptsSpecials.setText("Happy Hours");
+            }
+
+            switch (offers.get(position).getType()) {
+
+                case GlobalConstants.OFFER_TYPE_SIGNUP:
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_gift);
+                    break;
+
+                case GlobalConstants.OFFER_TYPE_REFERRAL:
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_user_plus);
+                    break;
+
+                case GlobalConstants.OFFER_TYPE_PROMO_HOURS:
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_clock);
+                    break;
+
+                case GlobalConstants.OFFER_TYPE_PROMOTION:
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_tag);
+                    break;
+
+                default:
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_question_solid);
+                    break;
+
+
+            }
 
         } else if (holder instanceof VH_Rewards) {
             VH_Rewards rewardsVH = (VH_Rewards) holder;
@@ -95,6 +124,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //                holder.coinRewards.setVisibility(View.GONE);
 //            }
         }
+
     }
 
 
@@ -123,6 +153,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ConstraintLayout cardSpecials;
         TextView ptsSpecials;
         TextView cardTextSpecials;
+        ImageView iconSpecials;
 
         public VH_Specials(@NonNull View itemView) {
             super(itemView);
@@ -131,6 +162,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             cardSpecials = itemView.findViewById(R.id.constraintLayoutRecyclerSpecialsCard);
             ptsSpecials = itemView.findViewById(R.id.textViewRecyclerSpecialsPointsText);
             cardTextSpecials = itemView.findViewById(R.id.textViewRecyclerSpecialsCardText);
+            iconSpecials = itemView.findViewById(R.id.imageViewRecyclerSpecialsIcon);
 
         }
     }

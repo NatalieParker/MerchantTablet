@@ -22,7 +22,7 @@
             android:layout_height="50dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/purple_coin"/>
+            android:background="@drawable/yellow_coin"/>
 
         <TextView
             android:id="@+id/textViewRecyclerRewardsPointsText"

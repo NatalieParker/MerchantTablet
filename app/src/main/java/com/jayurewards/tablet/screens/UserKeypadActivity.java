@@ -110,6 +110,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private TextView ptsResponseHeader;
     private TextView ptsResponseDesc;
     private TextView ptsResponseMoreInfo;
+    private ImageView qrCode;
 
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
     private ShopAdminModel shop;
@@ -166,6 +167,7 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
         ptsResponseDesc = findViewById(R.id.textUserKeypadPtsResponseDesc);
         ptsResponseMoreInfo = findViewById(R.id.textUserKeypadPtsResponseMoreInfo);
+        qrCode = findViewById(R.id.imageViewUserKeypadQRCode);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         adminLevel = preferences.getInt("adminLevel", 1);
@@ -179,6 +181,8 @@ public class UserKeypadActivity extends AppCompatActivity
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         optionsMenuContainer.setVisibility(View.GONE);
         constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
+        qrCode.setVisibility(View.GONE);
+        ptsResponseMoreInfo.setVisibility(View.GONE);
 
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
@@ -448,8 +452,10 @@ public class UserKeypadActivity extends AppCompatActivity
                                 moreInfo = "Download Jayu to start getting free gift cards!";
                                 ptsResponseMoreInfo.setText(moreInfo);
                                 ptsResponseMoreInfo.setVisibility(View.VISIBLE);
+                                qrCode.setVisibility(View.VISIBLE);
                             } else {
                                 ptsResponseMoreInfo.setVisibility(View.GONE);
+                                qrCode.setVisibility(View.GONE);
                             }
 
                             ptsResponseHeader.setText(points);

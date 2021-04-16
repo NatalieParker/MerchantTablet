@@ -11,7 +11,7 @@ import retrofit2.http.Path;
 
 public interface RestOffers {
 
-    @GET("/merchant-portal/business-offers/{storeId}")
+    @GET("/merchant-portal/tablet-offers/{storeId}")
     Call<ArrayList<OffersModel>> getBusinessOffers(@Path("storeId") int storeId);
 
 }
