@@ -2,74 +2,66 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardViewRecyclerRewardsRewardsCard"
-    app:cardCornerRadius="10dp"
-    android:layout_marginTop="40dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="40dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayoutRecycleRewardsCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/white_card"
-        android:alpha="1">
+        android:background="@android:color/transparent">
 
         <ImageView
-            android:id="@+id/imageViewRecyclerRewardsPurpleCoin"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/yellow_coin"/>
-
-        <TextView
-            android:id="@+id/textViewRecyclerRewardsPointsText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:layout_marginTop="30dp"
-            android:autoSizeTextType="uniform"
-            android:fontFamily="@font/soleil_bold"
-            android:text="Pts"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24dp" />
-
-        <TextView
-            android:id="@+id/textViewRecyclerRewardsCardText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.9"
+            android:scaleType="centerCrop"
+            android:src="@drawable/white_card"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewRecyclerRewardsPointsText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageRecyclerRewardsCoin"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/yellow_coin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textRecyclerRewardsPts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/soleil_bold"
+            android:text="@string/pts"
+            android:textColor="@color/colorPrimary"
+            android:textSize="21sp"
+            app:layout_constraintBottom_toBottomOf="@id/imageRecyclerRewardsCoin"
+            app:layout_constraintStart_toEndOf="@id/imageRecyclerRewardsCoin"
+            app:layout_constraintTop_toTopOf="@id/imageRecyclerRewardsCoin" />
+
+        <TextView
+            android:id="@+id/textRecyclerRewardsDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="25dp"
+            android:fontFamily="@font/soleil_book"
             android:text="@string/placeholder"
             android:textColor="@color/colorPrimary"
-            android:textSize="20dp" />
-
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageRecyclerRewardsCoin" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>
-
-    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
-    <!--        android:id="@+id/circleImageViewRewardsCardImage"-->
-    <!--        android:layout_width="80dp"-->
-    <!--        android:layout_height="80dp"-->
-    <!--        android:src="@mipmap/ic_launcher"/>-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/textViewRewardsCardImageName"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginLeft="30dp"-->
-    <!--        android:text="Canada"-->
-    <!--        android:textSize="17sp"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:layout_centerVertical="true"-->
-    <!--        android:layout_toRightOf="@id/circleImageViewRewardsCardImage"/>-->

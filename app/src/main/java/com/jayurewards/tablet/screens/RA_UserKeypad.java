@@ -77,16 +77,13 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             String type = offer.getType().substring(0, 1).toUpperCase() + offer.getType().substring(1).replaceAll("[_]", " ");
 
             specialsVH.cardTextSpecials.setText(offer.getDescription());
-            specialsVH.ptsSpecials.setText(type);
-
-            if (offer.getType().equals(GlobalConstants.OFFER_TYPE_PROMO_HOURS)) {
-                specialsVH.ptsSpecials.setText("Happy Hours");
-            }
+            specialsVH.typeSpecials.setText(type);
 
             switch (offers.get(position).getType()) {
 
                 case GlobalConstants.OFFER_TYPE_SIGNUP:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_gift);
+                    specialsVH.typeSpecials.setText("Sign up Offer");
                     break;
 
                 case GlobalConstants.OFFER_TYPE_REFERRAL:
@@ -95,14 +92,12 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 case GlobalConstants.OFFER_TYPE_PROMO_HOURS:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_clock);
+                    specialsVH.typeSpecials.setText("Happy Hours");
                     break;
 
                 case GlobalConstants.OFFER_TYPE_PROMOTION:
-                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_tag);
-                    break;
-
                 default:
-                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_question_solid);
+                    specialsVH.iconSpecials.setImageResource(R.drawable.ic_tag);
                     break;
 
 
@@ -140,9 +135,9 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             parentLayoutRewards = itemView.findViewById(R.id.cardViewRecyclerRewardsRewardsCard);
             cardRewards = itemView.findViewById(R.id.constraintLayoutRecycleRewardsCard);
-            coinRewards = itemView.findViewById(R.id.imageViewRecyclerRewardsPurpleCoin);
-            ptsRewards = itemView.findViewById(R.id.textViewRecyclerRewardsPointsText);
-            cardTextRewards = itemView.findViewById(R.id.textViewRecyclerRewardsCardText);
+            coinRewards = itemView.findViewById(R.id.imageRecyclerRewardsCoin);
+            ptsRewards = itemView.findViewById(R.id.textRecyclerRewardsPts);
+            cardTextRewards = itemView.findViewById(R.id.textRecyclerRewardsDesc);
 
         }
     }
@@ -151,7 +146,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         CardView parentLayoutSpecials;
         ConstraintLayout cardSpecials;
-        TextView ptsSpecials;
+        TextView typeSpecials;
         TextView cardTextSpecials;
         ImageView iconSpecials;
 
@@ -160,9 +155,9 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             parentLayoutSpecials = itemView.findViewById(R.id.cardViewRecyclerSpecialsSpecialsCard);
             cardSpecials = itemView.findViewById(R.id.constraintLayoutRecyclerSpecialsCard);
-            ptsSpecials = itemView.findViewById(R.id.textViewRecyclerSpecialsPointsText);
-            cardTextSpecials = itemView.findViewById(R.id.textViewRecyclerSpecialsCardText);
-            iconSpecials = itemView.findViewById(R.id.imageViewRecyclerSpecialsIcon);
+            typeSpecials = itemView.findViewById(R.id.textRecyclerSpecialsType);
+            cardTextSpecials = itemView.findViewById(R.id.textRecyclerSpecialsDesc);
+            iconSpecials = itemView.findViewById(R.id.imageRecyclerSpecialsIcon);
 
         }
     }

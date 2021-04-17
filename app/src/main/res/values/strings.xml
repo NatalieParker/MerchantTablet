@@ -61,4 +61,6 @@
     <string name="lock_screen_popup_desc_lock">This will prevent others from making any changes on this device.\nEnter a 4 digit pin to unlock this device later.</string>
     <string name="lock_screen_popup_desc_unlock">Enter the 4 digit pin to unlock this device.</string>
     <string name="unlock_screen">Unlock Screen</string>
+    <string name="pts">Pts</string>
+    <string name="_99999_points">99999 points</string>
 </resources>
