@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/image_bkg"
         android:scaleType="center"
-        android:src="@drawable/user_keypad_bkg"/>
+        android:src="@drawable/user_keypad_bkg" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineUserKeypadContainerSplit"
@@ -37,37 +37,37 @@
             android:id="@+id/scrollViewUserKeypadCards"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="90dp"
             android:layout_marginStart="60dp"
+            android:layout_marginTop="90dp"
             android:layout_marginEnd="60dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textViewUserKeypadRewards"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="50sp"
                     android:text="Get sweet rewards and free gift cards."
                     android:textColor="@color/white"
+                    android:textSize="50sp"
                     app:autoSizeTextType="uniform"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewUserKeypadCards"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:paddingBottom="20dp"
                     android:nestedScrollingEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadRewards"/>
+                    android:paddingBottom="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewUserKeypadRewards" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,11 +130,11 @@
                     android:layout_marginEnd="20dp"
                     android:backgroundTint="@android:color/transparent"
                     android:hint="@string/phone_input_hint"
+                    android:maxLength="16"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     android:textSize="23sp"
-                    android:maxLength="16"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayoutUserKeypadKeypadButtons"
                     app:layout_constraintTop_toBottomOf="@id/imageUserKeypadLogo" />
 
@@ -371,8 +371,8 @@
 
         <ImageView
             android:id="@+id/imageUserKeypadLogout"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:scaleType="fitCenter"
@@ -380,19 +380,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textUserKeypadPtsResponseName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:fontFamily="@font/soleil_bold"
-            android:text="Hello"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
-            android:id="@+id/imageViewUserKeypadProfilePicture"
+            android:id="@+id/imageUserKeypadPtsResponseRibbon"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="50dp"
@@ -402,114 +391,139 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
-<!--            android:layout_width="120dp"-->
-<!--            android:layout_height="120dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            android:src="@drawable/default_profile"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/textUserKeypadPtsResponseName"/>-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageUserKeypadPtsResponseProfile"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/default_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
         <LinearLayout
             android:id="@+id/layoutUserKeypadPointsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
             android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadProfilePicture">
+            app:layout_constraintTop_toBottomOf="@id/imageUserKeypadPtsResponseProfile">
 
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/confetti" />
 
-            <TextView
-            android:id="@+id/textUserKeypadPtResponseHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/soleil_bold"
-            android:gravity="center"
-            android:text="@string/_99999_points"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            app:autoSizeTextType="uniform" />
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/textUserKeypadPtResponseHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/soleil_bold"
+                    android:text="@string/_99999_points"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    app:autoSizeTextType="uniform" />
 
+                <TextView
+                    android:id="@+id/textUserKeypadPtsResponseName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp" />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitCenter"
+                android:scaleX="-1"
+                android:src="@drawable/confetti" />
         </LinearLayout>
-<!--        <TextView-->
-<!--            android:id="@+id/textUserKeypadPtResponseHeader"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            android:fontFamily="@font/soleil_bold"-->
-<!--            android:gravity="center"-->
-<!--            android:text="@string/_99999_points"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="28sp"-->
-<!--            app:autoSizeTextType="uniform"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/imageViewUserKeypadProfilePicture" />-->
 
         <TextView
             android:id="@+id/textUserKeypadPtsResponseDesc"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="50dp"
-            android:text="You just got 5 points from Go Get Yogurt and now have 45 points for rewards."
+            android:text="@string/points_response_desc"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="25sp"
             app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layoutUserKeypadPointsHeader" />
 
         <TextView
             android:id="@+id/textUserKeypadPtsResponseMoreInfo"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="110dp"
+            android:layout_marginBottom="10dp"
             android:text="You also have $5.00 available for gift cards you can redeem in the Jayu app."
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="25sp"
             app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@id/buttonUserKeypadBackButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtsResponseDesc" />
+            app:layout_constraintBottom_toTopOf="@id/imageViewUserKeypadQRCode"
+            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtsResponseDesc"
+            app:layout_constraintVertical_bias="1" />
 
         <ImageView
             android:id="@+id/imageViewUserKeypadQRCode"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/qr_code"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="87dp"
-            app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtsResponseMoreInfo"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textUserKeypadPtsResponseUrl"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textUserKeypadPtsResponseUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/soleil_bold"
+            android:text="www.jayu.me"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonUserKeypadBackButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="25dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="50dp"
             android:text="@string/ok"
             app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -526,9 +540,9 @@
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
         app:icon="@drawable/ic_menu"
+        app:iconGravity="textStart"
         app:iconSize="35dp"
         app:iconTint="@color/white"
-        app:iconGravity="textStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -536,15 +550,15 @@
         android:id="@+id/textUserKeypadCompany"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/soleil_book"
         android:text="@string/company"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="@font/soleil_book"
-        app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
+        app:layout_constraintBottom_toBottomOf="@id/buttonUserKeypadOptionsMenu"
         app:layout_constraintEnd_toEndOf="@+id/guidelineUserKeypadContainerSplit"
-        app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu"
-        app:layout_constraintBottom_toBottomOf="@id/buttonUserKeypadOptionsMenu"/>
+        app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
+        app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu" />
 
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"

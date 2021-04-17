@@ -164,7 +164,7 @@ public class UserKeypadActivity extends AppCompatActivity
         constraintLayoutPointSuccessScreen = findViewById(R.id.constraintLayoutUserKeypadPointSuccessScreen);
         constraintLayoutKeys = findViewById(R.id.layoutUserKeypadRightContainer);
         ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
-        profilePicture = findViewById(R.id.imageViewUserKeypadProfilePicture);
+        profilePicture = findViewById(R.id.imageUserKeypadPtsResponseProfile);
         BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
         ptsResponseName = findViewById(R.id.textUserKeypadPtsResponseName);
         ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
@@ -174,11 +174,6 @@ public class UserKeypadActivity extends AppCompatActivity
 
         preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         adminLevel = preferences.getInt("adminLevel", 1);
-
-//        animationDrawable = (AnimationDrawable) constraintLayoutBackgroundAnimation.getBackground();
-//        animationDrawable.setEnterFadeDuration(2000);
-//        animationDrawable.setExitFadeDuration(4000);
-//        animationDrawable.start();
 
         spinner.setVisibility(View.VISIBLE);
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
@@ -409,15 +404,10 @@ public class UserKeypadActivity extends AppCompatActivity
             GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, pointAmount, method,
                     type, teamId, adminLevel, timeout, day, time);
 
-            Log.i(TAG, "GIVE POINTS PARAMS: " + params);
-
             Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
             call.enqueue(new Callback<GivePointsResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-
-                    Log.i(TAG, "GIVE POINTS RESPONSE: " + response.body());
-
                     GivePointsResponse result = response.body();
 
                     if (result != null) {
@@ -543,19 +533,14 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setOnClickListener(v -> {
             closeKeypadOptionsMenu();
             LockScreenPopup popup = new LockScreenPopup();
-//            Bundle args = new Bundle();
-//            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
-//            args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
-//            popup.setArguments(args);
             popup.show(getSupportFragmentManager(), "lock_screen_popup");
-
         });
 
         buttonPointScreenBack.setOnClickListener(v -> {
             closePointSuccessScreen();
-            Log.i(TAG, "countdownTimer: BUTTON WAS PRESSED, CANCELING TIMER");
             timer.cancel();
         });
+
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
         constraintLayoutDarkenScreen.setOnClickListener(v -> closeKeypadOptionsMenu());
     }

@@ -63,4 +63,6 @@
     <string name="unlock_screen">Unlock Screen</string>
     <string name="pts">Pts</string>
     <string name="_99999_points">99999 points</string>
+    <string name="name">Name</string>
+    <string name="points_response_desc">You just got 5 points from Go Get Yogurt and now have 45 points for rewards.</string>
 </resources>

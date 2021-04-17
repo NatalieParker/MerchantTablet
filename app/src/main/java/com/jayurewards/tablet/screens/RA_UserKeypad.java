@@ -83,7 +83,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 case GlobalConstants.OFFER_TYPE_SIGNUP:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_gift);
-                    specialsVH.typeSpecials.setText("Sign up Offer");
+                    specialsVH.typeSpecials.setText("Signup Offer");
                     break;
 
                 case GlobalConstants.OFFER_TYPE_REFERRAL:
