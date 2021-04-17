@@ -181,7 +181,14 @@ public class UserKeypadActivity extends AppCompatActivity
         constraintLayoutDarkenScreen.setVisibility(View.GONE);
         optionsMenuContainer.setVisibility(View.GONE);
         constraintLayoutPointSuccessScreen.setVisibility(View.GONE);
+
         qrCode.setVisibility(View.GONE);
+        String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://jayu.me";
+        GlideApp.with(UserKeypadActivity.this)
+                .load(qrCodeUrl)
+                .fallback(R.drawable.qr_code)
+                .into(qrCode);
+
         ptsResponseMoreInfo.setVisibility(View.GONE);
 
         buttonLockScreen.setEnabled(false);
@@ -409,7 +416,7 @@ public class UserKeypadActivity extends AppCompatActivity
                     if (result != null) {
                         GlideApp.with(UserKeypadActivity.this)
                                 .load(result.getThumbnail())
-                                .fallback(R.drawable.default_profile)
+                                .fallback(R.drawable.ribbon_medal_img)
                                 .override(profilePicture.getWidth(),profilePicture.getHeight())
                                 .into(profilePicture);
 
