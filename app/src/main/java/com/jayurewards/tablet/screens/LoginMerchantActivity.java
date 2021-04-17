@@ -117,6 +117,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 if (!isValidEmail(email)) {
                     emailEditText.setError("Please enter a valid email.");
                     emailEditText.requestFocus();
+                    spinner.setVisibility(View.GONE);
                     return;
                 }
             }
@@ -217,8 +218,6 @@ public class LoginMerchantActivity extends AppCompatActivity {
                     AlertHelper.showAlert(LoginMerchantActivity.this, "Email Login Error",
                             "This email does not exist, or the password is incorrect. Please check and try again.");
                 }
-
-                spinner.setVisibility(View.GONE);
             });
 
         } catch (ApiException e) {
@@ -277,8 +276,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
                 editor.putString(GlobalConstants.SUBSCRIPTION_ID, subscriptionId);
                 editor.apply();
 
-                AuthHelper.checkMerchantSubscription(LoginMerchantActivity.this);
-                spinner.setVisibility(View.GONE);
+                AuthHelper.checkMerchantSubscription(LoginMerchantActivity.this, spinner);
             }
 
             @Override

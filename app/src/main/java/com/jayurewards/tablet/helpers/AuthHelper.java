@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.jayurewards.tablet.BuildConfig;
 import com.jayurewards.tablet.models.CheckSubscriptionParams;
 import com.jayurewards.tablet.models.CheckSubscriptionResponse;
 import com.jayurewards.tablet.models.UpdateSubscriptionStatus;
@@ -35,11 +41,10 @@ public class AuthHelper {
         }
     }
 
-    public static void checkMerchantSubscription(Context context) {
+    public static void checkMerchantSubscription(Context context, ConstraintLayout spinner) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String stripeId = sharedPref.getString(GlobalConstants.STRIPE_ID, null);
         String subscriptionId = sharedPref.getString(GlobalConstants.SUBSCRIPTION_ID, null);
-
 
         CheckSubscriptionParams params = new CheckSubscriptionParams(stripeId, subscriptionId);
         Call<CheckSubscriptionResponse> call = RetrofitClient.getInstance().getRestAuth().checkSubscription(params);
@@ -55,11 +60,12 @@ public class AuthHelper {
 
                     Intent intent = new Intent(context, UserKeypadActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                    if (spinner != null) spinner.setVisibility(View.GONE);
                     context.startActivity(intent);
 
                 } else {
                     String subStatus = "inactive";
-
                     AuthHelper.logOut(context);
 
                     if (status != null && status.getStatus() != null) {
@@ -81,15 +87,19 @@ public class AuthHelper {
                         });
                     }
 
+                    if (spinner != null) spinner.setVisibility(View.GONE);
                     Intent intent = new Intent(context, InactiveAccountActivity.class);
                     context.startActivity(intent);
                 }
+
             }
 
             @Override
             public void onFailure(@NonNull Call<CheckSubscriptionResponse> call, @NonNull Throwable t) {
                 String errorMessage = "Check subscription network error: ";
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                if (spinner != null) spinner.setVisibility(View.GONE);
+
                 AlertHelper.showNetworkAlert(context);
 
                 if (t.getMessage() != null && t.getMessage().equals("timeout")) {
@@ -109,7 +119,15 @@ public class AuthHelper {
 
         sharedPref.edit().clear().apply();
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(BuildConfig.googleSigninWebClientId)
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(currentScreen, gso);
+
         FirebaseAuth.getInstance().signOut();
+        googleSignInClient.signOut();
+
         Intent intent = new Intent(currentScreen, LoginMerchantActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         currentScreen.startActivity(intent);

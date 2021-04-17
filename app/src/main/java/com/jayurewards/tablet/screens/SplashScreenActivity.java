@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         boolean userLoggedIn = AuthHelper.isUserLoggedIn(this);
 
         if (userLoggedIn) {
-            AuthHelper.checkMerchantSubscription(SplashScreenActivity.this);
+            AuthHelper.checkMerchantSubscription(SplashScreenActivity.this, null);
         } else {
             Intent intent = new Intent(SplashScreenActivity.this, LoginMerchantActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

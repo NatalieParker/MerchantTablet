@@ -16,6 +16,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -111,6 +112,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private TextView ptsResponseDesc;
     private TextView ptsResponseMoreInfo;
     private ImageView qrCode;
+
+    private CountDownTimer timer;
 
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
     private ShopAdminModel shop;
@@ -301,17 +304,20 @@ public class UserKeypadActivity extends AppCompatActivity
                 List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
                 ArrayList<OffersModel> rewards = new ArrayList<>();
                 ArrayList<OffersModel> specials = new ArrayList<>();
+                OffersModel signUp = new OffersModel();
 
                 for (int i = 0; i < offers.size(); i++) {
 
 //                    Log.i(TAG, "OFFER NUMBER " + i + " \n OFFER DESCRIPTION: " + offers.get(i).getDescription());
                     OffersModel offer = offers.get(i);
 
-                    Log.i(TAG, "OFFER: " + offers.get(i).getType().equals(GlobalConstants.OFFER_TYPE_GENERAL));
+                    Log.i(TAG, "OFFER: " + offer.getType().equals(GlobalConstants.OFFER_TYPE_GENERAL));
 
 
-                    if (offers.get(i).getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
+                    if (offer.getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
                         rewards.add(offer);
+                    } else if (offer.getType().equals(GlobalConstants.OFFER_TYPE_SIGNUP)) {
+                        signUp = offer;
                     } else {
                         specials.add(offer);
                     }
@@ -322,6 +328,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 Log.i(TAG, "SPECIALS: " + specials);
 
                 ArrayList<OffersModel> of = new ArrayList<>();
+                of.add(signUp);
                 of.addAll(rewards);
                 of.addAll(specials);
 
@@ -544,7 +551,11 @@ public class UserKeypadActivity extends AppCompatActivity
 
         });
 
-        buttonPointScreenBack.setOnClickListener(v -> closePointSuccessScreen());
+        buttonPointScreenBack.setOnClickListener(v -> {
+            closePointSuccessScreen();
+            Log.i(TAG, "countdownTimer: BUTTON WAS PRESSED, CANCELING TIMER");
+            timer.cancel();
+        });
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
         constraintLayoutDarkenScreen.setOnClickListener(v -> closeKeypadOptionsMenu());
     }
@@ -634,6 +645,21 @@ public class UserKeypadActivity extends AppCompatActivity
         constraintLayoutDarkenScreen.setEnabled(false);
     }
 
+    private void countdownTimer () {
+        timer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long l) {
+                Log.i(TAG, "ON TICK: 1 SECOND");
+            }
+
+            @Override
+            public void onFinish() {
+                closePointSuccessScreen();
+            }
+        };
+        timer.start();
+    }
+
     private void openPointSuccessScreen() {
         Animation animationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_enter);
         constraintLayoutPointSuccessScreen.setVisibility(View.VISIBLE);
@@ -644,11 +670,13 @@ public class UserKeypadActivity extends AppCompatActivity
 
         constraintLayoutKeys.setEnabled(false);
 
-        new Handler().postDelayed(() -> {
-            if (buttonPointScreenBack.isEnabled()) {
-                closePointSuccessScreen();
-            }
-        }, 30000);
+        countdownTimer();
+
+//        new Handler().postDelayed(() -> {
+//            if (buttonPointScreenBack.isEnabled()) {
+//                closePointSuccessScreen();
+//            }
+//        }, 30000);
     }
 
     private void closePointSuccessScreen() {
