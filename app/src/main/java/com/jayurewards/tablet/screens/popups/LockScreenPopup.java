@@ -31,7 +31,7 @@ public class LockScreenPopup extends DialogFragment {
     private static final String TAG = "LockScreenPopup";
 
     public interface LockScreenInterface {
-        void onUpdate(boolean isLocked);
+        void onUpdateLockScreen(boolean isLocked);
     }
     private LockScreenInterface listener;
 
@@ -85,12 +85,12 @@ public class LockScreenPopup extends DialogFragment {
             if (savedPin == 0) {
                 editor.putInt(GlobalConstants.PIN_CODE, pinCode);
                 editor.apply();
-                listener.onUpdate(true);
+                listener.onUpdateLockScreen(true);
                 dismiss();
             } else if (savedPin == pinCode) {
                 editor.putInt(GlobalConstants.PIN_CODE, 0);
                 editor.apply();
-                listener.onUpdate(false);
+                listener.onUpdateLockScreen(false);
                 dismiss();
             } else {
                 AlertHelper.showAlert(getActivity(), "Incorrect Pin",
@@ -116,7 +116,7 @@ public class LockScreenPopup extends DialogFragment {
         if (getDialog() == null || getActivity() == null) return;
 
         // Set width of popup
-        int screenWidth = (getActivity().getResources().getDisplayMetrics().widthPixels);
+        int screenWidth = getActivity().getResources().getDisplayMetrics().widthPixels;
         int width = (int) Math.round(screenWidth * 0.60);
         int height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getDialog().getWindow().setLayout(width, height);

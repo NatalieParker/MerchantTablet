@@ -36,7 +36,7 @@ public class UpdatePointsPopup extends DialogFragment {
     private static final String TAG = "UpdatePointsPopup";
 
     public interface UpdatePtsPopupInterface {
-        void onUpdate(int points, int adminLevel);
+        void onUpdatePoints(int points, int adminLevel);
     }
 
     private UpdatePtsPopupInterface listener;
@@ -102,7 +102,7 @@ public class UpdatePointsPopup extends DialogFragment {
                 return;
             }
 
-            listener.onUpdate(amount, adminLevel);
+            listener.onUpdatePoints(amount, adminLevel);
             dismiss();
         });
 
