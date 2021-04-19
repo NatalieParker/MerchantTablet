@@ -306,7 +306,6 @@ public class UserKeypadActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<ArrayList<OffersModel>> call, Response<ArrayList<OffersModel>> response) {
                 offers = response.body();
-                Log.i(TAG, "BUSINESS OFFERS CALL: " + offers);
 
                 List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
                 ArrayList<OffersModel> rewards = new ArrayList<>();
@@ -337,8 +336,6 @@ public class UserKeypadActivity extends AppCompatActivity
                         offers.get(i).setStartDate(startDateString);
                         offers.get(i).setEndDate(endDateString);
                     }
-
-
                 }
 
                 rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
