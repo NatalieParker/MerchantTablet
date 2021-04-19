@@ -110,14 +110,6 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             rewardsVH.cardTextRewards.setText(offer.getDescription());
             rewardsVH.ptsRewards.setText(offerPoints);
-
-//            if (offer.getType().equals("general")) {
-//                holder.ptsRewards.setText("Pts");
-//                holder.coinRewards.setVisibility(View.VISIBLE);
-//            } else {
-//                holder.ptsRewards.setText(offer.getType());
-//                holder.coinRewards.setVisibility(View.GONE);
-//            }
         }
 
     }

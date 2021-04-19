@@ -19,6 +19,25 @@ public class DateTimeHelper {
         return fmt.format(date);
     }
 
+    public static Date parseDateStringToDate(String dateString) {
+        SimpleDateFormat fmt;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            fmt = new SimpleDateFormat(GlobalConstants.MYSQL_DATE_FORMAT, Locale.getDefault());
+        } else {
+            fmt = new SimpleDateFormat(GlobalConstants.MYSQL_DATE_FORMAT_LEGACY, Locale.getDefault());
+        }
+
+        fmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            return fmt.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
+    }
+
     public static long getDateDifferenceSeconds(String dateString) {
         Date currentDateTime = Calendar.getInstance().getTime();
         Date date = new Date();

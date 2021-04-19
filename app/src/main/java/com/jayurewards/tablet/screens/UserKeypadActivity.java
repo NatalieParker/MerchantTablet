@@ -54,6 +54,7 @@ import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -228,6 +229,9 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuBkgDark.setEnabled(false);
 
         startRecyclerView(offers);
+
+        // Temporary
+        goToTeamLoginButton.setVisibility(View.GONE);
     }
 
     /**
@@ -315,6 +319,22 @@ public class UserKeypadActivity extends AppCompatActivity
                     } else {
                         specials.add(offer);
                     }
+
+                    if (offer.getStartDate() != null && !"".equals(offer.getStartDate())
+                            && offer.getEndDate() != null && !"".equals(offer.getEndDate())) {
+
+                        Date startDate = DateTimeHelper.parseDateStringToDate(offer.getStartDate());
+                        Date endDate = DateTimeHelper.parseDateStringToDate(offer.getEndDate());
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault());
+                        String startDateString = dateFormat.format(startDate);
+                        String endDateString = dateFormat.format(endDate);
+
+                        offers.get(i).setStartDate(startDateString);
+                        offers.get(i).setEndDate(endDateString);
+                    }
+
+
                 }
 
                 rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
@@ -478,39 +498,6 @@ public class UserKeypadActivity extends AppCompatActivity
                             ptsResponseName.setText(result.getName());
                         }
 
-//                        // Check point timeout
-//                        if (result.getTimeLeft() != 0) {
-//                            String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
-//                            String message = result.getName() + " must wait " + timeLeftString + " to get more points.";
-//
-//                            ptsResponseHeader.setText("Too soon");
-//                            ptsResponseDesc.setText(message);
-//                            ptsResponseMoreInfo.setVisibility(View.GONE);
-//
-//                        } else {
-//                            int pointTally = result.getPointTally();
-//
-//                            String pointTallyString;
-//                            if (pointTally == 1) {
-//                                pointTallyString = "1 point for rewards.";
-//                            } else {
-//                                pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
-//                            }
-//
-//                            int pointsGiven = result.getPoints();
-//
-//                            String points;
-//                            if (pointsGiven == 1) {
-//                                points = "1 point";
-//                            } else {
-//                                points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven) + " points";
-//                            }
-//
-//                            String desc = "You just got " + points + " from " + shop.getCompany() + " and now have " + pointTallyString;
-//                            ptsResponseHeader.setText(points);
-//                            ptsResponseDesc.setText(desc);
-//                        }
-
                     } else {
                         String errorMessage = "Give user points null response";
                         LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
@@ -660,12 +647,30 @@ public class UserKeypadActivity extends AppCompatActivity
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
+        Log.i(TAG, "generateViewSizes: \n WIDTH: " + screenWidth);
+        Log.i(TAG, "generateViewSizes: \n HEIGHT: " + screenHeight);
+
         int width = (int) Math.round(screenWidth * 0.30);
         int height = (int) Math.round(screenHeight * 0.30);
 
-        ptsResponseProfilePic.getLayoutParams().width = width;
-        ptsResponseProfilePic.getLayoutParams().height = height;
-        ptsResponseProfilePic.requestLayout();
+        if (screenHeight >= 1000) {
+
+            double imagePercent = 0.25;
+
+
+//            ptsResponseProfilePic.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
+//            ptsResponseProfilePic.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
+//            ptsResponseProfilePic.requestLayout();
+//
+//
+//            ptsResponseRibbonImg.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
+//            ptsResponseRibbonImg.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
+//            ptsResponseRibbonImg.requestLayout();
+        } else {
+
+
+
+        }
     }
 
     private void openKeypadOptionsMenu() {
@@ -675,7 +680,7 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setEnabled(true);
         buttonUpdatePoints.setEnabled(true);
         signOutButton.setEnabled(true);
-        goToTeamLoginButton.setEnabled(true);
+//        goToTeamLoginButton.setEnabled(true);
 
         buttonOptionsMenu.setEnabled(false);
         buttonOptionsMenu.setVisibility(View.GONE);
@@ -778,7 +783,7 @@ public class UserKeypadActivity extends AppCompatActivity
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_unlock));
         } else if (!isLocked) {
             buttonUpdatePoints.setVisibility(View.VISIBLE);
-            goToTeamLoginButton.setVisibility(View.VISIBLE);
+//            goToTeamLoginButton.setVisibility(View.VISIBLE);
             optionsPortalBtn.setVisibility(View.VISIBLE);
 
             buttonLockScreen.setText("Lock Screen");

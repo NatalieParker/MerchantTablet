@@ -386,7 +386,7 @@
             android:id="@+id/imageUserKeypadPtsResponseRibbon"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ribbon_medal_img"
             app:layout_constraintEnd_toEndOf="parent"
@@ -397,7 +397,7 @@
             android:id="@+id/imageUserKeypadPtsResponseProfile"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:src="@drawable/default_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -409,9 +409,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
-            android:gravity="center"
+            android:gravity="fill"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -420,6 +420,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_weight="0.7"
                 android:scaleType="fitCenter"
                 android:src="@drawable/confetti" />
 
@@ -431,6 +432,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -461,6 +463,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_weight="0.7"
                 android:scaleType="fitCenter"
                 android:scaleX="-1"
                 android:src="@drawable/confetti" />
