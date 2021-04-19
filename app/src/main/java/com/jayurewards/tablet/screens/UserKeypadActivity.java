@@ -105,7 +105,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private ConstraintLayout containerPointsSuccess;
     private MaterialButton ptsResponseExit;
     private MaterialButton ptsResponseButton;
-    private CircleImageView ptsResponseProfilePic;
+    private ImageView ptsResponseProfilePic;
     private ImageView ptsResponseRibbonImg;
     private TextView ptsResponseName;
     private TextView ptsResponseHeader;
@@ -113,6 +113,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private TextView ptsResponseMoreInfo;
     private ImageView ptsResponseQrCode;
     private TextView ptsResponseJayuUrl;
+    private ImageView ptsResponseLeftConfetti;
+    private ImageView ptsResponseRightConfetti;
 
     private TextView companyTextView;
     private EditText phoneNumber;
@@ -174,6 +176,8 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseMoreInfo = findViewById(R.id.textUserKeypadPtsResponseMoreInfo);
         ptsResponseQrCode = findViewById(R.id.imageViewUserKeypadQRCode);
         ptsResponseJayuUrl = findViewById(R.id.textUserKeypadPtsResponseUrl);
+        ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
+        ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
         adminLevel = preferences.getInt(GlobalConstants.ADMIN_LEVEL, 1);
@@ -428,10 +432,6 @@ public class UserKeypadActivity extends AppCompatActivity
                     GivePointsResponse result = response.body();
 
                     if (result != null) {
-                        generateViewSizes();
-
-                        Log.i(TAG, "onResponse: \n POINTS RESPONSE: " + result);
-
                         String desc;
                         if (result.getTimeLeft() != 0) {
                             if (result.getThumbnail() == null || "".equals(result.getThumbnail())) {
@@ -442,8 +442,13 @@ public class UserKeypadActivity extends AppCompatActivity
                             desc = result.getName() + " must wait " + timeLeftString + " to get more points.";
 
                             ptsResponseHeader.setText("Too soon");
+                            ptsResponseLeftConfetti.setVisibility(View.GONE);
+                            ptsResponseRightConfetti.setVisibility(View.GONE);
 
                         } else {
+                            ptsResponseLeftConfetti.setVisibility(View.VISIBLE);
+                            ptsResponseRightConfetti.setVisibility(View.VISIBLE);
+
                             int pointTally = result.getPointTally();
 
                             String pointTallyString;
@@ -478,7 +483,7 @@ public class UserKeypadActivity extends AppCompatActivity
                             ptsResponseJayuUrl.setVisibility(View.VISIBLE);
                             ptsResponseButton.setVisibility(View.GONE);
 
-                            ptsResponseMoreInfo.setText("Download Jayu to start getting free gift cards!");
+                            ptsResponseMoreInfo.setText(R.string.pts_response_download_text);
 
                         } else {
                             ptsResponseProfilePic.setVisibility(View.VISIBLE);
@@ -492,6 +497,7 @@ public class UserKeypadActivity extends AppCompatActivity
                             GlideApp.with(UserKeypadActivity.this)
                                     .load(result.getThumbnail())
                                     .fallback(R.drawable.ribbon_medal_img)
+                                    .circleCrop()
                                     .override(ptsResponseProfilePic.getWidth(),ptsResponseProfilePic.getHeight())
                                     .into(ptsResponseProfilePic);
 
@@ -504,6 +510,7 @@ public class UserKeypadActivity extends AppCompatActivity
                         AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                     }
 
+                    generateViewSizes();
                     openPointSuccessScreen();
                     phoneNumber.getText().clear();
 
@@ -647,30 +654,29 @@ public class UserKeypadActivity extends AppCompatActivity
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-        Log.i(TAG, "generateViewSizes: \n WIDTH: " + screenWidth);
-        Log.i(TAG, "generateViewSizes: \n HEIGHT: " + screenHeight);
+        double imagePercent = 0.25;
+        if (screenHeight < 900) {
+           imagePercent = 0.20;
+            ptsResponseLeftConfetti.getLayoutParams().width = 70;
+            ptsResponseRightConfetti.getLayoutParams().width = 70;
+            ptsResponseQrCode.getLayoutParams().width = 120;
+            ptsResponseQrCode.getLayoutParams().height = 120;
 
-        int width = (int) Math.round(screenWidth * 0.30);
-        int height = (int) Math.round(screenHeight * 0.30);
-
-        if (screenHeight >= 1000) {
-
-            double imagePercent = 0.25;
-
-
-//            ptsResponseProfilePic.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
-//            ptsResponseProfilePic.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
-//            ptsResponseProfilePic.requestLayout();
-//
-//
-//            ptsResponseRibbonImg.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
-//            ptsResponseRibbonImg.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
-//            ptsResponseRibbonImg.requestLayout();
-        } else {
-
-
-
+            ptsResponseHeader.setTextSize(24);
+            ptsResponseName.setTextSize(20);
+            ptsResponseDesc.setTextSize(20);
+            ptsResponseMoreInfo.setTextSize(20);
+            ptsResponseJayuUrl.setTextSize(20);
         }
+
+        ptsResponseProfilePic.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
+        ptsResponseProfilePic.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
+        ptsResponseProfilePic.requestLayout();
+
+
+        ptsResponseRibbonImg.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
+        ptsResponseRibbonImg.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
+        ptsResponseRibbonImg.requestLayout();
     }
 
     private void openKeypadOptionsMenu() {
@@ -713,6 +719,7 @@ public class UserKeypadActivity extends AppCompatActivity
         containerPointsSuccess.startAnimation(animationOpen);
 
         ptsResponseButton.setEnabled(true);
+        enterButton.setEnabled(false);
         containerKeys.setEnabled(false);
         countdownTimer();
     }
@@ -722,6 +729,7 @@ public class UserKeypadActivity extends AppCompatActivity
         containerPointsSuccess.startAnimation(animationClose);
 
         ptsResponseButton.setEnabled(false);
+        enterButton.setEnabled(true);
         ptsResponseButton.setVisibility(View.GONE);
         containerKeys.setEnabled(true);
     }

@@ -65,4 +65,10 @@
     <string name="_99999_points">99999 points</string>
     <string name="name">Name</string>
     <string name="points_response_desc">You just got 5 points from Go Get Yogurt and now have 45 points for rewards.</string>
+    <string name="www_jayu_me">www.jayu.me</string>
+    <string name="pts_response_more_info">Download Jayu to start getting free gift cards!</string>
+    <string name="confetti">Confetti</string>
+    <string name="pts_response_download_text">Download Jayu to start getting free gift cards!</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="ribbon">Ribbon</string>
 </resources>

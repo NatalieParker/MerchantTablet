@@ -344,17 +344,12 @@
                             android:layout_weight="1"
                             android:backgroundTint="@color/colorPrimary"
                             android:fontFamily="@font/soleil_bold"
-                            android:text="Submit"
+                            android:text="@string/submit"
                             android:textSize="20sp" />
-
                     </LinearLayout>
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </eightbitlab.com.blurview.BlurView>
-
     </androidx.cardview.widget.CardView>
 
     <!-- Give points response-->
@@ -365,7 +360,7 @@
         android:layout_margin="30dp"
         android:background="@drawable/bg_rounded_corners_white"
         android:elevation="1dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit">
 
@@ -391,9 +386,10 @@
             android:src="@drawable/ribbon_medal_img"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/ribbon" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/imageUserKeypadPtsResponseProfile"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -401,8 +397,8 @@
             android:src="@drawable/default_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/profile_image" />
 
         <LinearLayout
             android:id="@+id/layoutUserKeypadPointsHeader"
@@ -418,20 +414,22 @@
             app:layout_constraintTop_toBottomOf="@id/imageUserKeypadPtsResponseProfile">
 
             <ImageView
+                android:id="@+id/imagePtsResponseLeftConfetti"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_weight="0.7"
                 android:scaleType="fitCenter"
-                android:src="@drawable/confetti" />
+                android:src="@drawable/confetti"
+                android:contentDescription="@string/confetti" />
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="10dp"
                 android:layout_height="0dp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -443,8 +441,7 @@
                     android:text="@string/_99999_points"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="28sp"
-                    app:autoSizeTextType="uniform" />
+                    android:textSize="30sp"/>
 
                 <TextView
                     android:id="@+id/textUserKeypadPtsResponseName"
@@ -457,45 +454,45 @@
             </LinearLayout>
 
             <View
-                android:layout_width="20dp"
+                android:layout_width="10dp"
                 android:layout_height="0dp" />
 
             <ImageView
+                android:id="@+id/imagePtsResponseRightConfetti"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_weight="0.7"
                 android:scaleType="fitCenter"
                 android:scaleX="-1"
-                android:src="@drawable/confetti" />
+                android:src="@drawable/confetti"
+                android:contentDescription="@string/confetti" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textUserKeypadPtsResponseDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
             android:text="@string/points_response_desc"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="25sp"
-            app:autoSizeTextType="uniform"
+            android:textSize="23sp"
             app:layout_constraintTop_toBottomOf="@id/layoutUserKeypadPointsHeader" />
 
         <TextView
             android:id="@+id/textUserKeypadPtsResponseMoreInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginBottom="10dp"
-            android:text="You also have $5.00 available for gift cards you can redeem in the Jayu app."
+            android:text="@string/pts_response_more_info"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            app:autoSizeTextType="uniform"
+            android:fontFamily="@font/soleil_book"
+            android:textColor="@color/colorPrimary"
+            android:textSize="23sp"
             app:layout_constraintBottom_toTopOf="@id/imageViewUserKeypadQRCode"
             app:layout_constraintTop_toBottomOf="@id/textUserKeypadPtsResponseDesc"
             app:layout_constraintVertical_bias="1" />
@@ -516,7 +513,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:fontFamily="@font/soleil_bold"
-            android:text="www.jayu.me"
+            android:text="@string/www_jayu_me"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="20sp"
@@ -526,11 +523,11 @@
             android:id="@+id/buttonUserKeypadBackButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:textSize="28sp"
             android:text="@string/ok"
-            app:autoSizeTextType="uniform"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
