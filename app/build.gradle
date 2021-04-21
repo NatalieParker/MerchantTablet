@@ -6,14 +6,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     signingConfigs {
-        release_debug_key {
-            keyAlias 'release_debug_key'
-            keyPassword 'dLRW-^\'5qxd2U_%3'
-            storePassword 'dLRW-^\'5qxd2U_%3'
-            storeFile file('D:\\Jayu_Dev\\merchant tablet_Keys\\release_debug_key.jks')
+        release_key {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     compileSdkVersion 30
@@ -51,7 +54,7 @@ android {
             buildConfigField "String", 'googleSigninWebClientId', '"754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com"'
             buildConfigField "String", 'restApiUrl', '"https://d7eead3c-d79c-403a-b4f6-ad2d1928184b.jayu.us"'
             buildConfigField "String", 'merchantPortalurl', '"https://portal.jayu.us"'
-            signingConfig signingConfigs.release_debug_key
+            signingConfig signingConfigs.release_key
         }
     }
     compileOptions {

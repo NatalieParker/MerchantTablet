@@ -6,24 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.OffersModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";
@@ -83,7 +77,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 case GlobalConstants.OFFER_TYPE_SIGNUP:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_gift);
-                    specialsVH.typeSpecials.setText("Signup Offer");
+                    specialsVH.typeSpecials.setText(R.string.signup_offer);
                     break;
 
                 case GlobalConstants.OFFER_TYPE_REFERRAL:
@@ -92,30 +86,25 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 case GlobalConstants.OFFER_TYPE_PROMO_HOURS:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_clock);
-                    specialsVH.typeSpecials.setText("Happy Hours");
+                    specialsVH.typeSpecials.setText(R.string.happy_hours);
                     break;
 
                 case GlobalConstants.OFFER_TYPE_PROMOTION:
                 default:
                     specialsVH.iconSpecials.setImageResource(R.drawable.ic_tag);
                     break;
-
-
             }
 
         } else if (holder instanceof VH_Rewards) {
             VH_Rewards rewardsVH = (VH_Rewards) holder;
-
             String offerPoints = offer.getPtsRequired() + " Pts";
-
             rewardsVH.cardTextRewards.setText(offer.getDescription());
             rewardsVH.ptsRewards.setText(offerPoints);
         }
-
     }
 
 
-    public class VH_Rewards extends RecyclerView.ViewHolder {
+    public static class VH_Rewards extends RecyclerView.ViewHolder {
 
         CardView parentLayoutRewards;
         ConstraintLayout cardRewards;

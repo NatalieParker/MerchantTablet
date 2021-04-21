@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,12 +13,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -52,17 +51,14 @@ import com.jayurewards.tablet.networking.RetrofitClient;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 import retrofit2.Call;
@@ -74,6 +70,19 @@ public class UserKeypadActivity extends AppCompatActivity
         LockScreenPopup.LockScreenInterface {
 
     private static final String TAG = "KeypadScreen";
+
+    // Left View
+    private NestedScrollView nsv;
+
+    // Options Menu
+    private LinearLayout optionsMenuContainer;
+    private TextView optionsPortalBtn;
+    private MaterialButton signOutButton;
+    private MaterialButton goToTeamLoginButton;
+    private MaterialButton buttonOptionsMenu;
+    private MaterialButton buttonLockScreen;
+    private MaterialButton buttonUpdatePoints;
+    private ConstraintLayout optionsMenuBkgDark;
 
     // Keypad
     private ConstraintLayout containerKeys;
@@ -90,18 +99,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private MaterialButton deleteButton;
     private MaterialButton enterButton;
 
-    // Options Menu
-    private LinearLayout optionsMenuContainer;
-    private TextView optionsPortalBtn;
-    private MaterialButton signOutButton;
-    private MaterialButton goToTeamLoginButton;
-    private MaterialButton buttonOptionsMenu;
-    private MaterialButton buttonLockScreen;
-    private MaterialButton buttonUpdatePoints;
-    private ConstraintLayout optionsMenuBkgDark;
-
     // Points response
-
     private ConstraintLayout containerPointsSuccess;
     private MaterialButton ptsResponseExit;
     private MaterialButton ptsResponseButton;
@@ -129,6 +127,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private ArrayList<OffersModel> offers = new ArrayList<>();
 
     private SharedPreferences preferences;
+    private RecyclerView rv;
     private boolean isPhoneValid = false;
     private CountDownTimer timer;
     private long lastClickTime = 0;
@@ -141,6 +140,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         hideSystemUI();
 
+        nsv = findViewById(R.id.scrollViewUserKeypadCards);
         phoneNumber = findViewById(R.id.editTextUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
@@ -191,7 +191,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         CountryCodePicker ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
         ccp.registerCarrierNumberEditText(phoneNumber);
-        ccp.setPhoneNumberValidityChangeListener(isValidNumber -> isPhoneValid = isValidNumber);
+        ccp.setPhoneNumberValidityChangeListener(this::enablePostSubmit);
 
         enablePostSubmit(false);
         deleteButton.setEnabled(false);
@@ -199,19 +199,18 @@ public class UserKeypadActivity extends AppCompatActivity
         setUpClickListeners();
         getMerchantShops();
 
-        // Blur keypad background
-        float radius = 5f;
-        View decorView = getWindow().getDecorView();
-        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
-        Drawable windowBackground = decorView.getBackground();
-        BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
-        blurView.setupWith(rootView)
-                .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(new RenderScriptBlur(this))
-                .setBlurRadius(radius)
-                .setBlurAutoUpdate(true)
-                .setHasFixedTransformationMatrix(true);
+        prepareViews();
 
+        startRecyclerView(offers);
+
+        // Temporary
+        goToTeamLoginButton.setVisibility(View.GONE);
+    }
+
+    /**
+     * View Manipulation
+     */
+    private void prepareViews() {
         optionsMenuBkgDark.setVisibility(View.GONE);
         optionsMenuContainer.setVisibility(View.GONE);
         containerPointsSuccess.setVisibility(View.GONE);
@@ -232,10 +231,18 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseButton.setEnabled(false);
         optionsMenuBkgDark.setEnabled(false);
 
-        startRecyclerView(offers);
-
-        // Temporary
-        goToTeamLoginButton.setVisibility(View.GONE);
+        // Blur keypad background
+        float radius = 5f;
+        View decorView = getWindow().getDecorView();
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        Drawable windowBackground = decorView.getBackground();
+        BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
+        blurView.setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setBlurAutoUpdate(true)
+                .setHasFixedTransformationMatrix(true);
     }
 
     /**
@@ -275,7 +282,6 @@ public class UserKeypadActivity extends AppCompatActivity
             @Override
             public void onResponse(@NonNull Call<ArrayList<ShopAdminModel>> call, @NonNull Response<ArrayList<ShopAdminModel>> response) {
                 shopList = response.body();
-                Log.i(TAG, "MERCHANT SHOPS CALL: " + shopList);
 
                 if (shopList != null && shopList.size() >= 1) {
                     shop = shopList.get(0);
@@ -304,7 +310,7 @@ public class UserKeypadActivity extends AppCompatActivity
         Call<ArrayList<OffersModel>> call = RetrofitClient.getInstance().getRestOffers().getBusinessOffers(storeId);
         call.enqueue(new Callback<ArrayList<OffersModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<OffersModel>> call, Response<ArrayList<OffersModel>> response) {
+            public void onResponse(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Response<ArrayList<OffersModel>> response) {
                 offers = response.body();
 
                 List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
@@ -351,7 +357,7 @@ public class UserKeypadActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<ArrayList<OffersModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Throwable t) {
                 String errorMessage = "Get Business Offers Error";
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 spinner.setVisibility(View.GONE);
@@ -401,130 +407,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
             spinner.setVisibility(View.VISIBLE);
             enablePostSubmit(false);
-
-            int teamId = 0;
-
-            String company = shop.getCompany();
-            int storeId = shop.getStoreId();
-
-            String cc = shop.getCountryCode();
-            String phoneFormatted = phoneNumber.getText().toString();
-            String phone = phoneFormatted.replaceAll("[^0-9]", "");
-
-            int timeout = shop.getStandardPtTimeout() != 0 ? shop.getStandardPtTimeout() : 14400;
-
-            String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
-            String type = GlobalConstants.POINT_TYPE_GENERAL;
-
-            String day = DateTimeHelper.getDayString(new Date());
-            String time = DateTimeHelper.getTimeString(new Date());
-
-            GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, pointAmount, method,
-                    type, teamId, adminLevel, timeout, day, time);
-
-            Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
-            call.enqueue(new Callback<GivePointsResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
-                    GivePointsResponse result = response.body();
-
-                    if (result != null) {
-                        String desc;
-                        if (result.getTimeLeft() != 0) {
-                            if (result.getThumbnail() == null || "".equals(result.getThumbnail())) {
-                                result.setIsAnonymous(1);
-                            }
-
-                            String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
-                            desc = result.getName() + " must wait " + timeLeftString + " to get more points.";
-
-                            ptsResponseHeader.setText("Too soon");
-                            ptsResponseLeftConfetti.setVisibility(View.GONE);
-                            ptsResponseRightConfetti.setVisibility(View.GONE);
-
-                        } else {
-                            ptsResponseLeftConfetti.setVisibility(View.VISIBLE);
-                            ptsResponseRightConfetti.setVisibility(View.VISIBLE);
-
-                            int pointTally = result.getPointTally();
-
-                            String pointTallyString;
-                            if (pointTally == 1) {
-                                pointTallyString = "1 point for rewards.";
-                            } else {
-                                pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
-                            }
-
-                            int pointsGiven = result.getPoints();
-
-                            String points;
-                            if (pointsGiven == 1) {
-                                points = "1 point";
-                            } else {
-                                points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven) + " points";
-                            }
-
-                            desc = "You just got " + points + " from " + shop.getCompany() + " and now have " + pointTallyString;
-                            ptsResponseHeader.setText(points);
-                        }
-
-                        ptsResponseDesc.setText(desc);
-
-
-                        if (result.getIsAnonymous() == 1) {
-                            ptsResponseProfilePic.setVisibility(View.INVISIBLE);
-                            ptsResponseRibbonImg.setVisibility(View.VISIBLE);
-                            ptsResponseName.setVisibility(View.GONE);
-                            ptsResponseMoreInfo.setVisibility(View.VISIBLE);
-                            ptsResponseQrCode.setVisibility(View.VISIBLE);
-                            ptsResponseJayuUrl.setVisibility(View.VISIBLE);
-                            ptsResponseButton.setVisibility(View.GONE);
-
-                            ptsResponseMoreInfo.setText(R.string.pts_response_download_text);
-
-                        } else {
-                            ptsResponseProfilePic.setVisibility(View.VISIBLE);
-                            ptsResponseRibbonImg.setVisibility(View.INVISIBLE);
-                            ptsResponseName.setVisibility(View.VISIBLE);
-                            ptsResponseMoreInfo.setVisibility(View.GONE);
-                            ptsResponseQrCode.setVisibility(View.GONE);
-                            ptsResponseJayuUrl.setVisibility(View.GONE);
-                            ptsResponseButton.setVisibility(View.VISIBLE);
-
-                            GlideApp.with(UserKeypadActivity.this)
-                                    .load(result.getThumbnail())
-                                    .fallback(R.drawable.ribbon_medal_img)
-                                    .circleCrop()
-                                    .override(ptsResponseProfilePic.getWidth(),ptsResponseProfilePic.getHeight())
-                                    .into(ptsResponseProfilePic);
-
-                            ptsResponseName.setText(result.getName());
-                        }
-
-                    } else {
-                        String errorMessage = "Give user points null response";
-                        LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
-                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-                    }
-
-                    generateViewSizes();
-                    openPointSuccessScreen();
-                    phoneNumber.getText().clear();
-
-                    pointAmount = shop.getStandardPoints();
-                    companyTextView.setText(shop.getCompany());
-
-                    spinner.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
-                    String errorMessage = "Get merchant data error: ";
-                    LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                    AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-                    spinner.setVisibility(View.GONE);
-                }
-            });
+            giveUserPoints();
         });
 
         signOutButton.setOnClickListener(v -> {
@@ -586,6 +469,133 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuBkgDark.setOnClickListener(v -> closeKeypadOptionsMenu());
     }
 
+    private void giveUserPoints() {
+        int teamId = 0;
+
+        String company = shop.getCompany();
+        int storeId = shop.getStoreId();
+
+        String cc = shop.getCountryCode();
+        String phoneFormatted = phoneNumber.getText().toString();
+        String phone = phoneFormatted.replaceAll("[^0-9]", "");
+
+        int timeout = shop.getStandardPtTimeout() != 0 ? shop.getStandardPtTimeout() : 14400;
+
+        String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
+        String type = GlobalConstants.POINT_TYPE_GENERAL;
+
+        String day = DateTimeHelper.getDayString(new Date());
+        String time = DateTimeHelper.getTimeString(new Date());
+
+        GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, pointAmount, method,
+                type, teamId, adminLevel, timeout, day, time);
+
+        Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
+        call.enqueue(new Callback<GivePointsResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<GivePointsResponse> call, @NonNull Response<GivePointsResponse> response) {
+                GivePointsResponse result = response.body();
+
+                if (result != null) {
+                    String desc;
+                    if (result.getTimeLeft() != 0) {
+                        if (result.getThumbnail() == null || "".equals(result.getThumbnail())) {
+                            result.setIsAnonymous(1);
+                        }
+
+                        String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
+                        desc = result.getName() + " must wait " + timeLeftString + " to get more points.";
+
+                        ptsResponseHeader.setText(R.string.too_soon);
+                        ptsResponseLeftConfetti.setVisibility(View.GONE);
+                        ptsResponseRightConfetti.setVisibility(View.GONE);
+
+                    } else {
+                        ptsResponseLeftConfetti.setVisibility(View.VISIBLE);
+                        ptsResponseRightConfetti.setVisibility(View.VISIBLE);
+
+                        int pointTally = result.getPointTally();
+
+                        String pointTallyString;
+                        if (pointTally == 1) {
+                            pointTallyString = "1 point for rewards.";
+                        } else {
+                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
+                        }
+
+                        int pointsGiven = result.getPoints();
+
+                        String points;
+                        if (pointsGiven == 1) {
+                            points = "1 point";
+                        } else {
+                            points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven) + " points";
+                        }
+
+                        desc = "You just got " + points + " from " + shop.getCompany() + " and now have " + pointTallyString;
+                        ptsResponseHeader.setText(points);
+                    }
+
+                    ptsResponseDesc.setText(desc);
+
+                    if (result.getIsAnonymous() == 1) {
+                        ptsResponseProfilePic.setVisibility(View.INVISIBLE);
+                        ptsResponseRibbonImg.setVisibility(View.VISIBLE);
+                        ptsResponseName.setVisibility(View.GONE);
+                        ptsResponseMoreInfo.setVisibility(View.VISIBLE);
+                        ptsResponseQrCode.setVisibility(View.VISIBLE);
+                        ptsResponseJayuUrl.setVisibility(View.VISIBLE);
+                        ptsResponseButton.setVisibility(View.GONE);
+
+                        ptsResponseMoreInfo.setText(R.string.pts_response_download_text);
+
+                    } else {
+                        ptsResponseProfilePic.setVisibility(View.VISIBLE);
+                        ptsResponseRibbonImg.setVisibility(View.INVISIBLE);
+                        ptsResponseName.setVisibility(View.VISIBLE);
+                        ptsResponseMoreInfo.setVisibility(View.GONE);
+                        ptsResponseQrCode.setVisibility(View.GONE);
+                        ptsResponseJayuUrl.setVisibility(View.GONE);
+                        ptsResponseButton.setVisibility(View.VISIBLE);
+
+                        GlideApp.with(UserKeypadActivity.this)
+                                .load(result.getThumbnail())
+                                .fallback(R.drawable.ribbon_medal_img)
+                                .circleCrop()
+                                .override(ptsResponseProfilePic.getWidth(),ptsResponseProfilePic.getHeight())
+                                .into(ptsResponseProfilePic);
+
+                        ptsResponseName.setText(result.getName());
+                    }
+
+                } else {
+                    String errorMessage = "Give user points null response";
+                    LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
+                    AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+                }
+
+                generateViewSizes();
+                openPointSuccessScreen();
+                phoneNumber.getText().clear();
+
+                pointAmount = shop.getStandardPoints();
+                companyTextView.setText(shop.getCompany());
+
+                spinner.setVisibility(View.GONE);
+                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<GivePointsResponse> call, @NonNull Throwable t) {
+                String errorMessage = "Get merchant data error: ";
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+                spinner.setVisibility(View.GONE);
+                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
+            }
+        });
+    }
+
     /**
      * Edit Text Functions
      */
@@ -609,7 +619,6 @@ public class UserKeypadActivity extends AppCompatActivity
         @Override
         public void afterTextChanged(Editable s) {
             checkForEmptyField();
-            enablePostSubmit(isPhoneValid);
         }
     };
 
@@ -640,7 +649,7 @@ public class UserKeypadActivity extends AppCompatActivity
      * Helper functions
      */
     private void startRecyclerView(ArrayList<OffersModel> offersList) {
-        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
+        rv = findViewById(R.id.recyclerViewUserKeypadCards);
         RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
@@ -708,15 +717,12 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuBkgDark.setEnabled(false);
     }
 
-
-
     private void openPointSuccessScreen() {
         Animation animationOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_enter);
         containerPointsSuccess.setVisibility(View.VISIBLE);
         containerPointsSuccess.startAnimation(animationOpen);
 
         ptsResponseButton.setEnabled(true);
-        enterButton.setEnabled(false);
         containerKeys.setEnabled(false);
         countdownTimer();
     }
@@ -726,7 +732,6 @@ public class UserKeypadActivity extends AppCompatActivity
         containerPointsSuccess.startAnimation(animationClose);
 
         ptsResponseButton.setEnabled(false);
-        enterButton.setEnabled(true);
         ptsResponseButton.setVisibility(View.GONE);
         containerKeys.setEnabled(true);
     }
@@ -746,7 +751,6 @@ public class UserKeypadActivity extends AppCompatActivity
 
         timer.start();
     }
-
 
     /**
      * Interfaces
@@ -770,28 +774,26 @@ public class UserKeypadActivity extends AppCompatActivity
 
         adminLevel = adminLvl;
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("adminLevel", adminLvl);
+        editor.putInt(GlobalConstants.ADMIN_LEVEL, adminLvl);
         editor.apply();
 
     }
 
     @Override
     public void onUpdateLockScreen(boolean isLocked) {
-        Log.i(TAG, "IS LOCKED: " + isLocked);
-
         if (isLocked) {
             buttonUpdatePoints.setVisibility(View.GONE);
             goToTeamLoginButton.setVisibility(View.GONE);
             optionsPortalBtn.setVisibility(View.GONE);
 
-            buttonLockScreen.setText("Unlock Screen");
+            buttonLockScreen.setText(R.string.unlock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_unlock));
         } else if (!isLocked) {
             buttonUpdatePoints.setVisibility(View.VISIBLE);
 //            goToTeamLoginButton.setVisibility(View.VISIBLE);
             optionsPortalBtn.setVisibility(View.VISIBLE);
 
-            buttonLockScreen.setText("Lock Screen");
+            buttonLockScreen.setText(R.string.lock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
         }
     }

@@ -53,7 +53,7 @@
                     android:id="@+id/textViewUserKeypadRewards"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Get sweet rewards and free gift cards."
+                    android:text="@string/tablet_header"
                     android:textColor="@color/white"
                     android:textSize="50sp"
                     app:autoSizeTextType="uniform"
@@ -119,7 +119,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/logo_white" />
+                    app:srcCompat="@drawable/logo_white"
+                    android:contentDescription="@string/logo" />
 
                 <EditText
                     android:id="@+id/editTextUserKeypadInput"
@@ -136,7 +137,9 @@
                     android:textColorHint="@color/white"
                     android:textSize="23sp"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayoutUserKeypadKeypadButtons"
-                    app:layout_constraintTop_toBottomOf="@id/imageUserKeypadLogo" />
+                    app:layout_constraintTop_toBottomOf="@id/imageUserKeypadLogo"
+                    android:autofillHints="@string/phone_input_hint"
+                    android:inputType="text|textMultiLine" />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guidelineUserKeypadKeys"

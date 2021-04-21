@@ -71,4 +71,8 @@
     <string name="pts_response_download_text">Download Jayu to start getting free gift cards!</string>
     <string name="profile_image">Profile Image</string>
     <string name="ribbon">Ribbon</string>
+    <string name="too_soon">Too soon</string>
+    <string name="signup_offer">Signup offer</string>
+    <string name="happy_hours">Happy hours</string>
+    <string name="tablet_header">Get sweet rewards and free gift cards.</string>
 </resources>
