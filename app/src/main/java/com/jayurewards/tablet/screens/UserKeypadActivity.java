@@ -482,7 +482,7 @@ public class UserKeypadActivity extends AppCompatActivity
         int timeout = shop.getStandardPtTimeout() != 0 ? shop.getStandardPtTimeout() : 14400;
 
         String method = GlobalConstants.MERCHANT_TABLET_KEYPAD;
-        String type = GlobalConstants.POINT_TYPE_GENERAL;
+        String type = GlobalConstants.OFFER_TYPE_GENERAL;
 
         String day = DateTimeHelper.getDayString(new Date());
         String time = DateTimeHelper.getTimeString(new Date());
