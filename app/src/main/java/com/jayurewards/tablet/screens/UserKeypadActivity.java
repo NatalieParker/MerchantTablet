@@ -47,6 +47,7 @@ import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
+import com.jayurewards.tablet.models.UserModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
@@ -115,6 +116,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private ImageView ptsResponseRightConfetti;
 
     private TextView companyTextView;
+    private TextView teamMemberTextView;
     private EditText phoneNumber;
     private ConstraintLayout spinner;
 
@@ -125,6 +127,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private int adminLevel;
 
     private ArrayList<OffersModel> offers = new ArrayList<>();
+
+    private UserModel userModel;
 
     private SharedPreferences preferences;
     private RecyclerView rv;
@@ -163,6 +167,7 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         companyTextView = findViewById(R.id.textUserKeypadCompany);
+        teamMemberTextView = findViewById(R.id.textUserKeypadTeamMemberName);
         optionsPortalBtn = findViewById(R.id.buttonUserKeypadOptionsPortal);
         spinner = findViewById(R.id.spinnerUserKeypad);
         optionsMenuBkgDark = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
@@ -202,9 +207,6 @@ public class UserKeypadActivity extends AppCompatActivity
         prepareViews();
 
         startRecyclerView(offers);
-
-        // Temporary
-        goToTeamLoginButton.setVisibility(View.GONE);
     }
 
     /**
@@ -692,7 +694,7 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setEnabled(true);
         buttonUpdatePoints.setEnabled(true);
         signOutButton.setEnabled(true);
-//        goToTeamLoginButton.setEnabled(true);
+        goToTeamLoginButton.setEnabled(true);
 
         buttonOptionsMenu.setEnabled(false);
         buttonOptionsMenu.setVisibility(View.GONE);
@@ -796,6 +798,10 @@ public class UserKeypadActivity extends AppCompatActivity
             buttonLockScreen.setText(R.string.lock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
         }
+    }
+
+    private void teamMemberLoggedIn() {
+
     }
 
 }

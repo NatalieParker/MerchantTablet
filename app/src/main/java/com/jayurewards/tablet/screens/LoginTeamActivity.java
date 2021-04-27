@@ -71,6 +71,8 @@ public class LoginTeamActivity extends AppCompatActivity {
                 return;
             }
 
+
+
             String countryCode = ccp.getSelectedCountryCode();
             String phoneFormatted = ccp.getFormattedFullNumber(); // Get formatted number with country code from ccp
             String phone = phoneFormatted.replaceAll("[^0-9]", "");

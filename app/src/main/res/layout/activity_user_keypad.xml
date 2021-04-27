@@ -565,6 +565,20 @@
         app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
         app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu" />
 
+    <TextView
+        android:id="@+id/textUserKeypadTeamMemberName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/soleil_book"
+        android:text="@string/team_member"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:alpha="0.6"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/textUserKeypadCompany"
+        app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
+        app:layout_constraintEnd_toEndOf="@id/guidelineUserKeypadContainerSplit"/>
+
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
         android:layout_width="200dp"

@@ -1,5 +1,6 @@
 package com.jayurewards.tablet.screens;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -263,14 +264,24 @@ public class LoginTeamVerifyFragment extends Fragment {
                                 hideKeyboard();
 
                                 if (getActivity() != null) {
-                                    Intent intent = new Intent(getActivity(), RegistrationTeamActivity.class);
 
-                                    if (countryCode != null && phoneNumber != null) {
-                                        intent.putExtra(GlobalConstants.COUNTRY_CODE, countryCode);
-                                        intent.putExtra(GlobalConstants.PHONE, phoneNumber);
-                                        intent.putExtra(GlobalConstants.USER_FIREBASE_UID, firebaseUid);
-                                        startActivity(intent);
-                                    }
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle("User does not exist")
+                                            .setMessage("Please create your account through the Jayu app.");
+                                    builder.setPositiveButton("Ok", (dialog, id) -> {
+                                    });
+                                    builder.show();
+
+                                    if (getFragmentManager() == null) return;
+                                    getFragmentManager().popBackStackImmediate();
+//                                    Intent intent = new Intent(getActivity(), RegistrationTeamActivity.class);
+//
+//                                    if (countryCode != null && phoneNumber != null) {
+//                                        intent.putExtra(GlobalConstants.COUNTRY_CODE, countryCode);
+//                                        intent.putExtra(GlobalConstants.PHONE, phoneNumber);
+//                                        intent.putExtra(GlobalConstants.USER_FIREBASE_UID, firebaseUid);
+//                                        startActivity(intent);
+//                                    }
                                 }
                             }
                         }
