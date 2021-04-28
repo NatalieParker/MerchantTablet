@@ -16,52 +16,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineRegistrationTeamBgSplit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.65"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="500dp"
-            android:layout_height="800dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginBottom="80dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/bg_rounded_corners_white"
+            app:layout_constraintEnd_toStartOf="@id/guidelineRegistrationTeamBgSplit"
+            android:background="@color/white"
             tools:context=".screens.onboarding.UserRegistrationActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutSignupTopView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            app:layout_constraintTop_toTopOf="parent">
-
             <TextView
+                android:id="@+id/textViewRegistrationTeamCreateProfile"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:fontFamily="@font/soleil_bold"
                 android:gravity="end|center_vertical"
                 android:text="@string/create_your_profile"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageRegistrationProfile"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="20dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="40dp"
                 android:src="@drawable/default_profile"
                 app:civ_border_color="@android:color/darker_gray"
                 app:civ_border_width="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutSignupTopView" />
+                app:layout_constraintTop_toBottomOf="@id/textViewRegistrationTeamCreateProfile" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonRegistrationEditPhoto"
@@ -78,66 +74,93 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageRegistrationProfile" />
 
-            <EditText
-                android:id="@+id/editTextRegisterName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputRegistrationTeamUsername"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/darker_gray"
-                android:fontFamily="@font/soleil_regular"
-                android:hint="@string/username"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="textCapWords|textPersonName"
-                android:maxLength="25"
-                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintTop_toBottomOf="@id/buttonRegistrationEditPhoto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                app:layout_constraintTop_toBottomOf="@+id/buttonRegistrationEditPhoto"/>
+                <EditText
+                    android:id="@+id/editTextRegisterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:fontFamily="@font/soleil_regular"
+                    android:hint="@string/username"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapWords|textPersonName"
+                    android:maxLength="25"
+                    android:textSize="16sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/editTextRegisterEmail"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputRegistrationTeamEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/darker_gray"
-                android:fontFamily="@font/soleil_regular"
-                android:hint="@string/email"
-                android:imeOptions="actionDone"
-                android:importantForAutofill="no"
-                android:inputType="textEmailAddress"
-                android:maxLength="60"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterName"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:layout_constraintTop_toBottomOf="@id/textInputRegistrationTeamUsername"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/editTextRegisterEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/darker_gray"
+                    android:fontFamily="@font/soleil_regular"
+                    android:hint="@string/email"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="60"
+                    android:textSize="16sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textRegistrationBirthday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/select_birthday"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/editTextRegisterEmail" />
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@+id/textInputRegistrationTeamEmail" />
 
             <TextView
                 android:id="@+id/textRegistrationDatePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_margin="20dp"
                 android:fontFamily="@font/soleil_regular"
                 android:text="@string/for_birthday_specials"
                 android:textColor="@android:color/darker_gray"
+                android:textAlignment="center"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/textRegistrationBirthday" />
+                app:layout_constraintTop_toBottomOf="@+id/textRegistrationBirthday"
+                app:layout_constraintBottom_toTopOf="@id/textRegistrationBirthdayDetails"/>
 
             <TextView
                 android:id="@+id/textRegistrationBirthdayDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/soleil_bold"
                 android:text="@string/birthdays_can_only_be_set_once"
                 android:textColor="@android:color/black"
+                android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintTop_toBottomOf="@id/textRegistrationDatePicker" />
 
@@ -148,19 +171,21 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/gender"
+                android:textAlignment="center"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 app:layout_constraintTop_toBottomOf="@+id/textRegistrationBirthdayDetails" />
 
             <RadioGroup
                 android:id="@+id/radioGroupRegistrationGender"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:paddingBottom="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/textRegistrationGender">
+                app:layout_constraintTop_toBottomOf="@+id/textRegistrationGender"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <RadioButton
                     android:id="@+id/radioRegistrationFemale"
@@ -175,7 +200,7 @@
                     android:id="@+id/radioRegistrationMale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
+                    android:layout_marginStart="100dp"
                     android:buttonTint="@color/colorPrimary"
                     android:fontFamily="@font/soleil_regular"
                     android:onClick="onRadioButtonClicked"
@@ -184,9 +209,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutRegistrationTermsAndConditions"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroupRegistrationGender">
@@ -195,7 +220,6 @@
                     android:id="@+id/textRegistrationDisclaimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/soleil_regular"
                     android:text="By signing up with Jayu you agree to our"
@@ -229,31 +253,32 @@
                 android:fontFamily="@font/soleil_bold"
                 android:letterSpacing="0"
                 android:stateListAnimator="@null"
-                android:text="@string/cancel"
+                android:text="@string/back"
                 android:textAllCaps="false"
                 android:textColor="@color/colorGray"
                 android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayoutRegistrationTermsAndConditions"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="150dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonRegistrationRegister"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/soleil_bold"
                 android:letterSpacing="0"
                 android:stateListAnimator="@null"
                 android:text="@string/register"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
-                android:backgroundTint="@color/white"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/colorPrimary"
                 android:textSize="20sp"
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="10dp"
+                app:cornerRadius="50dp"
+                android:layout_margin="30dp"
                 app:layout_constraintTop_toBottomOf="@id/constraintLayoutRegistrationTermsAndConditions"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
