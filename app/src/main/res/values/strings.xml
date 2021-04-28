@@ -75,4 +75,6 @@
     <string name="signup_offer">Signup offer</string>
     <string name="happy_hours">Happy hours</string>
     <string name="tablet_header">Get sweet rewards and free gift cards.</string>
+    <string name="icon">Icon</string>
+    <string name="team_logout">Team Logout</string>
 </resources>

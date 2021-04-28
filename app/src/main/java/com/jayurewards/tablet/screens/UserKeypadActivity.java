@@ -9,7 +9,9 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -17,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -79,7 +82,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private LinearLayout optionsMenuContainer;
     private TextView optionsPortalBtn;
     private MaterialButton signOutButton;
-    private MaterialButton goToTeamLoginButton;
+    private MaterialButton goTeamLoginBtn;
+    private MaterialButton goTeamPageBtn;
     private MaterialButton buttonOptionsMenu;
     private MaterialButton buttonLockScreen;
     private MaterialButton buttonUpdatePoints;
@@ -115,6 +119,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private ImageView ptsResponseLeftConfetti;
     private ImageView ptsResponseRightConfetti;
 
+    private LinearLayout companyNameContainer;
+    private LinearLayout teamNameContainer;
     private TextView companyTextView;
     private TextView teamMemberTextView;
     private EditText phoneNumber;
@@ -125,15 +131,15 @@ public class UserKeypadActivity extends AppCompatActivity
     private ShopAdminModel shop;
     private int pointAmount;
     private int adminLevel;
+    private int teamId;
 
     private ArrayList<OffersModel> offers = new ArrayList<>();
 
     private UserModel userModel;
 
-    private SharedPreferences preferences;
-    private RecyclerView rv;
-    private boolean isPhoneValid = false;
+    private SharedPreferences sp;
     private CountDownTimer timer;
+    private boolean screenLocked = false;
     private long lastClickTime = 0;
 
 
@@ -159,13 +165,16 @@ public class UserKeypadActivity extends AppCompatActivity
         deleteButton = findViewById(R.id.deleteButton);
         enterButton = findViewById(R.id.enterButton);
         signOutButton = findViewById(R.id.buttonUserKeypadSignOut);
-        goToTeamLoginButton = findViewById(R.id.buttonUserKeypadSwitchToEmployeeAccount);
+        goTeamLoginBtn = findViewById(R.id.buttonUserKeypadTeamLogin);
+        goTeamPageBtn = findViewById(R.id.buttonUserKeypadTeamPage);
         ptsResponseButton = findViewById(R.id.buttonUserKeypadBackButton);
         ptsResponseExit = findViewById(R.id.imageUserKeypadPtsResponseExit);
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
+        companyNameContainer = findViewById(R.id.layoutUserKeypadCompany);
+        teamNameContainer = findViewById(R.id.layoutUserKeypadTeamName);
         companyTextView = findViewById(R.id.textUserKeypadCompany);
         teamMemberTextView = findViewById(R.id.textUserKeypadTeamMemberName);
         optionsPortalBtn = findViewById(R.id.buttonUserKeypadOptionsPortal);
@@ -184,9 +193,9 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(UserKeypadActivity.this);
-        adminLevel = preferences.getInt(GlobalConstants.ADMIN_LEVEL, 1);
-        int pin = preferences.getInt(GlobalConstants.PIN_CODE, 0);
+        sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+        adminLevel = sp.getInt(GlobalConstants.ADMIN_LEVEL, 1);
+        int pin = sp.getInt(GlobalConstants.PIN_CODE, 0);
         onUpdateLockScreen(pin != 0);
 
         spinner.setVisibility(View.VISIBLE);
@@ -209,6 +218,12 @@ public class UserKeypadActivity extends AppCompatActivity
         startRecyclerView(offers);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkTeamMember();
+    }
+
     /**
      * View Manipulation
      */
@@ -229,7 +244,6 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
         signOutButton.setEnabled(false);
-        goToTeamLoginButton.setEnabled(false);
         ptsResponseButton.setEnabled(false);
         optionsMenuBkgDark.setEnabled(false);
 
@@ -245,6 +259,36 @@ public class UserKeypadActivity extends AppCompatActivity
                 .setBlurRadius(radius)
                 .setBlurAutoUpdate(true)
                 .setHasFixedTransformationMatrix(true);
+    }
+
+    private void checkTeamMember() {
+        teamId = sp.getInt(GlobalConstants.TEAM_USER_ID, 0);
+
+        if (screenLocked) {
+            goTeamLoginBtn.setVisibility(View.GONE);
+            goTeamLoginBtn.setEnabled(false);
+            goTeamPageBtn.setVisibility(View.GONE);
+            goTeamPageBtn.setEnabled(false);
+            return;
+        }
+
+        if (teamId >= 1) {
+            String name = sp.getString(GlobalConstants.TEAM_NAME, null);
+            if (name != null) {
+                teamMemberTextView.setText(name);
+                teamNameContainer.setVisibility(View.VISIBLE);
+                goTeamPageBtn.setVisibility(View.VISIBLE);
+                goTeamPageBtn.setEnabled(true);
+                goTeamLoginBtn.setVisibility(View.GONE);
+                goTeamLoginBtn.setEnabled(false);
+            }
+        } else {
+            teamNameContainer.setVisibility(View.GONE);
+            goTeamPageBtn.setVisibility(View.GONE);
+            goTeamPageBtn.setEnabled(false);
+            goTeamLoginBtn.setVisibility(View.VISIBLE);
+            goTeamLoginBtn.setEnabled(true);
+        }
     }
 
     /**
@@ -277,8 +321,7 @@ public class UserKeypadActivity extends AppCompatActivity
      * Network calls
      */
     private void getMerchantShops() {
-        int merchantId = preferences.getInt(GlobalConstants.MERCHANT_ID, 0);
-
+        int merchantId = sp.getInt(GlobalConstants.MERCHANT_ID, 0);
         Call<ArrayList<ShopAdminModel>> call = RetrofitClient.getInstance().getRestShops().getMerchantShops(merchantId);
         call.enqueue(new Callback<ArrayList<ShopAdminModel>>() {
             @Override
@@ -289,13 +332,13 @@ public class UserKeypadActivity extends AppCompatActivity
                     shop = shopList.get(0);
                     companyTextView.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
+                    getBusinessOffers(shop.getStoreId());
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
                     LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
+                    spinner.setVisibility(View.GONE);
                     AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 }
-
-                getBusinessOffers(shop.getStoreId());
             }
 
             @Override
@@ -372,6 +415,7 @@ public class UserKeypadActivity extends AppCompatActivity
     /**
      * Set Click Listeners
      */
+    @SuppressLint("ApplySharedPref")
     private void setUpClickListeners() {
         key1.setOnClickListener(v -> keypadButtonInput("1"));
         key2.setOnClickListener(v -> keypadButtonInput("2"));
@@ -422,10 +466,32 @@ public class UserKeypadActivity extends AppCompatActivity
             builder.show();
         });
 
-        goToTeamLoginButton.setOnClickListener(v -> {
+        goTeamLoginBtn.setOnClickListener(v -> {
             closeKeypadOptionsMenu();
             Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
             startActivity(intent);
+        });
+
+        goTeamPageBtn.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+            String name = sp.getString(GlobalConstants.TEAM_NAME, null);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(UserKeypadActivity.this);
+            builder.setTitle("Logout Team Member?");
+            builder.setMessage("Do you want to sign out " + name + "? They will no longer receive credit for customer sign ups or points.");
+            builder.setPositiveButton("Log out", (dialog, which) -> {
+                SharedPreferences sharedPref = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+                sharedPref.edit().remove(GlobalConstants.TEAM_USER_ID).commit();
+                sharedPref.edit().remove(GlobalConstants.TEAM_USER_FIREBASE_UID).commit();
+                sharedPref.edit().remove(GlobalConstants.TEAM_NAME).commit();
+                sharedPref.edit().remove(GlobalConstants.TEAM_COUNTRY_CODE).commit();
+                sharedPref.edit().remove(GlobalConstants.TEAM_PHONE).commit();
+
+                teamId = 0;
+                checkTeamMember();
+            });
+            builder.setNegativeButton("Cancel", null);
+            builder.show();
         });
 
         buttonUpdatePoints.setOnClickListener(v -> {
@@ -472,8 +538,6 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     private void giveUserPoints() {
-        int teamId = 0;
-
         String company = shop.getCompany();
         int storeId = shop.getStoreId();
 
@@ -584,7 +648,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 companyTextView.setText(shop.getCompany());
 
                 spinner.setVisibility(View.GONE);
-                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
             }
 
             @Override
@@ -651,7 +715,7 @@ public class UserKeypadActivity extends AppCompatActivity
      * Helper functions
      */
     private void startRecyclerView(ArrayList<OffersModel> offersList) {
-        rv = findViewById(R.id.recyclerViewUserKeypadCards);
+        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
         RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
@@ -694,11 +758,11 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setEnabled(true);
         buttonUpdatePoints.setEnabled(true);
         signOutButton.setEnabled(true);
-        goToTeamLoginButton.setEnabled(true);
+        checkTeamMember();
 
         buttonOptionsMenu.setEnabled(false);
         buttonOptionsMenu.setVisibility(View.GONE);
-        companyTextView.setVisibility(View.GONE);
+        companyNameContainer.setVisibility(View.GONE);
         optionsMenuBkgDark.setVisibility(View.VISIBLE);
         optionsMenuBkgDark.setEnabled(true);
     }
@@ -710,11 +774,12 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
         signOutButton.setEnabled(false);
-        goToTeamLoginButton.setEnabled(false);
+        goTeamLoginBtn.setEnabled(false);
+        goTeamPageBtn.setEnabled(false);
 
         buttonOptionsMenu.setEnabled(true);
         buttonOptionsMenu.setVisibility(View.VISIBLE);
-        companyTextView.setVisibility(View.VISIBLE);
+        companyNameContainer.setVisibility(View.VISIBLE);
         optionsMenuBkgDark.setVisibility(View.GONE);
         optionsMenuBkgDark.setEnabled(false);
     }
@@ -775,7 +840,7 @@ public class UserKeypadActivity extends AppCompatActivity
         }
 
         adminLevel = adminLvl;
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = sp.edit();
         editor.putInt(GlobalConstants.ADMIN_LEVEL, adminLvl);
         editor.apply();
 
@@ -784,24 +849,23 @@ public class UserKeypadActivity extends AppCompatActivity
     @Override
     public void onUpdateLockScreen(boolean isLocked) {
         if (isLocked) {
+            screenLocked = true;
             buttonUpdatePoints.setVisibility(View.GONE);
-            goToTeamLoginButton.setVisibility(View.GONE);
+            goTeamLoginBtn.setVisibility(View.GONE);
+            goTeamPageBtn.setVisibility(View.GONE);
             optionsPortalBtn.setVisibility(View.GONE);
 
             buttonLockScreen.setText(R.string.unlock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_unlock));
-        } else if (!isLocked) {
+        } else {
+            screenLocked = false;
             buttonUpdatePoints.setVisibility(View.VISIBLE);
-//            goToTeamLoginButton.setVisibility(View.VISIBLE);
+            checkTeamMember();
             optionsPortalBtn.setVisibility(View.VISIBLE);
 
             buttonLockScreen.setText(R.string.lock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
         }
-    }
-
-    private void teamMemberLoggedIn() {
-
     }
 
 }

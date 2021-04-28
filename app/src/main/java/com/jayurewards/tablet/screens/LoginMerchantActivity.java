@@ -13,7 +13,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -60,8 +59,6 @@ public class LoginMerchantActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private SharedPreferences preferences;
     private ConstraintLayout spinner;
-    private ConstraintLayout cLBackground;
-    private AnimationDrawable animationDrawable;
 
     private long lastClickTime = 0;
 
@@ -78,7 +75,7 @@ public class LoginMerchantActivity extends AppCompatActivity {
         buttonSignUp = findViewById(R.id.buttonLoginMerchantSignUp);
         buttonForgotPassword = findViewById(R.id.buttonLoginMerchantForgotPassword);
         spinner = findViewById(R.id.spinnerLoginMerchant);
-        cLBackground = findViewById(R.id.constraintLayoutLoginMerchantScreen);
+        ConstraintLayout cLBackground = findViewById(R.id.constraintLayoutLoginMerchantScreen);
 
         auth = FirebaseAuth.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -90,12 +87,12 @@ public class LoginMerchantActivity extends AppCompatActivity {
         emailEditText.addTextChangedListener(textWatcher);
         passwordEditText.addTextChangedListener(textWatcher);
 
-        animationDrawable = (AnimationDrawable) cLBackground.getBackground();
+        AnimationDrawable animationDrawable = (AnimationDrawable) cLBackground.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(LoginMerchantActivity.this);
+        preferences = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
 
         enableEmailSubmit(false);
         setUpClickListeners();

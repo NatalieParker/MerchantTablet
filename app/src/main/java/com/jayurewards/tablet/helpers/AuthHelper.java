@@ -42,7 +42,7 @@ public class AuthHelper {
     }
 
     public static void checkMerchantSubscription(Context context, ConstraintLayout spinner) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPref = context.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         String stripeId = sharedPref.getString(GlobalConstants.STRIPE_ID, null);
         String subscriptionId = sharedPref.getString(GlobalConstants.SUBSCRIPTION_ID, null);
 
@@ -110,7 +110,7 @@ public class AuthHelper {
     }
 
     public static void logOut(Context currentScreen) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(currentScreen);
+        SharedPreferences sharedPref = currentScreen.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         sharedPref.edit().remove(GlobalConstants.MERCHANT_ID).apply();
         sharedPref.edit().remove(GlobalConstants.MERCHANT_FIREBASE_UID).apply();
         sharedPref.edit().remove(GlobalConstants.PIN_CODE).apply();

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
@@ -34,6 +36,8 @@ public class LoginTeamActivity extends AppCompatActivity {
     private Boolean isPhoneValid = false;
     private long lastClickTime = 0;
     private InputMethodManager imm;
+    private ScrollView background;
+    private AnimationDrawable animationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,12 @@ public class LoginTeamActivity extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonLoginTeamCancel);
         buttonSend = findViewById(R.id.buttonLoginTeamSend);
         ccp = findViewById(R.id.ccpLoginTeamEnterPhone);
+        background = findViewById(R.id.scrollViewLoginTeamBg);
+
+        animationDrawable = (AnimationDrawable) background.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
 
         phoneNumberInput.addTextChangedListener(textWatcher);
         phoneNumberInput.requestFocus();

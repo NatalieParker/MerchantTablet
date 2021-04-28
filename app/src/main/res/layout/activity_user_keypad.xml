@@ -551,33 +551,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textUserKeypadCompany"
+    <LinearLayout
+        android:id="@+id/layoutUserKeypadCompany"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="@font/soleil_book"
-        android:text="@string/company"
-        android:textColor="@color/white"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/buttonUserKeypadOptionsMenu"
         app:layout_constraintEnd_toEndOf="@+id/guidelineUserKeypadContainerSplit"
         app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
-        app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu" />
+        app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textUserKeypadTeamMemberName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/soleil_book"
-        android:text="@string/team_member"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:alpha="0.6"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/textUserKeypadCompany"
-        app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
-        app:layout_constraintEnd_toEndOf="@id/guidelineUserKeypadContainerSplit"/>
+        <TextView
+            android:id="@+id/textUserKeypadCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/soleil_book"
+            android:text="@string/company"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+
+        <LinearLayout
+            android:id="@+id/layoutUserKeypadTeamName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_user"
+                android:alpha="0.7"
+                android:contentDescription="@string/icon" />
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/textUserKeypadTeamMemberName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/soleil_book"
+                android:text="@string/team_member"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:alpha="0.7"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
@@ -622,7 +643,7 @@
             app:iconTint="@color/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonUserKeypadSwitchToEmployeeAccount"
+            android:id="@+id/buttonUserKeypadTeamLogin"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -632,6 +653,20 @@
             android:textAllCaps="false"
             android:textColor="@color/colorGray"
             app:icon="@drawable/ic_users"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadTeamPage"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="@string/team_logout"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_user_x"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
 
