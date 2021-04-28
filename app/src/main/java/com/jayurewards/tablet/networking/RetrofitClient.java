@@ -11,8 +11,8 @@ public class RetrofitClient {
 
     // TODO: Add website URL to build config file
     // TODO: Implement PROGUARD
-//    private static final String BASE_URL = BuildConfig.restApiUrl;
-    private static final String BASE_URL = "http://10.0.2.2:8080";
+    private static final String BASE_URL = BuildConfig.restApiUrl;
+//    private static final String BASE_URL = "http://10.0.2.2:8080";
 
     private static RetrofitClient mInstance;
     private final Retrofit retrofit;
