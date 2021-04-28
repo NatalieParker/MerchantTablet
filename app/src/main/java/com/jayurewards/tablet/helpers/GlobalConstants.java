@@ -24,7 +24,6 @@ public class GlobalConstants {
     public static final String NAME = "name";
     public static final String COUNTRY_CODE = "countryCode";
     public static final String PHONE = "phone";
-    public static final String BIRTHDATE = "birthdate";
     public static final String USER_FIREBASE_UID = "userFirebaseUid";
     public static final String PHOTO_URL = "photoUrl";
     public static final String THUMBNAIL_URL = "thumbnailUrl";
@@ -39,15 +38,12 @@ public class GlobalConstants {
     public static final String MYSQL_CUSTOM_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss'Z'";
 
 
+    // MISC
     public static final String IMAGE_DIRECTORY = "imageDirectory";
     public static final String IMAGE_PATH_CHILD = "imagePathChild";
-    public static final String CHANNEL_DEFAULT = "channelDefault";
-    public static final String FCM_RECIPIENT = "fcmRecipient";
-    public static final String FCM_RECIPIENT_MERCHANT = "fcmRecipientMerchant";
-    public static final String FCM_NOTIFICATION_ID = "fcmNotificationId";
-    public static final String FCM_NOTIFICATION_ID_MERCHANT = "fcmNotificationIdMerchant";
     public static final String USER_TERMS_AND_CONDITIONS_LINK = "userTermsAndConditionsLink";
     public static final String MERCHANT_TABLET_KEYPAD = "merchant_tablet_keypad";
+    public static final String SMS_VERIFY_APPROVED = "approved";
 
 
     // URLS

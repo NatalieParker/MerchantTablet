@@ -17,7 +17,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,7 +27,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -42,12 +40,11 @@ import com.google.android.material.button.MaterialButton;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
-import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.ImageHelper;
 import com.jayurewards.tablet.helpers.LogHelper;
-import com.jayurewards.tablet.models.RegisterUserModel;
-import com.jayurewards.tablet.models.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.RegisterUserModel;
+import com.jayurewards.tablet.models.TeamMembers.UserModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.yalantis.ucrop.UCrop;
 
@@ -230,7 +227,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
         RegisterUserModel params = new RegisterUserModel(nameInput, emailInput, countryCode, phoneNumber,
                 birthdayInput, genderInput, imageBase64, thumbnailBase64, deviceType, userFirebaseUID);
 
-        Call<String> call = RetrofitClient.getInstance().getRestUser().registerUser(params);
+        Call<String> call = RetrofitClient.getInstance().getRestTeam().registerUser(params);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -271,81 +268,81 @@ public class RegistrationTeamActivity extends AppCompatActivity {
                     }
                 } else {
                     String userUID = userFirebaseUID;
-                    Call<UserModel> callUser = RetrofitClient.getInstance().getRestUser().getUser(userUID);
-                    callUser.enqueue(new Callback<UserModel>() {
-                        @Override
-                        public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
-                            if (!response.isSuccessful()) {
-                                String errorMessage = "User registered get user REST Error: ";
-                                LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
-                                AlertHelper.showNetworkAlert(RegistrationTeamActivity.this);
-                                return;
-                            }
-
-                            UserModel user = response.body();
-                            if (user != null) {
-                                SharedPreferences sharedPref = RegistrationTeamActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-
-                                editor.putInt(GlobalConstants.USER_ID, user.getUserId());
-                                editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
-                                editor.putString(GlobalConstants.NAME, user.getName());
-                                editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
-                                editor.putString(GlobalConstants.PHONE, user.getPhone());
-                                editor.putString(GlobalConstants.BIRTHDATE, user.getBirthdate());
-
-//                                editor.putBoolean(GlobalConstantsMerchant.SHARED_PREF_IS_MERCHANT_ACTIVE, false);
-                                editor.apply();
-
-//                                AuthHelper.mapUserIdToMerchant(RegistrationTeamActivity.this);
-
-                                // Save user profile photo to local device - Download image as bitmap
-                                // Check if activity is null and if photo url is valid
-                                if (user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {
-                                    GlideApp.with(RegistrationTeamActivity.this)
-                                            .asBitmap()
-                                            .load(user.getPhotoUrl())
-                                            .into(new CustomTarget<Bitmap>() {
-                                                @Override
-                                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                                    imageService.saveProfileImageInternalStorage(RegistrationTeamActivity.this, resource);
-
-                                                    editor.putString(GlobalConstants.PHOTO_URL, user.getPhotoUrl());
-                                                    editor.putString(GlobalConstants.THUMBNAIL_URL, user.getThumbnailUrl());
-                                                    editor.apply();
-
-                                                    spinner.setVisibility(View.GONE);
-
-                                                    Intent intent = new Intent(RegistrationTeamActivity.this, UserKeypadActivity.class);
-
-                                                    // Creates a clean new activity and clears everything else
-                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                    startActivity(intent);
-                                                }
-
-                                                @Override
-                                                public void onLoadCleared(@Nullable Drawable placeholder) {
-                                                }
-                                            });
-
-                                    // If photo URL is empty Navigate to nearby screen
-                                } else {
-                                    spinner.setVisibility(View.GONE);
-                                    Intent intent = new Intent(RegistrationTeamActivity.this, UserKeypadActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
-                            spinner.setVisibility(View.GONE);
-                            String errorMessage = "Retrieve newly registered user network ERROR:\n" + t.getMessage();
-                            LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                            AlertHelper.showNetworkAlert(RegistrationTeamActivity.this);
-                        }
-                    });
+//                    Call<UserModel> callUser = RetrofitClient.getInstance().getRestTeam().getTeamMember();
+//                    callUser.enqueue(new Callback<UserModel>() {
+//                        @Override
+//                        public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+//                            if (!response.isSuccessful()) {
+//                                String errorMessage = "User registered get user REST Error: ";
+//                                LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
+//                                AlertHelper.showNetworkAlert(RegistrationTeamActivity.this);
+//                                return;
+//                            }
+//
+//                            UserModel user = response.body();
+//                            if (user != null) {
+//                                SharedPreferences sharedPref = RegistrationTeamActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+//                                SharedPreferences.Editor editor = sharedPref.edit();
+//
+//                                editor.putInt(GlobalConstants.USER_ID, user.getUserId());
+//                                editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
+//                                editor.putString(GlobalConstants.NAME, user.getName());
+//                                editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
+//                                editor.putString(GlobalConstants.PHONE, user.getPhone());
+//                                editor.putString(GlobalConstants.BIRTHDATE, user.getBirthdate());
+//
+////                                editor.putBoolean(GlobalConstantsMerchant.SHARED_PREF_IS_MERCHANT_ACTIVE, false);
+//                                editor.apply();
+//
+////                                AuthHelper.mapUserIdToMerchant(RegistrationTeamActivity.this);
+//
+//                                // Save user profile photo to local device - Download image as bitmap
+//                                // Check if activity is null and if photo url is valid
+//                                if (user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {
+//                                    GlideApp.with(RegistrationTeamActivity.this)
+//                                            .asBitmap()
+//                                            .load(user.getPhotoUrl())
+//                                            .into(new CustomTarget<Bitmap>() {
+//                                                @Override
+//                                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                                                    imageService.saveProfileImageInternalStorage(RegistrationTeamActivity.this, resource);
+//
+//                                                    editor.putString(GlobalConstants.PHOTO_URL, user.getPhotoUrl());
+//                                                    editor.putString(GlobalConstants.THUMBNAIL_URL, user.getThumbnailUrl());
+//                                                    editor.apply();
+//
+//                                                    spinner.setVisibility(View.GONE);
+//
+//                                                    Intent intent = new Intent(RegistrationTeamActivity.this, UserKeypadActivity.class);
+//
+//                                                    // Creates a clean new activity and clears everything else
+//                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                                    startActivity(intent);
+//                                                }
+//
+//                                                @Override
+//                                                public void onLoadCleared(@Nullable Drawable placeholder) {
+//                                                }
+//                                            });
+//
+//                                    // If photo URL is empty Navigate to nearby screen
+//                                } else {
+//                                    spinner.setVisibility(View.GONE);
+//                                    Intent intent = new Intent(RegistrationTeamActivity.this, UserKeypadActivity.class);
+//                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(intent);
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+//                            spinner.setVisibility(View.GONE);
+//                            String errorMessage = "Retrieve newly registered user network ERROR:\n" + t.getMessage();
+//                            LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+//                            AlertHelper.showNetworkAlert(RegistrationTeamActivity.this);
+//                        }
+//                    });
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.jayurewards.tablet.models;
+package com.jayurewards.tablet.models.TeamMembers;
 
 public class RegisterUserModel {
 
