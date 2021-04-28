@@ -71,11 +71,10 @@ public class LoginTeamActivity extends AppCompatActivity {
                 return;
             }
 
-
-
             String countryCode = ccp.getSelectedCountryCode();
+            String phone = phoneNumberInput.getText().toString().replaceAll("[^0-9]", "");
             String phoneFormatted = ccp.getFormattedFullNumber(); // Get formatted number with country code from ccp
-            String phone = phoneFormatted.replaceAll("[^0-9]", "");
+
 
             AlertDialog.Builder builder = new AlertDialog.Builder(LoginTeamActivity.this);
             builder.setTitle("Phone Number").setMessage("Send the code to " + phoneFormatted + "?");

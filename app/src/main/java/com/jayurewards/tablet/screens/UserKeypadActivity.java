@@ -47,7 +47,7 @@ import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
-import com.jayurewards.tablet.models.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.UserModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;

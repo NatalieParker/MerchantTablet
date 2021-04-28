@@ -3,6 +3,7 @@ package com.jayurewards.tablet.screens;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -28,17 +29,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.ImageHelper;
 import com.jayurewards.tablet.helpers.LogHelper;
-import com.jayurewards.tablet.models.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.CheckSMSVerificationModel;
+import com.jayurewards.tablet.models.TeamMembers.CountryCodePhoneModel;
+import com.jayurewards.tablet.models.TeamMembers.UserModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
-
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,8 +56,6 @@ public class LoginTeamVerifyFragment extends Fragment {
     private String countryCode;
     private String phoneFormatted;
 
-    private FirebaseAuth auth;
-
     private MaterialButton buttonCancel;
     private MaterialButton buttonSubmit;
     private TextView textViewUserPhoneNumber;
@@ -67,8 +65,6 @@ public class LoginTeamVerifyFragment extends Fragment {
     private final ImageHelper imageHelper = new ImageHelper();
 
     private InputMethodManager imm;
-
-    private String verificationId;
 
     private long lastClickTime = 0;
 
@@ -100,8 +96,6 @@ public class LoginTeamVerifyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login_team_verify, container, false);
 
-        auth = FirebaseAuth.getInstance();
-
         buttonCancel = view.findViewById(R.id.buttonVerifyFragmentCancel);
         buttonSubmit = view.findViewById(R.id.buttonVerifyFragmentSubmit);
         textViewUserPhoneNumber = view.findViewById(R.id.textViewVerifyFragmentUserPhoneNumber);
@@ -111,12 +105,8 @@ public class LoginTeamVerifyFragment extends Fragment {
         textViewUserPhoneNumber.setText(phoneFormatted);
         editTextVerificationInput.addTextChangedListener(textWatcher);
         editTextVerificationInput.requestFocus();
-//        spinner.setVisibility(View.VISIBLE);
 
         setUpTextListeners();
-
-        // Format phone number and send to Firebase Auth
-        String phone = "+" + phoneNumber;
 
         // Initialize keyboard and open keyboard through window manager
         if (getContext() != null) {
@@ -126,35 +116,15 @@ public class LoginTeamVerifyFragment extends Fragment {
         enablePostSubmit(false);
         setUpClickListeners();
 
-        sendVerificationCode(phone);
-
-        // Inflate the layout for this fragment
-        Log.i(TAG, "COUNTRY CODE: " + countryCode);
-        Log.i(TAG, "PHONE NUMBER: " + phone);
-        Log.i(TAG, "PHONE FORMATTED: " + phoneFormatted);
+        requestVerification();
 
         return view;
-
     }
 
     @Override
     public void onDestroy() {
         hideKeyboard();
         super.onDestroy();
-    }
-
-    private void sendVerificationCode(String phone) {
-        if (getActivity() != null) {
-            PhoneAuthOptions options =
-                    PhoneAuthOptions.newBuilder(auth)
-                            .setPhoneNumber(phone)       // Phone number to verify
-                            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                            .setActivity(getActivity())                 // Activity (for callback binding)
-                            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-                            .build();
-
-            PhoneAuthProvider.verifyPhoneNumber(options);
-        }
     }
 
     private void setUpClickListeners() {
@@ -169,152 +139,172 @@ public class LoginTeamVerifyFragment extends Fragment {
             }
             lastClickTime = SystemClock.elapsedRealtime();
 
-            if (getView() == null) return;
-
             String code = editTextVerificationInput.getText().toString();
-            Log.i(TAG, "VERIFICATION CODE: " + code);
-            verifyCode(code);
+            checkVerification(code);
         });
     }
 
-    private void verifyCode(String code) {
-        spinner.setVisibility(View.VISIBLE);
+    /**
+     * Network calls
+     */
+    private void requestVerification() {
+        String phone = "+" + countryCode + phoneNumber;
+        Call<String> call = RetrofitClient.getInstance().getRestTeam().requestSMSVerification(phone);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.i(TAG, "onResponse: \n PHONE RESPONSE: " + response.body());
 
-        if (verificationId != null) {
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-            signInWithCredential(credential);
-        }
-    }
-
-    private void signInWithCredential(PhoneAuthCredential credential) {
-        auth.signInWithCredential(credential).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                FirebaseUser user = task.getResult().getUser();
-
-                if (user != null) {
-                    String firebaseUid = user.getUid();
-
-                    // Retrieve user's info from Database
-                    Call<UserModel> call = RetrofitClient.getInstance().getRestUser().getUser(firebaseUid);
-                    call.enqueue(new Callback<UserModel>() {
-                        @Override
-                        public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
-                            if (!response.isSuccessful()) {
-                                String errorMessage = "Check if user exists REST Error: ";
-                                LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
-                                AlertHelper.showNetworkAlert(getActivity());
-                                return;
-                            }
-
-                            UserModel user = response.body();
-                            Log.i(TAG, "onResponse: \n USER OBJECT; " + user);
-
-                            // User already exists
-                            if (getActivity() != null && user != null && user.getFirebaseUID() != null) {
-//                                SharedPreferences sharedPref = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPref.edit();
-
-//                                editor.putInt(GlobalConstants.USER_ID, user.getUserId());
-//                                editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
-//                                editor.putString(GlobalConstants.NAME, user.getName());
-//                                editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
-//                                editor.putString(GlobalConstants.PHONE, user.getPhone());
-//                                editor.putString(GlobalConstants.BIRTHDATE, user.getBirthdate());
-
-//                                editor.putBoolean(GlobalConstantsMerchant.SHARED_PREF_IS_MERCHANT_ACTIVE, false);
-//                                editor.apply();
-
-//                                FCMHelper.updateUserFcmToken(user.getUserId(), user.getFirebaseUID());
-//                                AuthHelper.mapUserIdToMerchant(getActivity());
-
-                                // Save user profile photo to local device - Download image as bitmap
-//                                if (getActivity() != null && user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {
-//                                    GlideApp.with(getActivity())
-//                                            .asBitmap()
-//                                            .load(user.getPhotoUrl())
-//                                            .into(new CustomTarget<Bitmap>() {
-//                                                @Override
-//                                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                                                    imageHelper.saveProfileImageInternalStorage(getActivity(), resource);
-//
-//                                                    editor.putString(GlobalConstants.PHOTO_URL, user.getPhotoUrl());
-//                                                    editor.putString(GlobalConstants.THUMBNAIL_URL, user.getThumbnailUrl());
-//                                                    editor.apply();
-//
-//                                                    spinner.setVisibility(View.GONE);
-//                                                    hideKeyboard();
-//                                                    navigateToUserKeypad();
-//                                                }
-//
-//                                                @Override
-//                                                public void onLoadCleared(@Nullable Drawable placeholder) {
-//                                                }
-//                                            });
-//                                } else {
-//                                    navigateToUserKeypad();
-//                                }
-
-                                // TODO: Handle the employee's info
-                                // E.g. name, image, etc
-                                navigateToUserKeypad();
-
-                                // User doesn't exist in database.
-                            } else {
-                                spinner.setVisibility(View.GONE);
-                                hideKeyboard();
-
-                                if (getActivity() != null) {
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                    builder.setTitle("User does not exist")
-                                            .setMessage("Please create your account through the Jayu app.");
-                                    builder.setPositiveButton("Ok", (dialog, id) -> {
-                                    });
-                                    builder.show();
-
-                                    if (getFragmentManager() == null) return;
-                                    getFragmentManager().popBackStackImmediate();
-//                                    Intent intent = new Intent(getActivity(), RegistrationTeamActivity.class);
-//
-//                                    if (countryCode != null && phoneNumber != null) {
-//                                        intent.putExtra(GlobalConstants.COUNTRY_CODE, countryCode);
-//                                        intent.putExtra(GlobalConstants.PHONE, phoneNumber);
-//                                        intent.putExtra(GlobalConstants.USER_FIREBASE_UID, firebaseUid);
-//                                        startActivity(intent);
-//                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
-                            String errorMessage = "Check if user exists network ERROR:\n" + t.getMessage();
-                            LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                            spinner.setVisibility(View.GONE);
-                            AlertHelper.showNetworkAlert(getActivity());
-                        }
-                    });
-                }
-            } else {
-                String errorMessage = "Phone verification Sign in Error";
-                if (task.getException() != null) {
-                    errorMessage = errorMessage + "\n" + task.getException().getMessage();
-                    LogHelper.errorReport(TAG, errorMessage, task.getException(), LogHelper.ErrorReportType.NETWORK);
-                }
-
-                // The verification code entered was invalid
-                if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                    spinner.setVisibility(View.GONE);
-                    AlertHelper.showAlert(getActivity(), "Validation Error",
-                            "Please try again and check the verification code sent in a text message.");
-
-                } else {
-                    spinner.setVisibility(View.GONE);
+                if (!response.isSuccessful()) {
+                    String errorMessage = "Request SMS verification REST Error: ";
+                    LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
                     AlertHelper.showNetworkAlert(getActivity());
                 }
             }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = "Request SMS Verification Error:" + t.getMessage();
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(getActivity());
+            }
         });
     }
+
+    private void checkVerification(String code) {
+        String phone = "+" + countryCode + phoneNumber;
+        CheckSMSVerificationModel params = new CheckSMSVerificationModel(phone, code);
+        Call<String> call = RetrofitClient.getInstance().getRestTeam().checkSMSVerification(params);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.i(TAG, "onResponse: \n PHONE RESPONSE CHECK: " + response.body());
+
+                if (!response.isSuccessful()) {
+                    String errorMessage = "Check SMS verification REST Error: ";
+                    LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
+                    AlertHelper.showNetworkAlert(getActivity());
+                    return;
+                }
+
+                if (GlobalConstants.SMS_VERIFY_APPROVED.equals(response.body())) {
+                    getTeamMember();
+                } else {
+                    spinner.setVisibility(View.GONE);
+                    AlertHelper.showAlert(getActivity(), "Validation Error",
+                            "Please try again and check the verification code sent in a text message.");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = "Check SMS Verification Error:" + t.getMessage();
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(getActivity());
+            }
+        });
+    }
+
+    private void getTeamMember() {
+        CountryCodePhoneModel params = new CountryCodePhoneModel(countryCode, phoneNumber);
+
+        Log.i(TAG, "USER MODEL PARAMS: " + params);
+        Call<UserModel> call = RetrofitClient.getInstance().getRestTeam().getTeamMember(params);
+        call.enqueue(new Callback<UserModel>() {
+            @Override
+            public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+                spinner.setVisibility(View.GONE);
+                hideKeyboard();
+
+                Log.i(TAG, "onResponse: \n USER MODEL: " + response.body());
+
+                if (!response.isSuccessful()) {
+                    String errorMessage = "Get team member REST Error: ";
+                    LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
+                    AlertHelper.showNetworkAlert(getActivity());
+                    return;
+                }
+
+
+
+                UserModel user = response.body();
+                Log.i(TAG, "onResponse: \n USER OBJECT; " + user);
+
+                // User already exists
+                if (getActivity() != null && user != null && user.getFirebaseUID() != null) {
+                    SharedPreferences sharedPref = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+
+                    editor.putInt(GlobalConstants.USER_ID, user.getUserId());
+                    editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
+                    editor.putString(GlobalConstants.NAME, user.getName());
+                    editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
+                    editor.putString(GlobalConstants.PHONE, user.getPhone());
+
+                    editor.apply();
+
+                    // Save user profile photo to local device - Download image as bitmap
+//                    if (getActivity() != null && user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {
+//                        GlideApp.with(getActivity())
+//                                .asBitmap()
+//                                .load(user.getPhotoUrl())
+//                                .into(new CustomTarget<Bitmap>() {
+//                                    @Override
+//                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                                        imageHelper.saveProfileImageInternalStorage(getActivity(), resource);
+//
+//                                        editor.putString(GlobalConstants.PHOTO_URL, user.getPhotoUrl());
+//                                        editor.putString(GlobalConstants.THUMBNAIL_URL, user.getThumbnailUrl());
+//                                        editor.apply();
+//
+//                                        spinner.setVisibility(View.GONE);
+//                                        hideKeyboard();
+//                                        navigateToUserKeypad();
+//                                    }
+//
+//                                    @Override
+//                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                                    }
+//                                });
+//                    } else {
+//                        navigateToUserKeypad();
+//                    }
+
+                    navigateToUserKeypad();
+
+                    // User doesn't exist in database.
+                } else {
+                    if (getActivity() != null) {
+                        AlertHelper.showAlert(getContext(), "User does not exist",
+                                "Please first create your account through the Jayu app.");
+
+//                        if (getFragmentManager() == null) return;
+//                        getFragmentManager().popBackStackImmediate();
+//                        Intent intent = new Intent(getActivity(), RegistrationTeamActivity.class);
+//
+//                        if (countryCode != null && phoneNumber != null) {
+//                            intent.putExtra(GlobalConstants.COUNTRY_CODE, countryCode);
+//                            intent.putExtra(GlobalConstants.PHONE, phoneNumber);
+//                            intent.putExtra(GlobalConstants.USER_FIREBASE_UID, firebaseUid);
+//                            startActivity(intent);
+//                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+                String errorMessage = "Get team member network ERROR:\n" + t.getMessage();
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(getActivity());
+            }
+        });
+    }
+
 
     private void navigateToUserKeypad() {
         Intent intent = new Intent(getActivity(), UserKeypadActivity.class);
@@ -322,47 +312,6 @@ public class LoginTeamVerifyFragment extends Fragment {
         startActivity(intent);
     }
 
-    /**
-     * Handle Firebase reception of verification code
-     */
-    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-        // Called if the verification happens automatically
-        @Override
-        public void onVerificationCompleted(PhoneAuthCredential credential) {
-//            Log.d(TAG, "onVerificationCompleted:" + credential.getSignInMethod());
-            signInWithCredential(credential);
-        }
-
-        @Override
-        public void onVerificationFailed(FirebaseException e) {
-            Log.e(TAG, "Verification Error: " + e.getMessage());
-
-            // Invalid request
-            if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                Log.d(TAG, "Invalid credentials: " + e.getLocalizedMessage());
-
-                spinner.setVisibility(View.GONE);
-                AlertHelper.showAlert(getActivity(), "Validation Error",
-                        "Please double check your phone number or the verification code if you received a text message.");
-
-                // SMS quota exceeded
-            } else if (e instanceof FirebaseTooManyRequestsException) {
-                Log.d(TAG, "SMS Quota exceeded.");
-
-                spinner.setVisibility(View.GONE);
-                AlertHelper.showAlert(getActivity(), "SMS Quota exceeded",
-                        "Too many attempts made with this phone number! Please try again later.");
-            }
-        }
-
-        // Called when the verification Id is received from Firebase
-        @Override
-        public void onCodeSent(@NonNull String verificationIDIn, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(verificationIDIn, forceResendingToken);
-            verificationId = verificationIDIn;
-        }
-    };
 
     /**
      * Edit Text methods
