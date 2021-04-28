@@ -237,13 +237,16 @@ public class LoginTeamVerifyFragment extends Fragment {
                     SharedPreferences sharedPref = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
 
-                    editor.putInt(GlobalConstants.USER_ID, user.getUserId());
-                    editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
-                    editor.putString(GlobalConstants.NAME, user.getName());
-                    editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
-                    editor.putString(GlobalConstants.PHONE, user.getPhone());
+                    editor.putInt(GlobalConstants.TEAM_USER_ID, user.getUserId());
+                    editor.putString(GlobalConstants.TEAM_USER_FIREBASE_UID, user.getFirebaseUID());
+                    editor.putString(GlobalConstants.TEAM_NAME, user.getName());
+                    editor.putString(GlobalConstants.TEAM_COUNTRY_CODE, user.getCountryCode());
+                    editor.putString(GlobalConstants.TEAM_PHONE, user.getPhone());
 
                     editor.apply();
+
+                    Log.i(TAG, "USER ID: " + user.getUserId());
+                    Log.i(TAG, "USER NAME: " + user.getName());
 
                     // Save user profile photo to local device - Download image as bitmap
 //                    if (getActivity() != null && user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {

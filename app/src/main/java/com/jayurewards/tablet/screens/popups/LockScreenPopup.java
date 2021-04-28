@@ -33,12 +33,10 @@ public class LockScreenPopup extends DialogFragment {
     public interface LockScreenInterface {
         void onUpdateLockScreen(boolean isLocked);
     }
+
     private LockScreenInterface listener;
 
-    private TextView header;
-    private TextView desc;
     private EditText pinEditText;
-    private MaterialButton cancelBtn;
     private MaterialButton submitBtn;
 
     private SharedPreferences sp;
@@ -48,16 +46,18 @@ public class LockScreenPopup extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.popup_lock_screen, container, false);
 
-        header = view.findViewById(R.id.textPopupLockScreenHeader);
-        desc = view.findViewById(R.id.textPopupLockScreenDesc);
+        TextView header = view.findViewById(R.id.textPopupLockScreenHeader);
+        TextView desc = view.findViewById(R.id.textPopupLockScreenDesc);
         pinEditText = view.findViewById(R.id.editTextLockScreen);
-        cancelBtn = view.findViewById(R.id.buttonPopupLockScreenCancel);
+        MaterialButton cancelBtn = view.findViewById(R.id.buttonPopupLockScreenCancel);
         submitBtn = view.findViewById(R.id.buttonPopupLockScreenSubmit);
 
         pinEditText.addTextChangedListener(textWatcher);
 
-        sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        savedPin = sp.getInt(GlobalConstants.PIN_CODE, 0);
+        if (getActivity() != null) {
+            sp = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+            savedPin = sp.getInt(GlobalConstants.PIN_CODE, 0);
+        }
 
         if (savedPin == 0) {
             header.setText(R.string.lock_screen);
@@ -96,13 +96,6 @@ public class LockScreenPopup extends DialogFragment {
                 AlertHelper.showAlert(getActivity(), "Incorrect Pin",
                         "The pin number entered was incorrect. Please try again or logout to reset the device.");
             }
-
-
-
-            Log.i(TAG, "onCreateView: PIN CODE SUBMITTED: " + pinCode);
-
-//            listener.onUpdate(amount, adminLevel);
-//            dismiss();
         });
 
         cancelBtn.setOnClickListener(v -> dismiss());

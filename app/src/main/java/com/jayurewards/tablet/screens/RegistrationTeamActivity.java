@@ -107,9 +107,9 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 
         // Retrieve data
         Intent intent = getIntent();
-        countryCode = intent.getStringExtra(GlobalConstants.COUNTRY_CODE);
-        phoneNumber = intent.getStringExtra(GlobalConstants.PHONE);
-        userFirebaseUID = intent.getStringExtra(GlobalConstants.USER_FIREBASE_UID);
+        countryCode = intent.getStringExtra(GlobalConstants.TEAM_COUNTRY_CODE);
+        phoneNumber = intent.getStringExtra(GlobalConstants.TEAM_PHONE);
+        userFirebaseUID = intent.getStringExtra(GlobalConstants.TEAM_USER_FIREBASE_UID);
 
         // Initialize Views
 //        spinner = findViewById(R.id.loadingRegisterUser);
