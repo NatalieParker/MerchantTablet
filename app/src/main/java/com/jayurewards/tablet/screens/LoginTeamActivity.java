@@ -25,6 +25,7 @@ import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
+import com.jayurewards.tablet.helpers.GlobalConstants;
 
 public class LoginTeamActivity extends AppCompatActivity {
     private static final String TAG = "LoginTmActivity";
@@ -32,12 +33,14 @@ public class LoginTeamActivity extends AppCompatActivity {
     private EditText phoneNumberInput;
     private MaterialButton buttonBack;
     private MaterialButton buttonSend;
+
+    // Passed data
+    private int storeId;
+
     private CountryCodePicker ccp;
     private Boolean isPhoneValid = false;
     private long lastClickTime = 0;
     private InputMethodManager imm;
-    private ScrollView background;
-    private AnimationDrawable animationDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +51,12 @@ public class LoginTeamActivity extends AppCompatActivity {
         buttonBack = findViewById(R.id.buttonLoginTeamCancel);
         buttonSend = findViewById(R.id.buttonLoginTeamSend);
         ccp = findViewById(R.id.ccpLoginTeamEnterPhone);
-        background = findViewById(R.id.scrollViewLoginTeamBg);
+        ScrollView background = findViewById(R.id.scrollViewLoginTeamBg);
 
-        animationDrawable = (AnimationDrawable) background.getBackground();
+        Intent intent = getIntent();
+        storeId = intent.getIntExtra(GlobalConstants.STORE_ID, 0);
+
+        AnimationDrawable animationDrawable = (AnimationDrawable) background.getBackground();
         animationDrawable.setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
@@ -73,6 +79,7 @@ public class LoginTeamActivity extends AppCompatActivity {
 
         buttonSend.setOnClickListener(v -> {
             preventDuplicateClicks();
+            hideKeyboard();
 
             if (!ccp.isValidFullNumber()) {
                 String title = "Invalid Phone Number";
@@ -125,7 +132,7 @@ public class LoginTeamActivity extends AppCompatActivity {
         phoneNumberInput.requestFocus();
 
         // Prep fragment with passed data
-        LoginTeamVerifyFragment fragment = LoginTeamVerifyFragment.newInstance(phoneNumber, countryCode, phoneFormatted);
+        LoginTeamVerifyFragment fragment = LoginTeamVerifyFragment.newInstance(phoneNumber, countryCode, phoneFormatted, storeId);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -166,12 +173,14 @@ public class LoginTeamActivity extends AppCompatActivity {
         }
     }
 
+    private void hideKeyboard() {
+        imm.hideSoftInputFromWindow(phoneNumberInput.getWindowToken(), 0);
+    }
+
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        // Hide keyboard
-        imm.hideSoftInputFromWindow(phoneNumberInput.getWindowToken(), 0);
+        hideKeyboard();
     }
 }

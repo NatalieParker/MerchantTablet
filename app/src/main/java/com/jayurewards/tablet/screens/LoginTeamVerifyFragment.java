@@ -1,11 +1,9 @@
 package com.jayurewards.tablet.screens;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,25 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.ImageHelper;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.TeamMembers.CheckSMSVerificationModel;
-import com.jayurewards.tablet.models.TeamMembers.CountryCodePhoneModel;
-import com.jayurewards.tablet.models.TeamMembers.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.TeamMemberRequest;
+import com.jayurewards.tablet.models.TeamMembers.TeamMemberModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
 import retrofit2.Call;
@@ -53,14 +43,15 @@ public class LoginTeamVerifyFragment extends Fragment {
     private static final String PHONE_NUMBER = "phoneNumber";
     private static final String COUNTRY_CODE = "countryCode";
     private static final String PHONE_FORMATTED = "phoneFormatted";
+    private static final String STORE_ID = "storeId";
 
     private String phoneNumber;
     private String countryCode;
     private String phoneFormatted;
+    private int storeId;
 
     private MaterialButton buttonCancel;
     private MaterialButton buttonSubmit;
-    private TextView textViewUserPhoneNumber;
     private EditText editTextVerificationInput;
 
     private ConstraintLayout spinner;
@@ -74,12 +65,13 @@ public class LoginTeamVerifyFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static LoginTeamVerifyFragment newInstance(String phoneNumber, String countryCode, String phoneFormatted) {
+    public static LoginTeamVerifyFragment newInstance(String phoneNumber, String countryCode, String phoneFormatted, int storeId) {
         LoginTeamVerifyFragment fragment = new LoginTeamVerifyFragment();
         Bundle args = new Bundle();
         args.putString(PHONE_NUMBER, phoneNumber);
         args.putString(COUNTRY_CODE, countryCode);
         args.putString(PHONE_FORMATTED, phoneFormatted);
+        args.putInt(STORE_ID, storeId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,6 +83,7 @@ public class LoginTeamVerifyFragment extends Fragment {
             phoneNumber = getArguments().getString(PHONE_NUMBER);
             countryCode = getArguments().getString(COUNTRY_CODE);
             phoneFormatted = getArguments().getString(PHONE_FORMATTED);
+            storeId = getArguments().getInt(STORE_ID);
         }
     }
 
@@ -100,7 +93,7 @@ public class LoginTeamVerifyFragment extends Fragment {
 
         buttonCancel = view.findViewById(R.id.buttonVerifyFragmentCancel);
         buttonSubmit = view.findViewById(R.id.buttonVerifyFragmentSubmit);
-        textViewUserPhoneNumber = view.findViewById(R.id.textViewVerifyFragmentUserPhoneNumber);
+        TextView textViewUserPhoneNumber = view.findViewById(R.id.textViewVerifyFragmentUserPhoneNumber);
         editTextVerificationInput = view.findViewById(R.id.editTextVerifyFragmentVerificationInput);
         spinner = view.findViewById(R.id.spinnerLoginTeamVerifyFragment);
         textViewUserPhoneNumber.setText(phoneFormatted);
@@ -117,7 +110,9 @@ public class LoginTeamVerifyFragment extends Fragment {
         enablePostSubmit(false);
         setUpClickListeners();
 
-        requestVerification();
+        if (storeId != 0) {
+            requestVerification();
+        }
 
         return view;
     }
@@ -154,12 +149,17 @@ public class LoginTeamVerifyFragment extends Fragment {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.i(TAG, "onResponse: \n PHONE RESPONSE: " + response.body());
-
                 if (!response.isSuccessful()) {
                     String errorMessage = "Request SMS verification REST Error: ";
                     LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
                     AlertHelper.showNetworkAlert(getActivity());
+                    getActivity().onBackPressed();
+                }
+
+                if ("landline".equals(response.body())) {
+                    AlertHelper.showAlert(getContext(), "Landline Number",
+                            "Please enter a mobile phone number to receive the SMS code.");
+                    getActivity().onBackPressed();
                 }
             }
 
@@ -180,8 +180,6 @@ public class LoginTeamVerifyFragment extends Fragment {
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.i(TAG, "onResponse: \n PHONE RESPONSE CHECK: " + response.body());
-
                 if (!response.isSuccessful()) {
                     String errorMessage = "Check SMS verification REST Error: ";
                     LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
@@ -209,17 +207,13 @@ public class LoginTeamVerifyFragment extends Fragment {
     }
 
     private void getTeamMember() {
-        CountryCodePhoneModel params = new CountryCodePhoneModel(countryCode, phoneNumber);
-
-        Log.i(TAG, "USER MODEL PARAMS: " + params);
-        Call<UserModel> call = RetrofitClient.getInstance().getRestTeam().getTeamMember(params);
-        call.enqueue(new Callback<UserModel>() {
+        TeamMemberRequest params = new TeamMemberRequest(countryCode, phoneNumber, storeId);
+        Call<TeamMemberModel> call = RetrofitClient.getInstance().getRestTeam().getTeamMember(params);
+        call.enqueue(new Callback<TeamMemberModel>() {
             @Override
-            public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+            public void onResponse(@NonNull Call<TeamMemberModel> call, @NonNull Response<TeamMemberModel> response) {
                 spinner.setVisibility(View.GONE);
                 hideKeyboard();
-
-                Log.i(TAG, "onResponse: \n USER MODEL: " + response.body());
 
                 if (!response.isSuccessful()) {
                     String errorMessage = "Get team member REST Error: ";
@@ -228,61 +222,55 @@ public class LoginTeamVerifyFragment extends Fragment {
                     return;
                 }
 
-
-
-                UserModel user = response.body();
-                Log.i(TAG, "onResponse: \n USER OBJECT; " + user);
+                TeamMemberModel user = response.body();
 
                 // User already exists
                 if (getActivity() != null && user != null && user.getFirebaseUID() != null) {
-                    SharedPreferences sharedPref = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
 
-                    editor.putInt(GlobalConstants.TEAM_USER_ID, user.getUserId());
-                    editor.putString(GlobalConstants.TEAM_USER_FIREBASE_UID, user.getFirebaseUID());
-                    editor.putString(GlobalConstants.TEAM_NAME, user.getName());
-                    editor.putString(GlobalConstants.TEAM_COUNTRY_CODE, user.getCountryCode());
-                    editor.putString(GlobalConstants.TEAM_PHONE, user.getPhone());
+                    String status = user.getStatus();
 
-                    editor.apply();
+                    String statusTitle = "Not Approved";
+                    String statusMessage = "Your request to join this team has not yet been approved. " +
+                            "Please contact the business to approve your request.";
 
-                    Log.i(TAG, "USER ID: " + user.getUserId());
-                    Log.i(TAG, "USER NAME: " + user.getName());
+                    switch (status) {
+                        case GlobalConstants.PENDING:
+                            AlertHelper.showAlert(getContext(), statusTitle, statusMessage);
+                            getActivity().onBackPressed();;
+                            break;
 
-                    // Save user profile photo to local device - Download image as bitmap
-//                    if (getActivity() != null && user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty()) {
-//                        GlideApp.with(getActivity())
-//                                .asBitmap()
-//                                .load(user.getPhotoUrl())
-//                                .into(new CustomTarget<Bitmap>() {
-//                                    @Override
-//                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                                        imageHelper.saveProfileImageInternalStorage(getActivity(), resource);
-//
-//                                        editor.putString(GlobalConstants.PHOTO_URL, user.getPhotoUrl());
-//                                        editor.putString(GlobalConstants.THUMBNAIL_URL, user.getThumbnailUrl());
-//                                        editor.apply();
-//
-//                                        spinner.setVisibility(View.GONE);
-//                                        hideKeyboard();
-//                                        navigateToUserKeypad();
-//                                    }
-//
-//                                    @Override
-//                                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                                    }
-//                                });
-//                    } else {
-//                        navigateToUserKeypad();
-//                    }
+                        case GlobalConstants.DENIED:
+                            statusMessage = "Your request to join this team was not approved.";
+                            AlertHelper.showAlert(getContext(), statusTitle, statusMessage);
+                            getActivity().onBackPressed();
+                            break;
 
-                    navigateToUserKeypad();
+                        default:
+                            SharedPreferences sharedPref = getActivity().getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+
+                            editor.putInt(GlobalConstants.TEAM_USER_ID, user.getUserId());
+                            editor.putString(GlobalConstants.TEAM_USER_FIREBASE_UID, user.getFirebaseUID());
+                            editor.putString(GlobalConstants.TEAM_NAME, user.getName());
+                            editor.putString(GlobalConstants.TEAM_COUNTRY_CODE, user.getCountryCode());
+                            editor.putString(GlobalConstants.TEAM_PHONE, user.getPhone());
+                            editor.putString(GlobalConstants.TEAM_STATUS, user.getStatus());
+                            editor.putString(GlobalConstants.TEAM_TYPE, user.getType());
+                            editor.putInt(GlobalConstants.TEAM_ADMIN_LVL, user.getAdminLvl());
+
+                            editor.apply();
+
+                            navigateToUserKeypad();
+
+                            break;
+                    }
 
                     // User doesn't exist in database.
                 } else {
                     if (getActivity() != null) {
-                        AlertHelper.showAlert(getContext(), "User does not exist",
-                                "Please first create your account through the Jayu app.");
+                        AlertHelper.showAlert(getContext(), "Member does not exist",
+                                "You must first request to join this team through the Jayu app.");
+                        getActivity().onBackPressed();
 
 //                        if (getFragmentManager() == null) return;
 //                        getFragmentManager().popBackStackImmediate();
@@ -300,7 +288,7 @@ public class LoginTeamVerifyFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<TeamMemberModel> call, @NonNull Throwable t) {
                 String errorMessage = "Get team member network ERROR:\n" + t.getMessage();
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 spinner.setVisibility(View.GONE);

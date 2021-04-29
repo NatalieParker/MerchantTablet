@@ -11,12 +11,10 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,17 +32,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.button.MaterialButton;
-import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.ImageHelper;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.TeamMembers.RegisterUserModel;
-import com.jayurewards.tablet.models.TeamMembers.UserModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.yalantis.ucrop.UCrop;
 
@@ -268,10 +262,10 @@ public class RegistrationTeamActivity extends AppCompatActivity {
                     }
                 } else {
                     String userUID = userFirebaseUID;
-//                    Call<UserModel> callUser = RetrofitClient.getInstance().getRestTeam().getTeamMember();
-//                    callUser.enqueue(new Callback<UserModel>() {
+//                    Call<TeamMemberModel> callUser = RetrofitClient.getInstance().getRestTeam().getTeamMember();
+//                    callUser.enqueue(new Callback<TeamMemberModel>() {
 //                        @Override
-//                        public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+//                        public void onResponse(@NonNull Call<TeamMemberModel> call, @NonNull Response<TeamMemberModel> response) {
 //                            if (!response.isSuccessful()) {
 //                                String errorMessage = "User registered get user REST Error: ";
 //                                LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
@@ -279,7 +273,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 //                                return;
 //                            }
 //
-//                            UserModel user = response.body();
+//                            TeamMemberModel user = response.body();
 //                            if (user != null) {
 //                                SharedPreferences sharedPref = RegistrationTeamActivity.this.getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
 //                                SharedPreferences.Editor editor = sharedPref.edit();
@@ -336,7 +330,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 //                        }
 //
 //                        @Override
-//                        public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+//                        public void onFailure(@NonNull Call<TeamMemberModel> call, @NonNull Throwable t) {
 //                            spinner.setVisibility(View.GONE);
 //                            String errorMessage = "Retrieve newly registered user network ERROR:\n" + t.getMessage();
 //                            LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);

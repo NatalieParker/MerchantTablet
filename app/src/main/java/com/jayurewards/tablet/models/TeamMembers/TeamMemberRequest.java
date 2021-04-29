@@ -1,19 +1,22 @@
 package com.jayurewards.tablet.models.TeamMembers;
 
-public class CountryCodePhoneModel {
+public class TeamMemberRequest {
     String countryCode;
     String phone;
+    int storeId;
 
-    public CountryCodePhoneModel(String countryCode, String phone) {
+    public TeamMemberRequest(String countryCode, String phone, int storeId) {
         this.countryCode = countryCode;
         this.phone = phone;
+        this.storeId = storeId;
     }
 
     @Override
     public String toString() {
-        return "CountryCodePhoneModel{" +
+        return "TeamMemberRequest{" +
                 "countryCode='" + countryCode + '\'' +
                 ", phone='" + phone + '\'' +
+                ", storeId=" + storeId +
                 '}';
     }
 }

@@ -3,7 +3,7 @@ package com.jayurewards.tablet.models.TeamMembers;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserModel {
+public class TeamMemberModel {
 
     @SerializedName("user_id")
     @Expose
@@ -44,6 +44,18 @@ public class UserModel {
     @SerializedName("thumbnail")
     @Expose
     private String thumbnailUrl;
+
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    @SerializedName("type")
+    @Expose
+    private  String type;
+
+    @SerializedName("admin_lvl")
+    @Expose
+    private int adminLvl;
 
     public int getUserId() {
         return userId;
@@ -125,9 +137,33 @@ public class UserModel {
         this.thumbnailUrl = thumbnailUrl;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getAdminLvl() {
+        return adminLvl;
+    }
+
+    public void setAdminLvl(int adminLvl) {
+        this.adminLvl = adminLvl;
+    }
+
     @Override
     public String toString() {
-        return "UserModel{" +
+        return "TeamMemberModel{" +
                 "userId=" + userId +
                 ", firebaseUID='" + firebaseUID + '\'' +
                 ", name='" + name + '\'' +
@@ -138,6 +174,9 @@ public class UserModel {
                 ", gender='" + gender + '\'' +
                 ", photoUrl='" + photoUrl + '\'' +
                 ", thumbnailUrl='" + thumbnailUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", type='" + type + '\'' +
+                ", adminLvl=" + adminLvl +
                 '}';
     }
 }

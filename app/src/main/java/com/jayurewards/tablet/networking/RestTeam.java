@@ -1,9 +1,9 @@
 package com.jayurewards.tablet.networking;
 
 import com.jayurewards.tablet.models.TeamMembers.CheckSMSVerificationModel;
-import com.jayurewards.tablet.models.TeamMembers.CountryCodePhoneModel;
+import com.jayurewards.tablet.models.TeamMembers.TeamMemberRequest;
 import com.jayurewards.tablet.models.TeamMembers.RegisterUserModel;
-import com.jayurewards.tablet.models.TeamMembers.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.TeamMemberModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -26,7 +26,7 @@ public interface RestTeam {
     // Get team member user
     @Headers("Content-Type: application/json")
     @POST("/team-member/get-team-member")
-    Call<UserModel>getTeamMember(@Body CountryCodePhoneModel params);
+    Call<TeamMemberModel>getTeamMember(@Body TeamMemberRequest params);
 
     // Register new user
     @Headers("Content-Type: application/json")

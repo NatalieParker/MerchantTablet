@@ -22,7 +22,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -50,7 +49,7 @@ import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
-import com.jayurewards.tablet.models.TeamMembers.UserModel;
+import com.jayurewards.tablet.models.TeamMembers.TeamMemberModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
@@ -135,7 +134,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private ArrayList<OffersModel> offers = new ArrayList<>();
 
-    private UserModel userModel;
+    private TeamMemberModel teamMemberModel;
 
     private SharedPreferences sp;
     private CountDownTimer timer;
@@ -469,6 +468,7 @@ public class UserKeypadActivity extends AppCompatActivity
         goTeamLoginBtn.setOnClickListener(v -> {
             closeKeypadOptionsMenu();
             Intent intent = new Intent(UserKeypadActivity.this, LoginTeamActivity.class);
+            intent.putExtra(GlobalConstants.STORE_ID, shop.getStoreId());
             startActivity(intent);
         });
 
@@ -851,8 +851,6 @@ public class UserKeypadActivity extends AppCompatActivity
         if (isLocked) {
             screenLocked = true;
             buttonUpdatePoints.setVisibility(View.GONE);
-            goTeamLoginBtn.setVisibility(View.GONE);
-            goTeamPageBtn.setVisibility(View.GONE);
             optionsPortalBtn.setVisibility(View.GONE);
 
             buttonLockScreen.setText(R.string.unlock_screen);
@@ -860,7 +858,6 @@ public class UserKeypadActivity extends AppCompatActivity
         } else {
             screenLocked = false;
             buttonUpdatePoints.setVisibility(View.VISIBLE);
-            checkTeamMember();
             optionsPortalBtn.setVisibility(View.VISIBLE);
 
             buttonLockScreen.setText(R.string.lock_screen);

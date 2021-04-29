@@ -15,6 +15,7 @@ public class GlobalConstants {
     public static final String SHARED_PREF = "sharedPref";
     public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
+    public static final String STORE_ID = "storeId";
     public static final String MERCHANT_ID = "merchantId";
     public static final String MERCHANT_FIREBASE_UID = "firebaseUid";
     public static final String STRIPE_ID = "stripeId";
@@ -25,6 +26,9 @@ public class GlobalConstants {
     public static final String TEAM_COUNTRY_CODE = "countryCode";
     public static final String TEAM_PHONE = "phone";
     public static final String TEAM_USER_FIREBASE_UID = "userFirebaseUid";
+    public static final String TEAM_STATUS = "teamStatus";
+    public static final String TEAM_ADMIN_LVL = "teamAdminLvl";
+    public static final String TEAM_TYPE = "teamType";
     public static final String TEAM_PHOTO_URL = "photoUrl";
     public static final String TEAM_THUMBNAIL_URL = "thumbnailUrl";
     public static final String ADMIN_LEVEL = "adminLevel";
@@ -44,6 +48,11 @@ public class GlobalConstants {
     public static final String USER_TERMS_AND_CONDITIONS_LINK = "userTermsAndConditionsLink";
     public static final String MERCHANT_TABLET_KEYPAD = "merchant_tablet_keypad";
     public static final String SMS_VERIFY_APPROVED = "approved";
+
+    // Team member status
+    public static final String APPROVED = "approved";
+    public static final String PENDING = "pending";
+    public static final String DENIED = "denied";
 
 
     // URLS
