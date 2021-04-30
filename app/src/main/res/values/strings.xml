@@ -84,4 +84,8 @@
     <string name="verification_code">Verification code</string>
     <string name="verify">Verify</string>
     <string name="point_converter">Point converter</string>
+    <string name="pts_convert_popup_desc">Calculate the amount of points to give customers. \nWhen activated enter an amount before giving points.</string>
+    <string name="base_amount">Base amount</string>
+    <string name="activate_converter">Activate converter</string>
+    <string name="pts_convert_popup_disclaimer">Customers get ## points for every ### they spend.</string>
 </resources>

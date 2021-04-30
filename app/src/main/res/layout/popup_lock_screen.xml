@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
     tools:context=".screens.popups.LockScreenPopup">
 
@@ -50,6 +50,9 @@
                 android:id="@+id/editTextLockScreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_key"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/colorPrimary"
                 android:hint="@string/pin_number"
                 android:imeOptions="actionDone"
                 android:inputType="number"

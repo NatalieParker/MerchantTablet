@@ -1,17 +1,14 @@
 package com.jayurewards.tablet.screens.popups;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.jayurewards.tablet.R;
 
@@ -19,8 +16,7 @@ public class PointConvertPopup extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_point_convert_popup, container, false);
+        View view = inflater.inflate(R.layout.popup_point_convert, container, false);
 
 
 
