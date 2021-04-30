@@ -76,5 +76,12 @@
     <string name="happy_hours">Happy hours</string>
     <string name="tablet_header">Get sweet rewards and free gift cards.</string>
     <string name="icon">Icon</string>
-    <string name="team_logout">Team Logout</string>
+    <string name="team_logout">Team logout</string>
+    <string name="assign_tablet_to_cashier">Assign tablet to cashier</string>
+    <string name="team_login_desc">This employee will get credit for new customers joining the loyalty program through this tablet.</string>
+    <string name="send_code">Send code</string>
+    <string name="enter_code_sent_to">Enter code sent to</string>
+    <string name="verification_code">Verification code</string>
+    <string name="verify">Verify</string>
+    <string name="point_converter">Point converter</string>
 </resources>

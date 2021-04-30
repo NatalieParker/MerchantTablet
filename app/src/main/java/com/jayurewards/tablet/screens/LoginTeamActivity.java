@@ -12,12 +12,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 
@@ -38,7 +33,6 @@ public class LoginTeamActivity extends AppCompatActivity {
     private int storeId;
 
     private CountryCodePicker ccp;
-    private Boolean isPhoneValid = false;
     private long lastClickTime = 0;
     private InputMethodManager imm;
 
@@ -61,11 +55,10 @@ public class LoginTeamActivity extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(4000);
         animationDrawable.start();
 
-        phoneNumberInput.addTextChangedListener(textWatcher);
         phoneNumberInput.requestFocus();
 
         ccp.registerCarrierNumberEditText(phoneNumberInput);
-        ccp.setPhoneNumberValidityChangeListener(isValidNumber -> isPhoneValid = isValidNumber);
+        ccp.setPhoneNumberValidityChangeListener(this::enablePostSubmit);
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -142,25 +135,6 @@ public class LoginTeamActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.add(R.id.frameLoginTeamVerifyPhoneFragment, fragment, "Verify_Fragment").commit();
     }
-
-
-    // Track user's text input
-    private final TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            enablePostSubmit(isPhoneValid);
-        }
-    };
 
     private void enablePostSubmit(Boolean enabled) {
         if (!enabled) {

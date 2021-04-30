@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -67,8 +68,14 @@ public class LockScreenPopup extends DialogFragment {
             desc.setText(R.string.lock_screen_popup_desc_unlock);
         }
 
-        enableEmailSubmit(false);
+        // Show Keyboard
+        pinEditText.post(() -> {
+            pinEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) pinEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) imm.showSoftInput(pinEditText, InputMethodManager.SHOW_IMPLICIT);
+        });
 
+        enableEmailSubmit(false);
 
         submitBtn.setOnClickListener(v -> {
 

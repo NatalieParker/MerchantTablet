@@ -602,7 +602,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
@@ -639,6 +639,20 @@
             android:textAllCaps="false"
             android:textColor="@color/colorGray"
             app:icon="@drawable/ic_edit_2"
+            app:iconPadding="15dp"
+            app:iconTint="@color/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUserKeypadPointConverter"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/soleil_bold"
+            android:text="@string/point_converter"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="@color/colorGray"
+            app:icon="@drawable/ic_dollar_sign"
             app:iconPadding="15dp"
             app:iconTint="@color/colorPrimary" />
 

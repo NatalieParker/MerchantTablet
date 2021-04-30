@@ -30,8 +30,8 @@
 
                 <ImageView
                     android:id="@+id/imageViewLoginMerchantJayuLogo"
-                    android:layout_width="70dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_marginTop="10dp"
                     android:contentDescription="@string/logo"
                     android:scaleType="fitCenter"
@@ -109,7 +109,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLoginMerchantLoginSubmit"
                     android:layout_width="0dp"
-                    android:layout_height="55dp"
+                    android:layout_height="60dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
@@ -134,7 +134,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLoginMerchantGoogle"
                     android:layout_width="0dp"
-                    android:layout_height="55dp"
+                    android:layout_height="60dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="25dp"
@@ -150,7 +150,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonLoginMerchantApple"
                     android:layout_width="0dp"
-                    android:layout_height="55dp"
+                    android:layout_height="60dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
                     android:text="@string/sign_in_with_apple"

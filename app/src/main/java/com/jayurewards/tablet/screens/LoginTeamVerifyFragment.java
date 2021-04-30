@@ -7,7 +7,6 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.os.SystemClock;
@@ -19,13 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
-import com.jayurewards.tablet.helpers.ImageHelper;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.TeamMembers.CheckSMSVerificationModel;
 import com.jayurewards.tablet.models.TeamMembers.TeamMemberRequest;
@@ -54,8 +53,7 @@ public class LoginTeamVerifyFragment extends Fragment {
     private MaterialButton buttonSubmit;
     private EditText editTextVerificationInput;
 
-    private ConstraintLayout spinner;
-    private final ImageHelper imageHelper = new ImageHelper();
+    private ProgressBar spinner;
 
     private InputMethodManager imm;
 
@@ -93,8 +91,8 @@ public class LoginTeamVerifyFragment extends Fragment {
 
         buttonCancel = view.findViewById(R.id.buttonVerifyFragmentCancel);
         buttonSubmit = view.findViewById(R.id.buttonVerifyFragmentSubmit);
-        TextView textViewUserPhoneNumber = view.findViewById(R.id.textViewVerifyFragmentUserPhoneNumber);
-        editTextVerificationInput = view.findViewById(R.id.editTextVerifyFragmentVerificationInput);
+        TextView textViewUserPhoneNumber = view.findViewById(R.id.textVerifyTeamLoginPhone);
+        editTextVerificationInput = view.findViewById(R.id.editTextVerifyTeamLogin);
         spinner = view.findViewById(R.id.spinnerLoginTeamVerifyFragment);
         textViewUserPhoneNumber.setText(phoneFormatted);
         editTextVerificationInput.addTextChangedListener(textWatcher);
@@ -135,6 +133,7 @@ public class LoginTeamVerifyFragment extends Fragment {
             }
             lastClickTime = SystemClock.elapsedRealtime();
 
+            showSpinner(true);
             String code = editTextVerificationInput.getText().toString();
             checkVerification(code);
         });
@@ -153,13 +152,13 @@ public class LoginTeamVerifyFragment extends Fragment {
                     String errorMessage = "Request SMS verification REST Error: ";
                     LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
                     AlertHelper.showNetworkAlert(getActivity());
-                    getActivity().onBackPressed();
+                    if (getActivity() != null) getActivity().onBackPressed();
                 }
 
                 if ("landline".equals(response.body())) {
                     AlertHelper.showAlert(getContext(), "Landline Number",
                             "Please enter a mobile phone number to receive the SMS code.");
-                    getActivity().onBackPressed();
+                    if (getActivity() != null) getActivity().onBackPressed();
                 }
             }
 
@@ -167,7 +166,6 @@ public class LoginTeamVerifyFragment extends Fragment {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 String errorMessage = "Request SMS Verification Error:" + t.getMessage();
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                spinner.setVisibility(View.GONE);
                 AlertHelper.showNetworkAlert(getActivity());
             }
         });
@@ -183,6 +181,7 @@ public class LoginTeamVerifyFragment extends Fragment {
                 if (!response.isSuccessful()) {
                     String errorMessage = "Check SMS verification REST Error: ";
                     LogHelper.serverError(TAG, errorMessage, response.code(), response.message());
+                    showSpinner(false);
                     AlertHelper.showNetworkAlert(getActivity());
                     return;
                 }
@@ -190,7 +189,7 @@ public class LoginTeamVerifyFragment extends Fragment {
                 if (GlobalConstants.SMS_VERIFY_APPROVED.equals(response.body())) {
                     getTeamMember();
                 } else {
-                    spinner.setVisibility(View.GONE);
+                    showSpinner(false);
                     AlertHelper.showAlert(getActivity(), "Validation Error",
                             "Please try again and check the verification code sent in a text message.");
                 }
@@ -200,7 +199,7 @@ public class LoginTeamVerifyFragment extends Fragment {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 String errorMessage = "Check SMS Verification Error:" + t.getMessage();
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                spinner.setVisibility(View.GONE);
+                showSpinner(false);
                 AlertHelper.showNetworkAlert(getActivity());
             }
         });
@@ -212,7 +211,7 @@ public class LoginTeamVerifyFragment extends Fragment {
         call.enqueue(new Callback<TeamMemberModel>() {
             @Override
             public void onResponse(@NonNull Call<TeamMemberModel> call, @NonNull Response<TeamMemberModel> response) {
-                spinner.setVisibility(View.GONE);
+                showSpinner(false);
                 hideKeyboard();
 
                 if (!response.isSuccessful()) {
@@ -236,7 +235,7 @@ public class LoginTeamVerifyFragment extends Fragment {
                     switch (status) {
                         case GlobalConstants.PENDING:
                             AlertHelper.showAlert(getContext(), statusTitle, statusMessage);
-                            getActivity().onBackPressed();;
+                            getActivity().onBackPressed();
                             break;
 
                         case GlobalConstants.DENIED:
@@ -291,7 +290,7 @@ public class LoginTeamVerifyFragment extends Fragment {
             public void onFailure(@NonNull Call<TeamMemberModel> call, @NonNull Throwable t) {
                 String errorMessage = "Get team member network ERROR:\n" + t.getMessage();
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                spinner.setVisibility(View.GONE);
+                showSpinner(false);
                 AlertHelper.showNetworkAlert(getActivity());
             }
         });
@@ -348,6 +347,18 @@ public class LoginTeamVerifyFragment extends Fragment {
 
     private void hideKeyboard() {
         imm.hideSoftInputFromWindow(editTextVerificationInput.getWindowToken(), 0);
+    }
+
+    private void showSpinner(boolean show) {
+        if (show) {
+            spinner.setVisibility(View.VISIBLE);
+            buttonCancel.setEnabled(false);
+            buttonCancel.setVisibility(View.GONE);
+        } else {
+            spinner.setVisibility(View.GONE);
+            buttonCancel.setEnabled(true);
+            buttonCancel.setVisibility(View.VISIBLE);
+        }
     }
 
 }

@@ -49,9 +49,9 @@ import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
-import com.jayurewards.tablet.models.TeamMembers.TeamMemberModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
+import com.jayurewards.tablet.screens.popups.PointConvertPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
 import java.text.NumberFormat;
@@ -86,6 +86,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private MaterialButton buttonOptionsMenu;
     private MaterialButton buttonLockScreen;
     private MaterialButton buttonUpdatePoints;
+    private MaterialButton buttonPointConvert;
     private ConstraintLayout optionsMenuBkgDark;
 
     // Keypad
@@ -133,9 +134,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private int teamId;
 
     private ArrayList<OffersModel> offers = new ArrayList<>();
-
-    private TeamMemberModel teamMemberModel;
-
+    private CountryCodePicker ccp;
     private SharedPreferences sp;
     private CountDownTimer timer;
     private boolean screenLocked = false;
@@ -171,6 +170,7 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
+        buttonPointConvert = findViewById(R.id.buttonUserKeypadPointConverter);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         companyNameContainer = findViewById(R.id.layoutUserKeypadCompany);
         teamNameContainer = findViewById(R.id.layoutUserKeypadTeamName);
@@ -202,7 +202,7 @@ public class UserKeypadActivity extends AppCompatActivity
         phoneNumber.addTextChangedListener(textWatcher);
         phoneNumber.setEnabled(false);
 
-        CountryCodePicker ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
+        ccp = findViewById(R.id.ccpUserKeypadPhoneNumber);
         ccp.registerCarrierNumberEditText(phoneNumber);
         ccp.setPhoneNumberValidityChangeListener(this::enablePostSubmit);
 
@@ -242,6 +242,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
+        buttonPointConvert.setEnabled(false);
         signOutButton.setEnabled(false);
         ptsResponseButton.setEnabled(false);
         optionsMenuBkgDark.setEnabled(false);
@@ -249,7 +250,7 @@ public class UserKeypadActivity extends AppCompatActivity
         // Blur keypad background
         float radius = 5f;
         View decorView = getWindow().getDecorView();
-        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        ViewGroup rootView = decorView.findViewById(android.R.id.content);
         Drawable windowBackground = decorView.getBackground();
         BlurView blurView = findViewById(R.id.layoutUserKeypadContainer);
         blurView.setupWith(rootView)
@@ -329,9 +330,20 @@ public class UserKeypadActivity extends AppCompatActivity
 
                 if (shopList != null && shopList.size() >= 1) {
                     shop = shopList.get(0);
+
+                    try {
+                        ccp.setCountryForPhoneCode(Integer.parseInt(shop.getCountryCode()));
+                    } catch (Throwable t) {
+                        String errorMessage = "Convert Country code to int error";
+                        LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
+                        spinner.setVisibility(View.GONE);
+                        AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+                    }
+
                     companyTextView.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
                     getBusinessOffers(shop.getStoreId());
+
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
                     LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
@@ -392,9 +404,9 @@ public class UserKeypadActivity extends AppCompatActivity
                 specials.sort((o1, o2) -> types.indexOf(o1.getType()) - types.indexOf(o2.getType()));
 
                 ArrayList<OffersModel> of = new ArrayList<>();
-                of.add(signUp);
-                of.addAll(rewards);
-                of.addAll(specials);
+                if (signUp.getOfferId() != 0) of.add(signUp);
+                if (rewards.size() >= 1) of.addAll(rewards);
+                if (specials.size() >= 1) of.addAll(specials);
 
                 startRecyclerView(of);
                 spinner.setVisibility(View.GONE);
@@ -502,6 +514,16 @@ public class UserKeypadActivity extends AppCompatActivity
             args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
             popup.setArguments(args);
             popup.show(getSupportFragmentManager(), "update_points_popup");
+        });
+
+        buttonPointConvert.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+            PointConvertPopup popup = new PointConvertPopup();
+//            Bundle args = new Bundle();
+//            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
+//            args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
+//            popup.setArguments(args);
+            popup.show(getSupportFragmentManager(), "point_convert_popup");
         });
 
         optionsPortalBtn.setOnClickListener(v -> {
@@ -691,8 +713,6 @@ public class UserKeypadActivity extends AppCompatActivity
     private void checkForEmptyField() {
         String phone = phoneNumber.getText().toString();
         deleteButton.setEnabled(phone.length() >= 1);
-        boolean enableSubmit = phone.length() > 6;
-        enablePostSubmit(enableSubmit);
     }
 
     private void keypadButtonInput(String number) {
@@ -757,6 +777,7 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuContainer.startAnimation(animation);
         buttonLockScreen.setEnabled(true);
         buttonUpdatePoints.setEnabled(true);
+        buttonPointConvert.setEnabled(true);
         signOutButton.setEnabled(true);
         checkTeamMember();
 
@@ -773,6 +794,7 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuContainer.setVisibility(View.GONE);
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
+        buttonPointConvert.setEnabled(false);
         signOutButton.setEnabled(false);
         goTeamLoginBtn.setEnabled(false);
         goTeamPageBtn.setEnabled(false);
@@ -851,6 +873,7 @@ public class UserKeypadActivity extends AppCompatActivity
         if (isLocked) {
             screenLocked = true;
             buttonUpdatePoints.setVisibility(View.GONE);
+            buttonPointConvert.setVisibility(View.GONE);
             optionsPortalBtn.setVisibility(View.GONE);
 
             buttonLockScreen.setText(R.string.unlock_screen);
@@ -858,6 +881,7 @@ public class UserKeypadActivity extends AppCompatActivity
         } else {
             screenLocked = false;
             buttonUpdatePoints.setVisibility(View.VISIBLE);
+            buttonPointConvert.setVisibility(View.VISIBLE);
             optionsPortalBtn.setVisibility(View.VISIBLE);
 
             buttonLockScreen.setText(R.string.lock_screen);
