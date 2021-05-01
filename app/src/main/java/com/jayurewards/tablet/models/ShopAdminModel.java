@@ -1,12 +1,9 @@
 package com.jayurewards.tablet.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ShopAdminModel implements Parcelable {
+public class ShopAdminModel {
 
     @SerializedName("store_id")
     @Expose
@@ -24,53 +21,9 @@ public class ShopAdminModel implements Parcelable {
     @Expose
     private int standardPoints;
 
-
-
     @SerializedName("std_pt_timeout")
     @Expose
     private int standardPtTimeout;
-
-    public ShopAdminModel(int storeId, String company, String countryCode, int standardPoints, int standardPtTimeout) {
-        this.storeId = storeId;
-        this.company = company;
-        this.countryCode = countryCode;
-        this.standardPoints = standardPoints;
-        this.standardPtTimeout = standardPtTimeout;
-    }
-
-    protected ShopAdminModel(Parcel in) {
-        storeId = in.readInt();
-        company = in.readString();
-        countryCode = in.readString();
-        standardPoints = in.readInt();
-        standardPtTimeout = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(storeId);
-        dest.writeString(company);
-        dest.writeString(countryCode);
-        dest.writeInt(standardPoints);
-        dest.writeInt(standardPtTimeout);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<ShopAdminModel> CREATOR = new Creator<ShopAdminModel>() {
-        @Override
-        public ShopAdminModel createFromParcel(Parcel in) {
-            return new ShopAdminModel(in);
-        }
-
-        @Override
-        public ShopAdminModel[] newArray(int size) {
-            return new ShopAdminModel[size];
-        }
-    };
 
     public int getStoreId() {
         return storeId;
@@ -123,5 +76,3 @@ public class ShopAdminModel implements Parcelable {
                 '}';
     }
 }
-
-

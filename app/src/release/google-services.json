@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "754440637669",
+    "firebase_url": "https://jayu-8f063.firebaseio.com",
+    "project_id": "jayu-8f063",
+    "storage_bucket": "jayu-8f063.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754440637669:android:8c50afaccffe3582",
+        "android_client_info": {
+          "package_name": "com.jayurewards.jayu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754440637669-09pp0ima7dtom2rvo97jhmu30eqc6ibv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jayurewards.jayu",
+            "certificate_hash": "7e0f6855583f3883e64677010019d4e3fd60e88b"
+          }
+        },
+        {
+          "client_id": "754440637669-pkjjt49u52u1a1303asrhj74f6luefkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jayurewards.jayu",
+            "certificate_hash": "fc788c2494f494849371995bcbf7059f655c0adf"
+          }
+        },
+        {
+          "client_id": "754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6SxMqd6sEF6oYKP2pqxr2CLD3adar3og"
+        },
+        {
+          "current_key": "AIzaSyBcbHwudcZHMkac4iDLwIeia4TyChoWCpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754440637669-319o6if7o6g7ohinckedd83imh0qv8av.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jayurewards.Jayu",
+                "app_store_id": "1460541522"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754440637669:android:c2a4957a8b5fae6255980c",
+        "android_client_info": {
+          "package_name": "com.jayurewards.tablet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6SxMqd6sEF6oYKP2pqxr2CLD3adar3og"
+        },
+        {
+          "current_key": "AIzaSyBcbHwudcZHMkac4iDLwIeia4TyChoWCpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754440637669-1hqpc17bljv653a591pmk1n1t2q5tche.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "754440637669-319o6if7o6g7ohinckedd83imh0qv8av.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jayurewards.Jayu",
+                "app_store_id": "1460541522"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
