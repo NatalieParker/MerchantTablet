@@ -16,6 +16,7 @@ public class GlobalConstants {
     public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
     public static final String STORE_ID = "storeId";
+    public static final String COUNTRY_CODE = "countryCode";
     public static final String MERCHANT_ID = "merchantId";
     public static final String MERCHANT_FIREBASE_UID = "firebaseUid";
     public static final String STRIPE_ID = "stripeId";
@@ -34,6 +35,11 @@ public class GlobalConstants {
     public static final String ADMIN_LEVEL = "adminLevel";
     public static final String PIN_CODE = "pin_code";
     public static final String POINT_AMOUNT = "pointAmount";
+    public static final String PT_CONVERT_AMOUNT = "pointConvertAmount";
+    public static final String PT_CONVERT_POINTS = "pointConvertPoints";
+    public static final String PT_CONVERT_ACTIVATED = "pointConvertActivated";
+    public static final String ENTERED_PHONE = "enteredPhone";
+
 
     // MySQL date formats
     public static final String MYSQL_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";

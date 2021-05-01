@@ -84,8 +84,12 @@
     <string name="verification_code">Verification code</string>
     <string name="verify">Verify</string>
     <string name="point_converter">Point converter</string>
-    <string name="pts_convert_popup_desc">Calculate the amount of points to give customers. \nWhen activated enter an amount before giving points.</string>
+    <string name="pts_convert_popup_desc">Calculate the amount of points to give each customer. \nWhen activated enter the amount before giving points.</string>
     <string name="base_amount">Base amount</string>
     <string name="activate_converter">Activate converter</string>
-    <string name="pts_convert_popup_disclaimer">Customers get ## points for every ### they spend.</string>
+    <string name="pts_convert_popup_disclaimer">Customers get 0 points for every 0 dollars.</string>
+    <string name="next">Next</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="enter_pts_popup_desc">0 points to the customer</string>
+    <string name="amount">Amount</string>
 </resources>

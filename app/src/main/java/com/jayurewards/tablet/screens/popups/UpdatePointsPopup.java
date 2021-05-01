@@ -22,6 +22,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
+import com.jayurewards.tablet.helpers.GlobalConstants;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -52,11 +53,13 @@ public class UpdatePointsPopup extends DialogFragment {
 
         setCancelable(false);
 
-        ptsTextInput.getEditText().addTextChangedListener(textWatcher);
+        if (ptsTextInput.getEditText() != null) {
+            ptsTextInput.getEditText().addTextChangedListener(textWatcher);
+        }
 
         if (getArguments() != null) {
-            int defaultPoints = getArguments().getInt("pointAmount");
-            adminLevel = getArguments().getInt("adminLevel");
+            int defaultPoints = getArguments().getInt(GlobalConstants.POINT_AMOUNT);
+            adminLevel = getArguments().getInt(GlobalConstants.ADMIN_LEVEL);
 
             String ptsAmount = defaultPoints + " points per customer";
             if (defaultPoints == 1) {
@@ -137,6 +140,7 @@ public class UpdatePointsPopup extends DialogFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
+            if (ptsTextInput.getEditText() == null) return;
 
             ptsTextInput.getEditText().removeTextChangedListener(this);
             String numberString = ptsTextInput.getEditText().getText().toString();
@@ -170,6 +174,8 @@ public class UpdatePointsPopup extends DialogFragment {
     }
 
     private void enableEmailSubmit(boolean enabled) {
+        if (getActivity() == null) return;
+
         if (!enabled) {
             updateBtn.setBackgroundTintList(ColorStateList.valueOf(getActivity().getColor(R.color.colorPrimaryLight)));
             updateBtn.setEnabled(false);

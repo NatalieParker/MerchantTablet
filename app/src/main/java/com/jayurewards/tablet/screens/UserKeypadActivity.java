@@ -50,6 +50,7 @@ import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
+import com.jayurewards.tablet.screens.popups.EnterAmountPopup;
 import com.jayurewards.tablet.screens.popups.LockScreenPopup;
 import com.jayurewards.tablet.screens.popups.PointConvertPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
@@ -70,7 +71,9 @@ import retrofit2.Response;
 
 public class UserKeypadActivity extends AppCompatActivity
         implements UpdatePointsPopup.UpdatePtsPopupInterface,
-        LockScreenPopup.LockScreenInterface {
+        LockScreenPopup.LockScreenInterface,
+        PointConvertPopup.PointConvertInterface,
+        EnterAmountPopup.EnterAmountInterface {
 
     private static final String TAG = "KeypadScreen";
 
@@ -138,6 +141,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private SharedPreferences sp;
     private CountDownTimer timer;
     private boolean screenLocked = false;
+    private boolean converterActive;
     private long lastClickTime = 0;
 
 
@@ -220,6 +224,13 @@ public class UserKeypadActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        converterActive = sp.getBoolean(GlobalConstants.PT_CONVERT_ACTIVATED, false);
+        if (converterActive) {
+            enterButton.setText(R.string.next);
+        } else {
+            enterButton.setText(R.string.submit);
+        }
+
         checkTeamMember();
     }
 
@@ -448,9 +459,9 @@ public class UserKeypadActivity extends AppCompatActivity
             textFieldInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
 
             new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
-                        phoneNumber.clearFocus();
-                        phoneNumber.setEnabled(false);
-                    }, 10);
+                phoneNumber.clearFocus();
+                phoneNumber.setEnabled(false);
+            }, 10);
         });
 
         enterButton.setOnClickListener(v -> {
@@ -460,11 +471,11 @@ public class UserKeypadActivity extends AppCompatActivity
 
             lastClickTime = SystemClock.elapsedRealtime();
 
-            if (shop == null) return;
-
-            spinner.setVisibility(View.VISIBLE);
-            enablePostSubmit(false);
-            giveUserPoints();
+            if (converterActive) {
+                openConvertAmount();
+            } else {
+                giveUserPoints();
+            }
         });
 
         signOutButton.setOnClickListener(v -> {
@@ -518,11 +529,18 @@ public class UserKeypadActivity extends AppCompatActivity
 
         buttonPointConvert.setOnClickListener(v -> {
             closeKeypadOptionsMenu();
+
+            long points = sp.getLong(GlobalConstants.PT_CONVERT_POINTS, 0);
+            long amount = sp.getLong(GlobalConstants.PT_CONVERT_AMOUNT, 0);
+            boolean active = sp.getBoolean(GlobalConstants.PT_CONVERT_ACTIVATED, false);
+
             PointConvertPopup popup = new PointConvertPopup();
-//            Bundle args = new Bundle();
-//            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
-//            args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
-//            popup.setArguments(args);
+            Bundle args = new Bundle();
+            args.putString(GlobalConstants.COUNTRY_CODE, shop.getCountryCode());
+            args.putLong(GlobalConstants.PT_CONVERT_POINTS, points);
+            args.putLong(GlobalConstants.PT_CONVERT_AMOUNT, amount);
+            args.putBoolean(GlobalConstants.PT_CONVERT_ACTIVATED, active);
+            popup.setArguments(args);
             popup.show(getSupportFragmentManager(), "point_convert_popup");
         });
 
@@ -559,7 +577,27 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuBkgDark.setOnClickListener(v -> closeKeypadOptionsMenu());
     }
 
+    private void openConvertAmount() {
+        String phoneEntered = phoneNumber.getText().toString();
+        long points = sp.getLong(GlobalConstants.PT_CONVERT_POINTS, 0);
+        long amount = sp.getLong(GlobalConstants.PT_CONVERT_AMOUNT, 0);
+
+        EnterAmountPopup popup = new EnterAmountPopup();
+        Bundle args = new Bundle();
+        args.putString(GlobalConstants.COUNTRY_CODE, shop.getCountryCode());
+        args.putLong(GlobalConstants.PT_CONVERT_POINTS, points);
+        args.putLong(GlobalConstants.PT_CONVERT_AMOUNT, amount);
+        args.putString(GlobalConstants.ENTERED_PHONE, phoneEntered);
+        popup.setArguments(args);
+        popup.show(getSupportFragmentManager(), "enter_amount_popup");
+    }
+
     private void giveUserPoints() {
+        if (shop == null) return;
+
+        spinner.setVisibility(View.VISIBLE);
+        enablePostSubmit(false);
+
         String company = shop.getCompany();
         int storeId = shop.getStoreId();
 
@@ -650,7 +688,7 @@ public class UserKeypadActivity extends AppCompatActivity
                                 .load(result.getThumbnail())
                                 .fallback(R.drawable.ribbon_medal_img)
                                 .circleCrop()
-                                .override(ptsResponseProfilePic.getWidth(),ptsResponseProfilePic.getHeight())
+                                .override(ptsResponseProfilePic.getWidth(), ptsResponseProfilePic.getHeight())
                                 .into(ptsResponseProfilePic);
 
                         ptsResponseName.setText(result.getName());
@@ -670,7 +708,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 companyTextView.setText(shop.getCompany());
 
                 spinner.setVisibility(View.GONE);
-                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
             }
 
             @Override
@@ -679,7 +717,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 spinner.setVisibility(View.GONE);
-                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0,0), 2000);
+                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
             }
         });
     }
@@ -696,8 +734,8 @@ public class UserKeypadActivity extends AppCompatActivity
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-           // Changing edit text hint size
-            if(s.length() == 0) {
+            // Changing edit text hint size
+            if (s.length() == 0) {
                 phoneNumber.setTextSize(23);
             } else {
                 phoneNumber.setTextSize(40);
@@ -748,7 +786,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         double imagePercent = 0.25;
         if (screenHeight < 900) {
-           imagePercent = 0.20;
+            imagePercent = 0.20;
             ptsResponseLeftConfetti.getLayoutParams().width = 70;
             ptsResponseRightConfetti.getLayoutParams().width = 70;
             ptsResponseQrCode.getLayoutParams().width = 120;
@@ -825,7 +863,7 @@ public class UserKeypadActivity extends AppCompatActivity
         containerKeys.setEnabled(true);
     }
 
-    private void countdownTimer () {
+    private void countdownTimer() {
         timer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long l) {
@@ -875,6 +913,7 @@ public class UserKeypadActivity extends AppCompatActivity
             buttonUpdatePoints.setVisibility(View.GONE);
             buttonPointConvert.setVisibility(View.GONE);
             optionsPortalBtn.setVisibility(View.GONE);
+            buttonPointConvert.setVisibility(View.GONE);
 
             buttonLockScreen.setText(R.string.unlock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_unlock));
@@ -883,10 +922,26 @@ public class UserKeypadActivity extends AppCompatActivity
             buttonUpdatePoints.setVisibility(View.VISIBLE);
             buttonPointConvert.setVisibility(View.VISIBLE);
             optionsPortalBtn.setVisibility(View.VISIBLE);
+            buttonPointConvert.setVisibility(View.VISIBLE);
 
             buttonLockScreen.setText(R.string.lock_screen);
             buttonLockScreen.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_lock));
         }
     }
 
+    @Override
+    public void onPointConvertSubmit(boolean activated) {
+        converterActive = activated;
+        if (converterActive) {
+            enterButton.setText(R.string.next);
+        } else {
+            enterButton.setText(R.string.submit);
+        }
+    }
+
+    @Override
+    public void onEnterAmountSubmit(int points) {
+        pointAmount = points;
+        giveUserPoints();
+    }
 }

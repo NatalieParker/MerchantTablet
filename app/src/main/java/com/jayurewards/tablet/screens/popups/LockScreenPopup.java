@@ -152,6 +152,8 @@ public class LockScreenPopup extends DialogFragment {
     }
 
     private void enableEmailSubmit(boolean enabled) {
+        if (getActivity() == null) return;
+
         if (!enabled) {
             submitBtn.setBackgroundTintList(ColorStateList.valueOf(getActivity().getColor(R.color.colorPrimaryLight)));
             submitBtn.setEnabled(false);
