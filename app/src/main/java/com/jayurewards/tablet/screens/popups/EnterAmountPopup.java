@@ -168,12 +168,6 @@ public class EnterAmountPopup extends DialogFragment {
             pointString = "1 point";
         }
 
-        Log.i(TAG, "AMOUNT PASSED IN FUNCTION: " + amountDouble);
-        Log.i(TAG, "AMOUNT BASE: " + amountPassed);
-        Log.i(TAG, "AMOUNT PASSED / AMOUNT BASE: " + pointsDouble);
-        Log.i(TAG, "PASSED POINTS: " + pointsPassed);
-        Log.i(TAG, "PASSED POINTS * MULTIPLIER: " + pointsToGive);
-
         String description = "Give " + pointString + " to customer " + phonePassed + ".";
         desc.setText(description);
     }
