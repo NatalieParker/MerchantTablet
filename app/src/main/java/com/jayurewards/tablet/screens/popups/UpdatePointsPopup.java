@@ -58,7 +58,7 @@ public class UpdatePointsPopup extends DialogFragment {
         }
 
         if (getArguments() != null) {
-            long defaultPoints = getArguments().getInt(GlobalConstants.POINT_AMOUNT);
+            long defaultPoints = getArguments().getLong(GlobalConstants.POINT_AMOUNT);
             adminLevel = getArguments().getInt(GlobalConstants.ADMIN_LEVEL);
 
             String ptsAmount = defaultPoints + " points per customer";
