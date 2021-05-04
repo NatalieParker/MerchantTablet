@@ -32,7 +32,7 @@ public class EnterAmountPopup extends DialogFragment {
     private static final String TAG = "EnterAmountPopup";
 
     public interface EnterAmountInterface {
-        void onEnterAmountSubmit(int points);
+        void onEnterAmountSubmit(long points);
     }
 
     private EnterAmountInterface listener;
@@ -45,7 +45,7 @@ public class EnterAmountPopup extends DialogFragment {
     private long pointsPassed;
     private long amountPassed;
 
-    private int pointsToGive;
+    private long pointsToGive;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -161,12 +161,18 @@ public class EnterAmountPopup extends DialogFragment {
 
     private void calculatePoints(double amountDouble) {
         double pointsDouble = amountDouble / amountPassed;
-        pointsToGive = (int) pointsDouble * (int) pointsPassed;
+        pointsToGive = (long) pointsDouble * (long) pointsPassed;
 
         String pointString = pointsToGive + " points";
         if (pointsToGive == 1) {
             pointString = "1 point";
         }
+
+        Log.i(TAG, "AMOUNT PASSED IN FUNCTION: " + amountDouble);
+        Log.i(TAG, "AMOUNT BASE: " + amountPassed);
+        Log.i(TAG, "AMOUNT PASSED / AMOUNT BASE: " + pointsDouble);
+        Log.i(TAG, "PASSED POINTS: " + pointsPassed);
+        Log.i(TAG, "PASSED POINTS * MULTIPLIER: " + pointsToGive);
 
         String description = "Give " + pointString + " to customer " + phonePassed + ".";
         desc.setText(description);

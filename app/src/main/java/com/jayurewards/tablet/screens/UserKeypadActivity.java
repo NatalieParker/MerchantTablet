@@ -132,7 +132,7 @@ public class UserKeypadActivity extends AppCompatActivity
     // Properties
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
     private ShopAdminModel shop;
-    private int pointAmount;
+    private long pointAmount;
     private int adminLevel;
     private int teamId;
 
@@ -521,7 +521,7 @@ public class UserKeypadActivity extends AppCompatActivity
             closeKeypadOptionsMenu();
             UpdatePointsPopup popup = new UpdatePointsPopup();
             Bundle args = new Bundle();
-            args.putInt(GlobalConstants.POINT_AMOUNT, pointAmount);
+            args.putLong(GlobalConstants.POINT_AMOUNT, pointAmount);
             args.putInt(GlobalConstants.ADMIN_LEVEL, adminLevel);
             popup.setArguments(args);
             popup.show(getSupportFragmentManager(), "update_points_popup");
@@ -864,7 +864,7 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     private void countdownTimer() {
-        timer = new CountDownTimer(30000, 1000) {
+        timer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
 
@@ -940,7 +940,7 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEnterAmountSubmit(int points) {
+    public void onEnterAmountSubmit(long points) {
         pointAmount = points;
         giveUserPoints();
     }

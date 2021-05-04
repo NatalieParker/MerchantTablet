@@ -6,7 +6,7 @@ public class GivePointsRequest {
     private final String phone;
     private final int storeId;
     private final String company;
-    private final int points;
+    private final long points;
     private final String method;
     private final String type;
     private final int teamId;
@@ -15,7 +15,7 @@ public class GivePointsRequest {
     private final String day;
     private final String time;
 
-    public GivePointsRequest(String countryCode, String phone, int storeId, String company, int points, String method, String type, int teamId, int adminLevel, int pointTimeout, String day, String time) {
+    public GivePointsRequest(String countryCode, String phone, int storeId, String company, long points, String method, String type, int teamId, int adminLevel, int pointTimeout, String day, String time) {
         this.countryCode = countryCode;
         this.phone = phone;
         this.storeId = storeId;
