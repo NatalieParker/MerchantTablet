@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
+        android:hardwareAccelerated="true"
         android:theme="@style/Theme.MerchantTablet">
 
         <activity
