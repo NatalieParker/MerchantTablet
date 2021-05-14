@@ -72,15 +72,26 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerUserKeypadViewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineUserKeypadContainerSplit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.viewpager2.widget.ViewPager2>
+
 <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/layoutUserKeypadLeftContainer2"-->
+<!--        android:id="@+id/layoutUserKeypadViewPager"-->
 <!--        android:layout_width="0dp"-->
 <!--        android:layout_height="0dp"-->
-<!--        android:background="@color/colorPrimary"-->
 <!--        app:layout_constraintBottom_toBottomOf="parent"-->
 <!--        app:layout_constraintEnd_toStartOf="@id/guidelineUserKeypadContainerSplit"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
+<!--        app:layout_constraintTop_toTopOf="parent" >-->
 
 <!--        <TextView-->
 <!--            android:id="@+id/textViewUserKeypadTryJayuWith"-->
