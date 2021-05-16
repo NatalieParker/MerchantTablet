@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
@@ -778,6 +779,11 @@ public class UserKeypadActivity extends AppCompatActivity
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
         rv.setAdapter(adapter);
+    }
+
+    private void startViewPager() {
+        ViewPager2 vp = findViewById(R.id.viewPagerUserKeypadViewPager);
+        ViewPager2UserKeypad adapter;
     }
 
     private void generateViewSizes() {
