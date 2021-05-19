@@ -153,7 +153,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         hideSystemUI();
 
-        nsv = findViewById(R.id.scrollViewUserKeypadCards);
+//        nsv = findViewById(R.id.scrollViewUserKeypadCards);
         phoneNumber = findViewById(R.id.editTextUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
@@ -774,11 +774,11 @@ public class UserKeypadActivity extends AppCompatActivity
      * Helper functions
      */
     private void startRecyclerView(ArrayList<OffersModel> offersList) {
-        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
-        RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
-        LinearLayoutManager lm = new LinearLayoutManager(this);
-        rv.setLayoutManager(lm);
-        rv.setAdapter(adapter);
+//        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
+//        RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
+//        LinearLayoutManager lm = new LinearLayoutManager(this);
+//        rv.setLayoutManager(lm);
+//        rv.setAdapter(adapter);
     }
 
     private void startViewPager() {
