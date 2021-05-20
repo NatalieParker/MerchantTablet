@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -37,10 +38,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.util.Strings;
 import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
+import com.jayurewards.tablet.ViewPagerCard2Fragment;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
@@ -220,6 +223,12 @@ public class UserKeypadActivity extends AppCompatActivity
         prepareViews();
 
         startRecyclerView(offers);
+        startViewPager();
+
+        ViewPagerCard2Fragment recyclerFragment = new ViewPagerCard2Fragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("offers", offers);
+        recyclerFragment.setArguments(bundle);
     }
 
     @Override
@@ -355,6 +364,7 @@ public class UserKeypadActivity extends AppCompatActivity
                     companyTextView.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
                     getBusinessOffers(shop.getStoreId());
+                    getTabletFeeds(shop.getStoreId());
 
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
@@ -783,7 +793,8 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private void startViewPager() {
         ViewPager2 vp = findViewById(R.id.viewPagerUserKeypadViewPager);
-        ViewPager2UserKeypad adapter;
+        VPA_UserKeypad adapter = new VPA_UserKeypad(this);
+        vp.setAdapter(adapter);
     }
 
     private void generateViewSizes() {
@@ -949,5 +960,26 @@ public class UserKeypadActivity extends AppCompatActivity
     public void onEnterAmountSubmit(long points) {
         pointAmount = points;
         giveUserPoints();
+    }
+
+    private void getTabletFeeds(int storeId) {
+        Call<String[]> call = RetrofitClient.getInstance().getRestShops().getTabletFeeds(storeId);
+        call.enqueue(new Callback<String[]>() {
+            @Override
+            public void onResponse(Call<String[]> call, Response<String[]> response) {
+                String[] strings = response.body();
+                for (int i = 0; i < strings.length; i++) {
+
+//                    String list = String.join(", ", strings);
+                    Log.i("TAG", "IMAGE URL: " + strings[i]);
+                    Log.i(TAG, "STORE ID: " + storeId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String[]> call, Throwable t) {
+                Log.i("TAG", "NO RESPONSE: " + t);
+            }
+        });
     }
 }

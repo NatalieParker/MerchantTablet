@@ -1,5 +1,6 @@
 package com.jayurewards.tablet.networking;
 
+import com.google.android.gms.common.util.Strings;
 import com.jayurewards.tablet.models.ShopAdminModel;
 
 import java.util.ArrayList;
@@ -13,5 +14,7 @@ public interface RestShops {
     @GET("/merchant-app/get-shops/{merchantId}")
     Call<ArrayList<ShopAdminModel>> getMerchantShops(@Path("merchantId") int merchantId);
 
+    @GET("/merchant-tablet/feed/{storeId}")
+    Call<String[]> getTabletFeeds(@Path("storeId") int storeId);
 
 }
