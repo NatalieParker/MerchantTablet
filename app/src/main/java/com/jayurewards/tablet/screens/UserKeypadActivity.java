@@ -795,6 +795,7 @@ public class UserKeypadActivity extends AppCompatActivity
         ViewPager2 vp = findViewById(R.id.viewPagerUserKeypadViewPager);
         VPA_UserKeypad adapter = new VPA_UserKeypad(this);
         vp.setAdapter(adapter);
+        vp.setCurrentItem(1, true);
     }
 
     private void generateViewSizes() {

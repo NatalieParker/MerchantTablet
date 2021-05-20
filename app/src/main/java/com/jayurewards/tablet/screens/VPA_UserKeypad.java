@@ -36,6 +36,8 @@ public class VPA_UserKeypad extends FragmentStateAdapter {
             default:
                 return new ViewPagerCard2Fragment();
         }
+
+        
     }
 
     @Override
