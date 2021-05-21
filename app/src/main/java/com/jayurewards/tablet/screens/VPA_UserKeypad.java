@@ -12,23 +12,27 @@ import com.jayurewards.tablet.UKOffersListFragment;
 
 public class VPA_UserKeypad extends FragmentStateAdapter {
 
+    private static final String TAG = "VPA_UserKeypad";
     int storeId;
+    String[] strings;
 
-    public VPA_UserKeypad(@NonNull FragmentActivity fragmentActivity, int storeId) {
+    public VPA_UserKeypad(@NonNull FragmentActivity fragmentActivity, int storeId, String[] strings) {
         super(fragmentActivity);
 
         this.storeId = storeId;
+        this.strings = strings;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Log.i("TAG", "\n\n\n IN FRAGEMENT ADAPTER: " + position);
+        Log.i(TAG, "\n\n\n IN FRAGEMENT ADAPTER: " + position);
+        Log.i(TAG, "STRINGS: " + strings);
         switch (position) {
             case 0:
                 return new UKFeedFragment();
             default:
-                return new UKOffersListFragment().newInstance(storeId);
+                return UKOffersListFragment.newInstance(storeId);
         }
 
 

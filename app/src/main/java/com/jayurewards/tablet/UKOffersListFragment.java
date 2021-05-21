@@ -33,37 +33,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UKOffersListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UKOffersListFragment extends Fragment {
+    private static final String TAG = "UkOffersListFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private int storeId;
-    private String mParam2;
-
     private UserKeypadActivity uka;
     private ArrayList<OffersModel> offers = new ArrayList<>();
     private RecyclerView rv;
-    private NestedScrollView scrollView;
 
-    public UKOffersListFragment() {
-        // Required empty public constructor
-    }
+    // Required empty public constructor
+    public UKOffersListFragment() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment UKOffersListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static UKOffersListFragment newInstance(int storeId) {
         UKOffersListFragment fragment = new UKOffersListFragment();
         Bundle args = new Bundle();
@@ -77,17 +57,13 @@ public class UKOffersListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             storeId = getArguments().getInt(GlobalConstants.STORE_ID);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_uk_offers_list, container, false);
         rv = view.findViewById(R.id.recyclerViewUserKeypadViewPagerCard2Rewards);
-        scrollView = view.findViewById(R.id.scrollViewUserKeypadViewPagerCard2);
         uka = (UserKeypadActivity) getActivity();
 
         getBusinessOffers(storeId);
@@ -149,7 +125,7 @@ public class UKOffersListFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Throwable t) {
                 String errorMessage = "Get Business Offers Error";
-                LogHelper.errorReport("TAG", errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 uka.hideSpinner();
                 AlertHelper.showNetworkAlert(getActivity());
             }
@@ -157,9 +133,6 @@ public class UKOffersListFragment extends Fragment {
     }
 
     private void startRecyclerView(ArrayList<OffersModel> offersList) {
-
-        Log.i("TAG", "\n\n ACTIVITY IS NULL " + getActivity());
-
         RA_UserKeypad adapter = new RA_UserKeypad(offersList, getActivity());
         LinearLayoutManager lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(lm);

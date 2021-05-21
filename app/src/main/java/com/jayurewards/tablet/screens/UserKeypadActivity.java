@@ -128,6 +128,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private TextView teamMemberTextView;
     private EditText phoneNumber;
     private ConstraintLayout spinner;
+    private ViewPager2 vp;
 
     // Properties
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
@@ -195,6 +196,7 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseJayuUrl = findViewById(R.id.textUserKeypadPtsResponseUrl);
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
+        vp = findViewById(R.id.viewPagerUserKeypadViewPager);
 
         sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         adminLevel = sp.getInt(GlobalConstants.ADMIN_LEVEL, 1);
@@ -219,7 +221,6 @@ public class UserKeypadActivity extends AppCompatActivity
         prepareViews();
 
         startRecyclerView(offers);
-        startViewPager();
     }
 
     @Override
@@ -356,7 +357,6 @@ public class UserKeypadActivity extends AppCompatActivity
                     pointAmount = shop.getStandardPoints();
 //                    getBusinessOffers(shop.getStoreId());
                     getTabletFeeds(shop.getStoreId());
-
 
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
@@ -783,9 +783,8 @@ public class UserKeypadActivity extends AppCompatActivity
 //        rv.setAdapter(adapter);
     }
 
-    private void startViewPager() {
-        ViewPager2 vp = findViewById(R.id.viewPagerUserKeypadViewPager);
-        VPA_UserKeypad adapter = new VPA_UserKeypad(this, shop.getStoreId());
+    private void startViewPager(int storeId, String[] strings) {
+        VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
         vp.setCurrentItem(1, true);
     }
@@ -973,10 +972,15 @@ public class UserKeypadActivity extends AppCompatActivity
             public void onResponse(Call<String[]> call, Response<String[]> response) {
                 String[] strings = response.body();
                 for (int i = 0; i < strings.length; i++) {
+                    if (strings[i] != null) {
+//                      String list = String.join(", ", strings);
+                        Log.i("TAG", "IMAGE URL: " + strings[i]);
+                        Log.i(TAG, "STORE ID: " + storeId);
+                    } else {
 
-//                    String list = String.join(", ", strings);
-                    Log.i("TAG", "IMAGE URL: " + strings[i]);
-                    Log.i(TAG, "STORE ID: " + storeId);
+                    }
+
+                    startViewPager(shop.getStoreId(), strings);
                 }
             }
 
