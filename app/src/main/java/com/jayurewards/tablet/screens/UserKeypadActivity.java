@@ -6,12 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -38,12 +35,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.util.Strings;
 import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
-import com.jayurewards.tablet.ViewPagerCard2Fragment;
+import com.jayurewards.tablet.UKOffersListFragment;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
@@ -224,11 +220,6 @@ public class UserKeypadActivity extends AppCompatActivity
 
         startRecyclerView(offers);
         startViewPager();
-
-        ViewPagerCard2Fragment recyclerFragment = new ViewPagerCard2Fragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("offers", offers);
-        recyclerFragment.setArguments(bundle);
     }
 
     @Override
@@ -363,8 +354,9 @@ public class UserKeypadActivity extends AppCompatActivity
 
                     companyTextView.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
-                    getBusinessOffers(shop.getStoreId());
+//                    getBusinessOffers(shop.getStoreId());
                     getTabletFeeds(shop.getStoreId());
+
 
                 } else {
                     String errorMessage = "Get Merchant shops Server Error";
@@ -384,65 +376,65 @@ public class UserKeypadActivity extends AppCompatActivity
         });
     }
 
-    private void getBusinessOffers(int storeId) {
-        Call<ArrayList<OffersModel>> call = RetrofitClient.getInstance().getRestOffers().getBusinessOffers(storeId);
-        call.enqueue(new Callback<ArrayList<OffersModel>>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Response<ArrayList<OffersModel>> response) {
-                offers = response.body();
-
-                List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
-                ArrayList<OffersModel> rewards = new ArrayList<>();
-                ArrayList<OffersModel> specials = new ArrayList<>();
-                OffersModel signUp = new OffersModel();
-
-                for (int i = 0; i < offers.size(); i++) {
-                    OffersModel offer = offers.get(i);
-
-                    if (offer.getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
-                        rewards.add(offer);
-                    } else if (offer.getType().equals(GlobalConstants.OFFER_TYPE_SIGNUP)) {
-                        signUp = offer;
-                    } else {
-                        specials.add(offer);
-                    }
-
-                    if (offer.getStartDate() != null && !"".equals(offer.getStartDate())
-                            && offer.getEndDate() != null && !"".equals(offer.getEndDate())) {
-
-                        Date startDate = DateTimeHelper.parseDateStringToDate(offer.getStartDate());
-                        Date endDate = DateTimeHelper.parseDateStringToDate(offer.getEndDate());
-
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault());
-                        String startDateString = dateFormat.format(startDate);
-                        String endDateString = dateFormat.format(endDate);
-
-                        offers.get(i).setStartDate(startDateString);
-                        offers.get(i).setEndDate(endDateString);
-                    }
-                }
-
-                rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
-                specials.sort((o1, o2) -> types.indexOf(o1.getType()) - types.indexOf(o2.getType()));
-
-                ArrayList<OffersModel> of = new ArrayList<>();
-                if (signUp.getOfferId() != 0) of.add(signUp);
-                if (rewards.size() >= 1) of.addAll(rewards);
-                if (specials.size() >= 1) of.addAll(specials);
-
-                startRecyclerView(of);
-                spinner.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Throwable t) {
-                String errorMessage = "Get Business Offers Error";
-                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-                spinner.setVisibility(View.GONE);
-                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-            }
-        });
-    }
+//    private void getBusinessOffers(int storeId) {
+//        Call<ArrayList<OffersModel>> call = RetrofitClient.getInstance().getRestOffers().getBusinessOffers(storeId);
+//        call.enqueue(new Callback<ArrayList<OffersModel>>() {
+//            @Override
+//            public void onResponse(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Response<ArrayList<OffersModel>> response) {
+//                offers = response.body();
+//
+//                List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
+//                ArrayList<OffersModel> rewards = new ArrayList<>();
+//                ArrayList<OffersModel> specials = new ArrayList<>();
+//                OffersModel signUp = new OffersModel();
+//
+//                for (int i = 0; i < offers.size(); i++) {
+//                    OffersModel offer = offers.get(i);
+//
+//                    if (offer.getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
+//                        rewards.add(offer);
+//                    } else if (offer.getType().equals(GlobalConstants.OFFER_TYPE_SIGNUP)) {
+//                        signUp = offer;
+//                    } else {
+//                        specials.add(offer);
+//                    }
+//
+//                    if (offer.getStartDate() != null && !"".equals(offer.getStartDate())
+//                            && offer.getEndDate() != null && !"".equals(offer.getEndDate())) {
+//
+//                        Date startDate = DateTimeHelper.parseDateStringToDate(offer.getStartDate());
+//                        Date endDate = DateTimeHelper.parseDateStringToDate(offer.getEndDate());
+//
+//                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault());
+//                        String startDateString = dateFormat.format(startDate);
+//                        String endDateString = dateFormat.format(endDate);
+//
+//                        offers.get(i).setStartDate(startDateString);
+//                        offers.get(i).setEndDate(endDateString);
+//                    }
+//                }
+//
+//                rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
+//                specials.sort((o1, o2) -> types.indexOf(o1.getType()) - types.indexOf(o2.getType()));
+//
+//                ArrayList<OffersModel> of = new ArrayList<>();
+//                if (signUp.getOfferId() != 0) of.add(signUp);
+//                if (rewards.size() >= 1) of.addAll(rewards);
+//                if (specials.size() >= 1) of.addAll(specials);
+//
+//                startRecyclerView(of);
+//                spinner.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Throwable t) {
+//                String errorMessage = "Get Business Offers Error";
+//                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+//                spinner.setVisibility(View.GONE);
+//                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+//            }
+//        });
+//    }
 
 
     /**
@@ -793,9 +785,16 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private void startViewPager() {
         ViewPager2 vp = findViewById(R.id.viewPagerUserKeypadViewPager);
-        VPA_UserKeypad adapter = new VPA_UserKeypad(this);
+        VPA_UserKeypad adapter = new VPA_UserKeypad(this, shop.getStoreId());
         vp.setAdapter(adapter);
         vp.setCurrentItem(1, true);
+    }
+
+    private void viewPagerFragmentCalls() {
+        UKOffersListFragment viewpagerFragment = new UKOffersListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("offers", offers);
+        viewpagerFragment.setArguments(bundle);
     }
 
     private void generateViewSizes() {
@@ -838,7 +837,7 @@ public class UserKeypadActivity extends AppCompatActivity
         checkTeamMember();
 
         buttonOptionsMenu.setEnabled(false);
-        buttonOptionsMenu.setVisibility(View.GONE);
+        buttonOptionsMenu.setIconTint(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
         companyNameContainer.setVisibility(View.GONE);
         optionsMenuBkgDark.setVisibility(View.VISIBLE);
         optionsMenuBkgDark.setEnabled(true);
@@ -856,7 +855,7 @@ public class UserKeypadActivity extends AppCompatActivity
         goTeamPageBtn.setEnabled(false);
 
         buttonOptionsMenu.setEnabled(true);
-        buttonOptionsMenu.setVisibility(View.VISIBLE);
+        buttonOptionsMenu.setIconTint(ColorStateList.valueOf(getColor(R.color.white)));
         companyNameContainer.setVisibility(View.VISIBLE);
         optionsMenuBkgDark.setVisibility(View.GONE);
         optionsMenuBkgDark.setEnabled(false);
@@ -879,6 +878,10 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseButton.setEnabled(false);
         ptsResponseButton.setVisibility(View.GONE);
         containerKeys.setEnabled(true);
+    }
+
+    public void hideSpinner() {
+        spinner.setVisibility(View.GONE);
     }
 
     private void countdownTimer() {
