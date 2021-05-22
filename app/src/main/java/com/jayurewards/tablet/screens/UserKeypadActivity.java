@@ -220,7 +220,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         prepareViews();
 
-        startRecyclerView(offers);
+//        startRecyclerView(offers);
     }
 
     @Override
@@ -775,26 +775,25 @@ public class UserKeypadActivity extends AppCompatActivity
     /**
      * Helper functions
      */
-    private void startRecyclerView(ArrayList<OffersModel> offersList) {
+//    private void startRecyclerView(ArrayList<OffersModel> offersList) {
 //        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
 //        RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
 //        LinearLayoutManager lm = new LinearLayoutManager(this);
 //        rv.setLayoutManager(lm);
 //        rv.setAdapter(adapter);
-    }
+//    }
 
     private void startViewPager(int storeId, String[] strings) {
         VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
-        vp.setCurrentItem(1, true);
     }
 
-    private void viewPagerFragmentCalls() {
-        UKOffersListFragment viewpagerFragment = new UKOffersListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("offers", offers);
-        viewpagerFragment.setArguments(bundle);
-    }
+//    private void viewPagerFragmentCalls() {
+//        UKOffersListFragment viewpagerFragment = new UKOffersListFragment();
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("offers", offers);
+//        viewpagerFragment.setArguments(bundle);
+//    }
 
     private void generateViewSizes() {
         int screenWidth = getResources().getDisplayMetrics().widthPixels;

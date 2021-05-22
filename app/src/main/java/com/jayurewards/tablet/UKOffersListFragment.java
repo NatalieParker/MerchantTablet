@@ -36,7 +36,7 @@ import retrofit2.Response;
 public class UKOffersListFragment extends Fragment {
     private static final String TAG = "UkOffersListFragment";
 
-    private int storeId;
+    private int storeId;  // Passed
     private UserKeypadActivity uka;
     private ArrayList<OffersModel> offers = new ArrayList<>();
     private RecyclerView rv;
