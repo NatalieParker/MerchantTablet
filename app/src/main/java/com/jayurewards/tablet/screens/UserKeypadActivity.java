@@ -63,6 +63,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -138,13 +140,14 @@ public class UserKeypadActivity extends AppCompatActivity
     private int adminLevel;
     private int teamId;
 
-    private ArrayList<OffersModel> offers = new ArrayList<>();
     private CountryCodePicker ccp;
     private SharedPreferences sp;
     private CountDownTimer timer;
     private boolean screenLocked = false;
     private boolean converterActive;
     private long lastClickTime = 0;
+
+    private Timer refreshTimer;
 
 
     @Override
@@ -154,7 +157,6 @@ public class UserKeypadActivity extends AppCompatActivity
 
         hideSystemUI();
 
-//        nsv = findViewById(R.id.scrollViewUserKeypadCards);
         phoneNumber = findViewById(R.id.editTextUserKeypadInput);
         key1 = findViewById(R.id.buttonUserKeypadKey1);
         key2 = findViewById(R.id.buttonUserKeypadKey2);
@@ -220,8 +222,6 @@ public class UserKeypadActivity extends AppCompatActivity
         getMerchantShops();
 
         prepareViews();
-
-//        startRecyclerView(offers);
     }
 
     @Override
@@ -235,6 +235,20 @@ public class UserKeypadActivity extends AppCompatActivity
         }
 
         checkTeamMember();
+
+        refreshTimer = new Timer();
+        refreshTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+//                refreshNetworkCall();
+            }
+        }, 0, 4000);
+    }
+
+    @Override
+    public void onPause() {
+        refreshTimer.cancel();
+        super.onPause();
     }
 
     /**
@@ -356,7 +370,6 @@ public class UserKeypadActivity extends AppCompatActivity
 
                     companyTextView.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
-//                    getBusinessOffers(shop.getStoreId());
                     getTabletFeeds(shop.getStoreId());
 
                 } else {
@@ -377,66 +390,12 @@ public class UserKeypadActivity extends AppCompatActivity
         });
     }
 
-//    private void getBusinessOffers(int storeId) {
-//        Call<ArrayList<OffersModel>> call = RetrofitClient.getInstance().getRestOffers().getBusinessOffers(storeId);
-//        call.enqueue(new Callback<ArrayList<OffersModel>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Response<ArrayList<OffersModel>> response) {
-//                offers = response.body();
-//
-//                List<String> types = Arrays.asList(GlobalConstants.OFFER_TYPES_ARRAY);
-//                ArrayList<OffersModel> rewards = new ArrayList<>();
-//                ArrayList<OffersModel> specials = new ArrayList<>();
-//                OffersModel signUp = new OffersModel();
-//
-//                for (int i = 0; i < offers.size(); i++) {
-//                    OffersModel offer = offers.get(i);
-//
-//                    if (offer.getType().equals(GlobalConstants.OFFER_TYPE_GENERAL)) {
-//                        rewards.add(offer);
-//                    } else if (offer.getType().equals(GlobalConstants.OFFER_TYPE_SIGNUP)) {
-//                        signUp = offer;
-//                    } else {
-//                        specials.add(offer);
-//                    }
-//
-//                    if (offer.getStartDate() != null && !"".equals(offer.getStartDate())
-//                            && offer.getEndDate() != null && !"".equals(offer.getEndDate())) {
-//
-//                        Date startDate = DateTimeHelper.parseDateStringToDate(offer.getStartDate());
-//                        Date endDate = DateTimeHelper.parseDateStringToDate(offer.getEndDate());
-//
-//                        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault());
-//                        String startDateString = dateFormat.format(startDate);
-//                        String endDateString = dateFormat.format(endDate);
-//
-//                        offers.get(i).setStartDate(startDateString);
-//                        offers.get(i).setEndDate(endDateString);
-//                    }
-//                }
-//
-//                rewards.sort((o1, o2) -> Integer.compare(o1.getPtsRequired(), o2.getPtsRequired()));
-//                specials.sort((o1, o2) -> types.indexOf(o1.getType()) - types.indexOf(o2.getType()));
-//
-//                ArrayList<OffersModel> of = new ArrayList<>();
-//                if (signUp.getOfferId() != 0) of.add(signUp);
-//                if (rewards.size() >= 1) of.addAll(rewards);
-//                if (specials.size() >= 1) of.addAll(specials);
-//
-//                startRecyclerView(of);
-//                spinner.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ArrayList<OffersModel>> call, @NonNull Throwable t) {
-//                String errorMessage = "Get Business Offers Error";
-//                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
-//                spinner.setVisibility(View.GONE);
-//                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
-//            }
-//        });
-//    }
-
+    private void refreshNetworkCall() {
+        String phone = phoneNumber.getText().toString();
+        if ((phone == null || "".equals(phone)) && buttonOptionsMenu.isEnabled()) {
+            getMerchantShops();
+        }
+    }
 
     /**
      * Set Click Listeners
@@ -776,26 +735,11 @@ public class UserKeypadActivity extends AppCompatActivity
     /**
      * Helper functions
      */
-//    private void startRecyclerView(ArrayList<OffersModel> offersList) {
-//        RecyclerView rv = findViewById(R.id.recyclerViewUserKeypadCards);
-//        RA_UserKeypad adapter = new RA_UserKeypad(offersList, this);
-//        LinearLayoutManager lm = new LinearLayoutManager(this);
-//        rv.setLayoutManager(lm);
-//        rv.setAdapter(adapter);
-//    }
-
     private void startViewPager(int storeId, String[] strings) {
         VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
         vp.setPageTransformer(new MarginPageTransformer(100));
     }
-
-//    private void viewPagerFragmentCalls() {
-//        UKOffersListFragment viewpagerFragment = new UKOffersListFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable("offers", offers);
-//        viewpagerFragment.setArguments(bundle);
-//    }
 
     private void generateViewSizes() {
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -971,18 +915,8 @@ public class UserKeypadActivity extends AppCompatActivity
         call.enqueue(new Callback<String[]>() {
             @Override
             public void onResponse(Call<String[]> call, Response<String[]> response) {
-                String[] strings = response.body();
-                for (int i = 0; i < strings.length; i++) {
-                    if (strings[i] != null) {
-//                      String list = String.join(", ", strings);
-                        Log.i("TAG", "IMAGE URL: " + strings[i]);
-                        Log.i(TAG, "STORE ID: " + storeId);
-                    } else {
-
-                    }
-
-                    startViewPager(shop.getStoreId(), strings);
-                }
+                String[] imageUrls = response.body();
+                startViewPager(shop.getStoreId(), imageUrls);
             }
 
             @Override
