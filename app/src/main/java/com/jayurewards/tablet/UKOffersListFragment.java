@@ -1,13 +1,20 @@
 package com.jayurewards.tablet;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +47,7 @@ public class UKOffersListFragment extends Fragment {
     private UserKeypadActivity uka;
     private ArrayList<OffersModel> offers = new ArrayList<>();
     private RecyclerView rv;
+    private NestedScrollView nsv;
 
     // Required empty public constructor
     public UKOffersListFragment() {}
@@ -64,12 +72,30 @@ public class UKOffersListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_uk_offers_list, container, false);
         rv = view.findViewById(R.id.recyclerViewUserKeypadViewPagerCard2Rewards);
+        nsv = view.findViewById(R.id.scrollViewUserKeypadViewPagerCard2);
         uka = (UserKeypadActivity) getActivity();
 
         getBusinessOffers(storeId);
         startRecyclerView(offers);
 
+        LocalBroadcastManager.getInstance(uka).registerReceiver(scrollToTop,
+                new IntentFilter("offers-scroll-to-top"));
+
         return view;
+    }
+
+    private BroadcastReceiver scrollToTop = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "SCROLL TO TOP FUNCTION");
+            new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(uka).unregisterReceiver(scrollToTop);
+        super.onDestroy();
     }
 
     private void getBusinessOffers(int storeId) {

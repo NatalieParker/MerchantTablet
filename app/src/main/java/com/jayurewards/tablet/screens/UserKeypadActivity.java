@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -243,6 +244,7 @@ public class UserKeypadActivity extends AppCompatActivity
     @Override
     public void onPause() {
         refreshTimer.cancel();
+        timer.cancel();
         super.onPause();
     }
 
@@ -387,7 +389,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private void refreshNetworkCall() {
         String phone = phoneNumber.getText().toString();
-        if ((phone == null || "".equals(phone)) && buttonOptionsMenu.isEnabled()) {
+        if ("".equals(phone) && buttonOptionsMenu.isEnabled()) {
             runOnUiThread(() -> {
                 spinner.setVisibility(View.VISIBLE);
                 getMerchantShops();
@@ -396,8 +398,8 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     private void setUpRefreshTimer() {
-        float hoursToMillis = 3600000;
-        float hours = 6 * hoursToMillis;
+        long hoursToMillis = 3600000;
+        long hours = 6 * hoursToMillis;
 
         refreshTimer = new Timer();
         refreshTimer.schedule(new TimerTask() {
@@ -405,7 +407,7 @@ public class UserKeypadActivity extends AppCompatActivity
             public void run() {
                 refreshNetworkCall();
             }
-        }, 0, 6000);
+        }, 0, hours);
     }
 
     /**
@@ -687,7 +689,8 @@ public class UserKeypadActivity extends AppCompatActivity
                 companyTextView.setText(shop.getCompany());
 
                 spinner.setVisibility(View.GONE);
-                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
+//                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
+                scrollToTop();
             }
 
             @Override
@@ -696,9 +699,15 @@ public class UserKeypadActivity extends AppCompatActivity
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 spinner.setVisibility(View.GONE);
-                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
+//                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
+                scrollToTop();
             }
         });
+    }
+
+    private void scrollToTop() {
+        Intent intent = new Intent("offers-scroll-to-top");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     /**
