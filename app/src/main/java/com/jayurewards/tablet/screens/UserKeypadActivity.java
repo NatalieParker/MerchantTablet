@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -786,6 +787,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private void startViewPager(int storeId, String[] strings) {
         VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
+        vp.setPageTransformer(new MarginPageTransformer(100));
     }
 
 //    private void viewPagerFragmentCalls() {
