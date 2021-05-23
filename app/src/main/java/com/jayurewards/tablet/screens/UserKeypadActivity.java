@@ -93,6 +93,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private MaterialButton buttonLockScreen;
     private MaterialButton buttonUpdatePoints;
     private MaterialButton buttonPointConvert;
+    private MaterialButton buttonRefresh;
     private ConstraintLayout optionsMenuBkgDark;
 
     // Keypad
@@ -178,6 +179,7 @@ public class UserKeypadActivity extends AppCompatActivity
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
+        buttonRefresh = findViewById(R.id.buttonUserKeypadRefresh);
         buttonPointConvert = findViewById(R.id.buttonUserKeypadPointConverter);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
         companyNameContainer = findViewById(R.id.layoutUserKeypadCompany);
@@ -235,14 +237,7 @@ public class UserKeypadActivity extends AppCompatActivity
         }
 
         checkTeamMember();
-
-        refreshTimer = new Timer();
-        refreshTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-//                refreshNetworkCall();
-            }
-        }, 0, 4000);
+        setUpRefreshTimer();
     }
 
     @Override
@@ -393,8 +388,24 @@ public class UserKeypadActivity extends AppCompatActivity
     private void refreshNetworkCall() {
         String phone = phoneNumber.getText().toString();
         if ((phone == null || "".equals(phone)) && buttonOptionsMenu.isEnabled()) {
-            getMerchantShops();
+            runOnUiThread(() -> {
+                spinner.setVisibility(View.VISIBLE);
+                getMerchantShops();
+            });
         }
+    }
+
+    private void setUpRefreshTimer() {
+        float hoursToMillis = 3600000;
+        float hours = 6 * hoursToMillis;
+
+        refreshTimer = new Timer();
+        refreshTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                refreshNetworkCall();
+            }
+        }, 0, 6000);
     }
 
     /**
@@ -524,6 +535,11 @@ public class UserKeypadActivity extends AppCompatActivity
             closeKeypadOptionsMenu();
             LockScreenPopup popup = new LockScreenPopup();
             popup.show(getSupportFragmentManager(), "lock_screen_popup");
+        });
+
+        buttonRefresh.setOnClickListener(v -> {
+            closeKeypadOptionsMenu();
+            refreshNetworkCall();
         });
 
         ptsResponseExit.setOnClickListener(v -> {
