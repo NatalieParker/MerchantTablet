@@ -120,6 +120,8 @@ public class UKOffersListFragment extends Fragment {
                 uka.hideSpinner();
                 startRecyclerView(of);
 
+                Log.i(TAG, "onResponse: OFFERS RESPONSE: " + offers);
+
             }
 
             @Override

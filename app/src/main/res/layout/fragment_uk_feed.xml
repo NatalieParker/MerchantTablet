@@ -7,7 +7,6 @@
     app:cardCornerRadius="20dp"
     tools:context=".UKFeedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/imageViewUserKeypadViewPagerCard1Design"
         android:layout_width="match_parent"

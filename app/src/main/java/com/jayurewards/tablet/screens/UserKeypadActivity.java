@@ -917,6 +917,9 @@ public class UserKeypadActivity extends AppCompatActivity
             public void onResponse(Call<String[]> call, Response<String[]> response) {
                 String[] imageUrls = response.body();
                 startViewPager(shop.getStoreId(), imageUrls);
+                if (imageUrls != null) {
+                    vp.setCurrentItem(1,true);
+                }
             }
 
             @Override
