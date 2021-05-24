@@ -1,4 +1,4 @@
-package com.jayurewards.tablet;
+package com.jayurewards.tablet.screens;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,19 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
 import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
-import com.jayurewards.tablet.screens.RA_UserKeypad;
-import com.jayurewards.tablet.screens.UserKeypadActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,15 +77,14 @@ public class UKOffersListFragment extends Fragment {
         startRecyclerView(offers);
 
         LocalBroadcastManager.getInstance(uka).registerReceiver(scrollToTop,
-                new IntentFilter("offers-scroll-to-top"));
+                new IntentFilter(GlobalConstants.OFFERS_SCROLL_TOP));
 
         return view;
     }
 
-    private BroadcastReceiver scrollToTop = new BroadcastReceiver() {
+    private final BroadcastReceiver scrollToTop = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "SCROLL TO TOP FUNCTION");
             new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
         }
     };
@@ -145,9 +142,6 @@ public class UKOffersListFragment extends Fragment {
                 if (specials.size() >= 1) of.addAll(specials);
                 uka.hideSpinner();
                 startRecyclerView(of);
-
-                Log.i(TAG, "onResponse: OFFERS RESPONSE: " + offers);
-
             }
 
             @Override

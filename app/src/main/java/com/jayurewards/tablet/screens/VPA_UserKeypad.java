@@ -7,14 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.jayurewards.tablet.UKFeedFragment;
-import com.jayurewards.tablet.UKOffersListFragment;
-
 public class VPA_UserKeypad extends FragmentStateAdapter {
     private static final String TAG = "VPA_UserKeypad";
 
     int storeId;
-    String[] strings;
+    String[] imageUrls;
     int firstFragmentIndex = 1;
 
 
@@ -22,12 +19,12 @@ public class VPA_UserKeypad extends FragmentStateAdapter {
         super(fragmentActivity);
 
         this.storeId = storeId;
-        this.strings = strings;
+        this.imageUrls = strings;
     }
 
     @Override
     public int getItemCount() {
-        return strings.length + firstFragmentIndex;
+        return imageUrls.length + firstFragmentIndex;
     }
 
     @Override
@@ -38,16 +35,12 @@ public class VPA_UserKeypad extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Log.i(TAG, "\n\n\n IN FRAGEMENT ADAPTER: " + position);
-        Log.i(TAG, "STRINGS: " + strings);
-        switch (position) {
-            case 0:
-                return UKOffersListFragment.newInstance(storeId);
-            default:
-                String url = strings[position - firstFragmentIndex];
-                return UKFeedFragment.newInstance(url);
+        if (position == 0) {
+            return UKOffersListFragment.newInstance(storeId);
         }
 
+        String url = imageUrls[position - firstFragmentIndex];
+        return UKFeedFragment.newInstance(url);
     }
 
 

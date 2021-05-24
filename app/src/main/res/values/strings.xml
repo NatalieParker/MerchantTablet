@@ -93,4 +93,5 @@
     <string name="enter_pts_popup_desc">0 points to the customer</string>
     <string name="amount">Amount</string>
     <string name="refresh">Refresh</string>
+    <string name="promo_image">promo_image</string>
 </resources>

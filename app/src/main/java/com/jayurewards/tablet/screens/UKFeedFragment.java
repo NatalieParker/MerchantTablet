@@ -1,4 +1,4 @@
-package com.jayurewards.tablet;
+package com.jayurewards.tablet.screens;
 
 import android.os.Bundle;
 
@@ -9,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.jayurewards.tablet.screens.UserKeypadActivity;
+import com.jayurewards.tablet.GlideApp;
+import com.jayurewards.tablet.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UKFeedFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UKFeedFragment extends Fragment {
 
     private static final String URL = "url";
@@ -56,7 +52,6 @@ public class UKFeedFragment extends Fragment {
     private void setDesignImage() {
         GlideApp.with(uka)
                 .load(url)
-                .fallback(R.drawable.beauty_promo_design)
                 .into(design);
     }
 }

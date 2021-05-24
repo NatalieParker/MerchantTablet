@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -41,13 +40,11 @@ import com.google.android.material.button.MaterialButton;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
-import com.jayurewards.tablet.UKOffersListFragment;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
-import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
@@ -58,11 +55,8 @@ import com.jayurewards.tablet.screens.popups.PointConvertPopup;
 import com.jayurewards.tablet.screens.popups.UpdatePointsPopup;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -387,6 +381,30 @@ public class UserKeypadActivity extends AppCompatActivity
         });
     }
 
+    private void getTabletFeeds(int storeId) {
+        Call<String[]> call = RetrofitClient.getInstance().getRestShops().getTabletFeeds(storeId);
+        call.enqueue(new Callback<String[]>() {
+            @Override
+            public void onResponse(@NonNull Call<String[]> call, @NonNull Response<String[]> response) {
+                String[] imageUrls = response.body();
+                startViewPager(shop.getStoreId(), imageUrls);
+
+                int firstImageFrag = 1;
+                if (imageUrls != null) {
+                    vp.setCurrentItem(firstImageFrag,true);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String[]> call, @NonNull Throwable t) {
+                String errorMessage = "Get tablet feeds error";
+                LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
+                spinner.setVisibility(View.GONE);
+                AlertHelper.showNetworkAlert(UserKeypadActivity.this);
+            }
+        });
+    }
+
     private void refreshNetworkCall() {
         String phone = phoneNumber.getText().toString();
         if ("".equals(phone) && buttonOptionsMenu.isEnabled()) {
@@ -689,7 +707,6 @@ public class UserKeypadActivity extends AppCompatActivity
                 companyTextView.setText(shop.getCompany());
 
                 spinner.setVisibility(View.GONE);
-//                new Handler(Looper.getMainLooper()).postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
                 scrollToTop();
             }
 
@@ -699,14 +716,13 @@ public class UserKeypadActivity extends AppCompatActivity
                 LogHelper.errorReport(TAG, errorMessage, t, LogHelper.ErrorReportType.NETWORK);
                 AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 spinner.setVisibility(View.GONE);
-//                new android.os.Handler().postDelayed(() -> nsv.smoothScrollTo(0, 0), 2000);
                 scrollToTop();
             }
         });
     }
 
     private void scrollToTop() {
-        Intent intent = new Intent("offers-scroll-to-top");
+        Intent intent = new Intent(GlobalConstants.OFFERS_SCROLL_TOP);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -933,24 +949,5 @@ public class UserKeypadActivity extends AppCompatActivity
     public void onEnterAmountSubmit(long points) {
         pointAmount = points;
         giveUserPoints();
-    }
-
-    private void getTabletFeeds(int storeId) {
-        Call<String[]> call = RetrofitClient.getInstance().getRestShops().getTabletFeeds(storeId);
-        call.enqueue(new Callback<String[]>() {
-            @Override
-            public void onResponse(Call<String[]> call, Response<String[]> response) {
-                String[] imageUrls = response.body();
-                startViewPager(shop.getStoreId(), imageUrls);
-                if (imageUrls != null) {
-                    vp.setCurrentItem(1,true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String[]> call, Throwable t) {
-                Log.i("TAG", "NO RESPONSE: " + t);
-            }
-        });
     }
 }

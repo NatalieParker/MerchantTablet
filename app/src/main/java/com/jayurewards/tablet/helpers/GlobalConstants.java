@@ -39,6 +39,7 @@ public class GlobalConstants {
     public static final String PT_CONVERT_POINTS = "pointConvertPoints";
     public static final String PT_CONVERT_ACTIVATED = "pointConvertActivated";
     public static final String ENTERED_PHONE = "enteredPhone";
+    public static final String OFFERS_SCROLL_TOP = "offers_scroll_to_top";
 
 
     // MySQL date formats
