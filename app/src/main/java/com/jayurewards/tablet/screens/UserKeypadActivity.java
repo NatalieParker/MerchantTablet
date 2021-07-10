@@ -37,6 +37,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.hbb20.CountryCodePicker;
 import com.jayurewards.tablet.GlideApp;
 import com.jayurewards.tablet.R;
@@ -128,6 +130,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private EditText phoneNumber;
     private ConstraintLayout spinner;
     private ViewPager2 vp;
+    private TabLayout tabLayout;
 
     // Properties
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
@@ -197,6 +200,9 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
         vp = findViewById(R.id.viewPagerUserKeypadViewPager);
+        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
+
+        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
 
         sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         adminLevel = sp.getInt(GlobalConstants.ADMIN_LEVEL, 1);
@@ -780,6 +786,7 @@ public class UserKeypadActivity extends AppCompatActivity
         VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
         vp.setPageTransformer(new MarginPageTransformer(100));
+
     }
 
     private void generateViewSizes() {
