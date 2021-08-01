@@ -26,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -142,6 +143,8 @@ public class UserKeypadActivity extends AppCompatActivity
     private CountryCodePicker ccp;
     private SharedPreferences sp;
     private CountDownTimer timer;
+    private Timer vpTimer;
+    private int timerPosition;
     private boolean screenLocked = false;
     private boolean converterActive;
     private long lastClickTime = 0;
@@ -200,9 +203,9 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
         vp = findViewById(R.id.viewPagerUserKeypadViewPager);
-        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
+//        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
 
-        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
+//        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
 
         sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         adminLevel = sp.getInt(GlobalConstants.ADMIN_LEVEL, 1);
@@ -782,12 +785,27 @@ public class UserKeypadActivity extends AppCompatActivity
     /**
      * Helper functions
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void startViewPager(int storeId, String[] strings) {
         VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
         vp.setAdapter(adapter);
         vp.setPageTransformer(new MarginPageTransformer(100));
 
+        TabLayout tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
+        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> {
+        })).attach();
+        startTimer(vp, strings);
+
+        // Need to get child because Viewpager 2 is a view group
+        vp.getChildAt(0).setOnTouchListener((v, event) -> {
+            stopTimer();
+            Log.i(TAG, "startViewPager: TIMER RESET");
+            timerPosition = vp.getCurrentItem();
+            startTimer(vp, strings);
+            return false;
+        });
     }
+
 
     private void generateViewSizes() {
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -891,6 +909,41 @@ public class UserKeypadActivity extends AppCompatActivity
 
         timer.start();
     }
+
+    private void startTimer(ViewPager2 vp, String[] imageUrls) {
+        if (vpTimer != null) {
+            vpTimer.cancel();
+        }
+        timerPosition = vp.getCurrentItem();
+        startSlider(vp, imageUrls);
+        Log.i(TAG, "startTimer: TIMER STARTED");
+    }
+
+    private void stopTimer() {
+        if (vpTimer != null) {
+            vpTimer.cancel();
+            vpTimer = null;
+        }
+    }
+
+    private void startSlider(final ViewPager2 imageViewPager, String[] imageUrls) {
+        vpTimer = new Timer();
+        vpTimer.scheduleAtFixedRate(new TimerTask() {
+
+            public void run() {
+                runOnUiThread(() -> {
+                    imageViewPager.setCurrentItem(timerPosition);
+                    timerPosition = imageViewPager.getCurrentItem() + 1;
+
+                    if(timerPosition == (imageUrls.length + 1)) {
+                        timerPosition =0;
+                    }
+                    Log.i(TAG, "run: TIMER POSITION: " + timerPosition);
+                });
+            }
+        },0, 2000);
+    }
+
 
     /**
      * Interfaces
