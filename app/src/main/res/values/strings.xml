@@ -90,8 +90,10 @@
     <string name="pts_convert_popup_disclaimer">Customers get 0 points for every 0 dollars.</string>
     <string name="next">Next</string>
     <string name="enter_amount">Enter Amount</string>
+    <string name="enter_employee_pin">Enter Employee Pin</string>
     <string name="enter_pts_popup_desc">0 points to the customer</string>
     <string name="amount">Amount</string>
+    <string name="pin">PIN</string>
     <string name="refresh">Refresh</string>
     <string name="promo_image">promo_image</string>
 </resources>

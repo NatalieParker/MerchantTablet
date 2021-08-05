@@ -142,7 +142,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private CountryCodePicker ccp;
     private SharedPreferences sp;
-    private CountDownTimer timer;
+    private CountDownTimer pointScreenTimer;
     private Timer vpTimer;
     private int timerPosition;
     private boolean screenLocked = false;
@@ -247,7 +247,9 @@ public class UserKeypadActivity extends AppCompatActivity
     @Override
     public void onPause() {
         refreshTimer.cancel();
-        timer.cancel();
+        if (pointScreenTimer != null) {
+            pointScreenTimer.cancel();
+        }
         super.onPause();
     }
 
@@ -573,12 +575,12 @@ public class UserKeypadActivity extends AppCompatActivity
 
         ptsResponseExit.setOnClickListener(v -> {
             closePointSuccessScreen();
-            timer.cancel();
+            pointScreenTimer.cancel();
         });
 
         ptsResponseButton.setOnClickListener(v -> {
             closePointSuccessScreen();
-            timer.cancel();
+            pointScreenTimer.cancel();
         });
 
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
@@ -794,16 +796,16 @@ public class UserKeypadActivity extends AppCompatActivity
         TabLayout tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
         new TabLayoutMediator(tabLayout, vp, ((tab, position) -> {
         })).attach();
-        startTimer(vp, strings);
+//        startTimer(vp, strings);
 
         // Need to get child because Viewpager 2 is a view group
-        vp.getChildAt(0).setOnTouchListener((v, event) -> {
-            stopTimer();
-            Log.i(TAG, "startViewPager: TIMER RESET");
-            timerPosition = vp.getCurrentItem();
-            startTimer(vp, strings);
-            return false;
-        });
+//        vp.getChildAt(0).setOnTouchListener((v, event) -> {
+//            stopTimer();
+//            Log.i(TAG, "startViewPager: TIMER RESET");
+//            timerPosition = vp.getCurrentItem();
+//            startTimer(vp, strings);
+//            return false;
+//        });
     }
 
 
@@ -895,7 +897,7 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     private void countdownTimer() {
-        timer = new CountDownTimer(60000, 1000) {
+        pointScreenTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
 
@@ -907,7 +909,7 @@ public class UserKeypadActivity extends AppCompatActivity
             }
         };
 
-        timer.start();
+        pointScreenTimer.start();
     }
 
     private void startTimer(ViewPager2 vp, String[] imageUrls) {
