@@ -29,6 +29,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.BaseInputConnection;
@@ -228,6 +229,8 @@ public class UserKeypadActivity extends AppCompatActivity
         getMerchantShops();
 
         prepareViews();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
