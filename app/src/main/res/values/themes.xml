@@ -15,7 +15,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:fontFamily">@font/soleil_regular</item>
+        <item name="android:fontFamily">@font/urbanist</item>
 
 <!--        Prevents white screen from showing on app start up-->
         <item name="android:windowDisablePreview">true</item>

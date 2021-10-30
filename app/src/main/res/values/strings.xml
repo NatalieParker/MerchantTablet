@@ -64,7 +64,7 @@
     <string name="pts">Pts</string>
     <string name="_99999_points">99999 points</string>
     <string name="name">Name</string>
-    <string name="points_response_desc">You just got 5 points from Go Get Yogurt and now have 45 points for rewards.</string>
+    <string name="points_response_desc">From Go Get Yogurt and now have 45 points for rewards.</string>
     <string name="www_jayu_me">www.jayu.me</string>
     <string name="pts_response_more_info">Download Jayu to start getting free gift cards!</string>
     <string name="confetti">Confetti</string>
@@ -96,4 +96,9 @@
     <string name="pin">PIN</string>
     <string name="refresh">Refresh</string>
     <string name="promo_image">promo_image</string>
+    <string name="team_registration_disclaimer">By signing up with Jayu you agree to our</string>
+    <string name="terms_and_conditions">Terms and conditions</string>
+    <string name="you_have_earned">You have earned</string>
+    <string name="_99999">99999</string>
+    <string name="points">Points</string>
 </resources>

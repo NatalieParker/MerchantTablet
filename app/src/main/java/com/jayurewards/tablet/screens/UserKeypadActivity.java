@@ -262,7 +262,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private void prepareViews() {
         optionsMenuBkgDark.setVisibility(View.GONE);
         optionsMenuContainer.setVisibility(View.GONE);
-        containerPointsSuccess.setVisibility(View.GONE);
+//        containerPointsSuccess.setVisibility(View.GONE);
 
         ptsResponseQrCode.setVisibility(View.GONE);
         String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://jayu.me";
