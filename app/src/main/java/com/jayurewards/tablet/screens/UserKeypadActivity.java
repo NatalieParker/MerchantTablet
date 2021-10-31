@@ -193,12 +193,12 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuBkgDark = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
         containerPointsSuccess = findViewById(R.id.constraintLayoutUserKeypadPointSuccessScreen);
         containerKeys = findViewById(R.id.layoutUserKeypadRightContainer);
-        ptsResponseProfilePic = findViewById(R.id.imageUserKeypadPtsResponseProfile);
+        ptsResponseProfilePic = findViewById(R.id.imageUKPtsResponseProfile);
         ptsResponseRibbonImg = findViewById(R.id.imageUserKeypadPtsResponseRibbon);
-        ptsResponseName = findViewById(R.id.textUserKeypadPtsResponseName);
+        ptsResponseName = findViewById(R.id.textUKPtsResponseName);
         ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
         ptsResponseDesc = findViewById(R.id.textUserKeypadPtsResponseDesc);
-        ptsResponseMoreInfo = findViewById(R.id.textUserKeypadPtsResponseMoreInfo);
+        ptsResponseMoreInfo = findViewById(R.id.textUKPtsResponseMoreInfo);
         ptsResponseQrCode = findViewById(R.id.imageViewUserKeypadQRCode);
         ptsResponseJayuUrl = findViewById(R.id.textUserKeypadPtsResponseUrl);
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
@@ -264,6 +264,10 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsMenuContainer.setVisibility(View.GONE);
 //        containerPointsSuccess.setVisibility(View.GONE);
 
+        // TODO: REVERT THE REVEALING THE SUCCESS SCREEN and uncomment all in prepare views
+        ptsResponseName.setVisibility(View.GONE);
+        ptsResponseProfilePic.setVisibility(View.GONE);
+
         ptsResponseQrCode.setVisibility(View.GONE);
         String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://jayu.me";
         GlideApp.with(UserKeypadActivity.this)
@@ -271,7 +275,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 .fallback(R.drawable.qr_code)
                 .into(ptsResponseQrCode);
 
-        ptsResponseMoreInfo.setVisibility(View.GONE);
+//        ptsResponseMoreInfo.setVisibility(View.GONE);
 
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
@@ -817,19 +821,20 @@ public class UserKeypadActivity extends AppCompatActivity
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
         double imagePercent = 0.25;
-        if (screenHeight < 900) {
-            imagePercent = 0.20;
-            ptsResponseLeftConfetti.getLayoutParams().width = 70;
-            ptsResponseRightConfetti.getLayoutParams().width = 70;
-            ptsResponseQrCode.getLayoutParams().width = 120;
-            ptsResponseQrCode.getLayoutParams().height = 120;
-
-            ptsResponseHeader.setTextSize(24);
-            ptsResponseName.setTextSize(20);
-            ptsResponseDesc.setTextSize(20);
-            ptsResponseMoreInfo.setTextSize(20);
-            ptsResponseJayuUrl.setTextSize(20);
-        }
+        // TODO: Check this screen size difference
+//        if (screenHeight < 900) {
+//            imagePercent = 0.20;
+//            ptsResponseLeftConfetti.getLayoutParams().width = 70;
+//            ptsResponseRightConfetti.getLayoutParams().width = 70;
+//            ptsResponseQrCode.getLayoutParams().width = 120;
+//            ptsResponseQrCode.getLayoutParams().height = 120;
+//
+//            ptsResponseHeader.setTextSize(24);
+//            ptsResponseName.setTextSize(20);
+//            ptsResponseDesc.setTextSize(20);
+//            ptsResponseMoreInfo.setTextSize(20);
+//            ptsResponseJayuUrl.setTextSize(20);
+//        }
 
         ptsResponseProfilePic.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
         ptsResponseProfilePic.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
