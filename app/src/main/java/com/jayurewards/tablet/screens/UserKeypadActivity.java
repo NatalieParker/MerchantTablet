@@ -686,8 +686,20 @@ public class UserKeypadActivity extends AppCompatActivity
                 GivePointsResponse result = response.body();
 
                 if (result != null) {
+                    int pointsGiven = result.getPoints();
+                    if (pointsGiven == 1) {
+                        ptsResponsePointsText.setText(R.string.point);
+                    } else {
+                        ptsResponsePointsText.setText(R.string.points);
+                    }
+                    String points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
+
                     String desc;
                     if (result.getTimeLeft() != 0) {
+                        ptsResponseCompany.setVisibility(View.INVISIBLE);
+                        ptsResponseLeftConfetti.setVisibility(View.GONE);
+                        ptsResponseRightConfetti.setVisibility(View.GONE);
+                        
                         if (result.getThumbnail() == null || "".equals(result.getThumbnail())) {
                             result.setIsAnonymous(1);
                         }
@@ -697,39 +709,25 @@ public class UserKeypadActivity extends AppCompatActivity
 
                         ptsResponsePoints.setText("0");
                         ptsResponseDesc.setText(desc);
-                        ptsResponseCompany.setVisibility(View.INVISIBLE);
-                        ptsResponseLeftConfetti.setVisibility(View.GONE);
-                        ptsResponseRightConfetti.setVisibility(View.GONE);
+                        ptsResponseDesc2.setText(R.string.too_soon);
 
                     } else {
+                        ptsResponseCompany.setVisibility(View.VISIBLE);
                         ptsResponseLeftConfetti.setVisibility(View.VISIBLE);
                         ptsResponseRightConfetti.setVisibility(View.VISIBLE);
 
                         int pointTally = result.getPointTally();
-
                         String pointTallyString;
                         if (pointTally == 1) {
-                            pointTallyString = "1 point for rewards.";
+                            pointTallyString = "You have 1 point for rewards.";
                         } else {
-                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards";
+                            pointTallyString = "You have " + NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards";
                         }
-
-                        int pointsGiven = result.getPoints();
-                        if (pointsGiven == 1) {
-                            ptsResponsePointsText.setText(R.string.point);
-                        } else {
-                            ptsResponsePointsText.setText(R.string.points);
-                        }
-
-                        String points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
-                        desc = "You have " + pointTallyString;
+                        ptsResponseDesc2.setText(pointTallyString);
 
                         ptsResponsePoints.setText(points);
                         ptsResponseDesc.setText(R.string.from_your_visit_to);
                         ptsResponseCompany.setText(shop.getCompany());
-                        ptsResponseDesc2.setText(desc);
-
-
                     }
 
                     if (result.getIsAnonymous() == 1) {
