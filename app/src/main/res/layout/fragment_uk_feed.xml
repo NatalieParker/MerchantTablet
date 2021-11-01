@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="20dp"
     tools:context=".screens.UKFeedFragment">
 
-    <ImageView
-        android:id="@+id/imageViewUserKeypadViewPagerCard1Design"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/promo_image" />
+        android:layout_marginBottom="20dp"
+        app:cardCornerRadius="20dp">
 
-</androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/imageUKFeedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/promo_image"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

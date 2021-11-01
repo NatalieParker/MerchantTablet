@@ -16,8 +16,6 @@ public class UKFeedFragment extends Fragment {
 
     private static final String URL = "url";
     private String url;
-    private ImageView design;
-    private UserKeypadActivity uka;
 
     public UKFeedFragment() {
         // Required empty public constructor
@@ -42,16 +40,14 @@ public class UKFeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_uk_feed, container, false);
-        design = view.findViewById(R.id.imageViewUserKeypadViewPagerCard1Design);
-        uka = (UserKeypadActivity) getActivity();
+        ImageView design = view.findViewById(R.id.imageUKFeedImage);
 
-        setDesignImage();
+        if (getActivity() != null) {
+            GlideApp.with(getActivity())
+                    .load(url)
+                    .into(design);
+        }
+
         return view;
-    }
-
-    private void setDesignImage() {
-        GlideApp.with(uka)
-                .load(url)
-                .into(design);
     }
 }

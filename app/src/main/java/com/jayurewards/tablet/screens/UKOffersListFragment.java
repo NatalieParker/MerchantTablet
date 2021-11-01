@@ -18,12 +18,14 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.AlertHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
+import com.jayurewards.tablet.helpers.UtilsHelper;
 import com.jayurewards.tablet.models.OffersModel;
 import com.jayurewards.tablet.networking.RetrofitClient;
 
@@ -41,11 +43,12 @@ import retrofit2.Response;
 public class UKOffersListFragment extends Fragment {
     private static final String TAG = "UkOffersListFragment";
 
-    private int storeId;  // Passed
     private UserKeypadActivity uka;
-    private ArrayList<OffersModel> offers = new ArrayList<>();
     private RecyclerView rv;
     private NestedScrollView nsv;
+
+    private int storeId;  // Passed
+    private ArrayList<OffersModel> offers = new ArrayList<>();
 
     // Required empty public constructor
     public UKOffersListFragment() {}
@@ -69,15 +72,18 @@ public class UKOffersListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_uk_offers_list, container, false);
-        rv = view.findViewById(R.id.recyclerViewUserKeypadViewPagerCard2Rewards);
-        nsv = view.findViewById(R.id.scrollViewUserKeypadViewPagerCard2);
         uka = (UserKeypadActivity) getActivity();
+        rv = view.findViewById(R.id.recyclerViewUKViewOffersList);
+        nsv = view.findViewById(R.id.scrollViewUKOffersList);
+        TextView header = view.findViewById(R.id.textUKOffersListHeader);
 
         getBusinessOffers(storeId);
         startRecyclerView(offers);
 
         LocalBroadcastManager.getInstance(uka).registerReceiver(scrollToTop,
                 new IntentFilter(GlobalConstants.OFFERS_SCROLL_TOP));
+
+        if (UtilsHelper.isScreenLarge()) header.setTextSize(60);
 
         return view;
     }
@@ -155,7 +161,7 @@ public class UKOffersListFragment extends Fragment {
     }
 
     private void startRecyclerView(ArrayList<OffersModel> offersList) {
-        RA_UserKeypad adapter = new RA_UserKeypad(offersList, getActivity());
+        RA_UserKeypad adapter = new RA_UserKeypad(offersList);
         LinearLayoutManager lm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(lm);
         rv.setAdapter(adapter);

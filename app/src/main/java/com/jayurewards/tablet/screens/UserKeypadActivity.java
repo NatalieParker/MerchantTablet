@@ -7,7 +7,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -24,7 +23,6 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,6 +47,7 @@ import com.jayurewards.tablet.helpers.AuthHelper;
 import com.jayurewards.tablet.helpers.DateTimeHelper;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.helpers.LogHelper;
+import com.jayurewards.tablet.helpers.UtilsHelper;
 import com.jayurewards.tablet.models.Points.GivePointsRequest;
 import com.jayurewards.tablet.models.Points.GivePointsResponse;
 import com.jayurewards.tablet.models.ShopAdminModel;
@@ -78,9 +77,6 @@ public class UserKeypadActivity extends AppCompatActivity
         EnterAmountPopup.EnterAmountInterface {
 
     private static final String TAG = "KeypadScreen";
-
-    // Left View
-    private NestedScrollView nsv;
 
     // Options Menu
     private LinearLayout optionsMenuContainer;
@@ -133,11 +129,10 @@ public class UserKeypadActivity extends AppCompatActivity
     private TextView ptsResponsePointsText;
     private ImageView ptsResponseLeftConfetti;
     private ImageView ptsResponseRightConfetti;
-
     private LinearLayout companyNameContainer;
     private LinearLayout teamNameContainer;
-    private TextView companyTextView;
-    private TextView teamMemberTextView;
+    private TextView companyHeader;
+    private TextView teamMemberName;
     private EditText phoneNumber;
     private ConstraintLayout spinner;
     private ViewPager2 vp;
@@ -161,7 +156,6 @@ public class UserKeypadActivity extends AppCompatActivity
     private long lastClickTime = 0;
 
     private Timer refreshTimer;
-    private double screenInches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,15 +183,15 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseButton = findViewById(R.id.buttonUserKeypadBackButton);
         ptsResponseExit = findViewById(R.id.imageUKPtsResponseExit);
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
-        buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
+        buttonOptionsMenu = findViewById(R.id.buttonUKOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
         buttonRefresh = findViewById(R.id.buttonUserKeypadRefresh);
         buttonPointConvert = findViewById(R.id.buttonUserKeypadPointConverter);
         optionsMenuContainer = findViewById(R.id.linearLayoutUserKeypadOptionsMenu);
-        companyNameContainer = findViewById(R.id.layoutUserKeypadCompany);
+        companyNameContainer = findViewById(R.id.layoutUKCompany);
         teamNameContainer = findViewById(R.id.layoutUserKeypadTeamName);
-        companyTextView = findViewById(R.id.textUserKeypadCompany);
-        teamMemberTextView = findViewById(R.id.textUserKeypadTeamMemberName);
+        companyHeader = findViewById(R.id.textUKCompany);
+        teamMemberName = findViewById(R.id.textUKTeamMemberName);
         optionsPortalBtn = findViewById(R.id.buttonUserKeypadOptionsPortal);
         spinner = findViewById(R.id.spinnerUserKeypad);
         optionsMenuBkgDark = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
@@ -223,9 +217,9 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
         ptsResponseTopSpacer = findViewById(R.id.viewUKPtsResponseTopSpacer);
-        vp = findViewById(R.id.viewPagerUserKeypadViewPager);
-//        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
+        vp = findViewById(R.id.viewPagerUK);
 
+//        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
 //        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
 
         sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
@@ -274,13 +268,14 @@ public class UserKeypadActivity extends AppCompatActivity
         super.onPause();
     }
 
-
     /**
      * View Manipulation
      */
     private void prepareViews() {
-        screenInches = getScreenSizeInches();
-        if (screenInches >= 8.5) {
+        if (UtilsHelper.isScreenLarge()) {
+            companyHeader.setTextSize(25);
+            teamMemberName.setTextSize(20);
+
             submitButton.setTextSize(25);
 
             ptsResponseTopSpacer.getLayoutParams().height = 40;
@@ -345,16 +340,6 @@ public class UserKeypadActivity extends AppCompatActivity
                 .setHasFixedTransformationMatrix(true);
     }
 
-    private double getScreenSizeInches() {
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-        return Math.sqrt(x + y);
-//        return Math.sqrt(x + y) * dm.scaledDensity; // Multiple by scaled density for more accuracy?
-        // REF: https://stackoverflow.com/questions/19155559/how-to-get-android-device-screen-size
-    }
-
     /**
      * Fullscreen mode
      */
@@ -396,7 +381,7 @@ public class UserKeypadActivity extends AppCompatActivity
         if (teamId >= 1) {
             String name = sp.getString(GlobalConstants.TEAM_NAME, null);
             if (name != null) {
-                teamMemberTextView.setText(name);
+                teamMemberName.setText(name);
                 teamNameContainer.setVisibility(View.VISIBLE);
                 goTeamPageBtn.setVisibility(View.VISIBLE);
                 goTeamPageBtn.setEnabled(true);
@@ -435,7 +420,7 @@ public class UserKeypadActivity extends AppCompatActivity
                         AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                     }
 
-                    companyTextView.setText(shop.getCompany());
+                    companyHeader.setText(shop.getCompany());
                     pointAmount = shop.getStandardPoints();
                     getTabletFeeds(shop.getStoreId());
 
@@ -509,6 +494,9 @@ public class UserKeypadActivity extends AppCompatActivity
      */
     @SuppressLint("ApplySharedPref")
     private void setUpClickListeners() {
+
+        //TODO: Too many views in XML file. Create a recycler view in a grid for buttons.
+        // Move the options menu and the popup screen into a custom views
         key1.setOnClickListener(v -> keypadButtonInput("1"));
         key2.setOnClickListener(v -> keypadButtonInput("2"));
         key3.setOnClickListener(v -> keypadButtonInput("3"));
@@ -774,7 +762,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 openPointSuccessScreen();
                 phoneNumber.getText().clear();
                 pointAmount = shop.getStandardPoints();
-                companyTextView.setText(shop.getCompany());
+                companyHeader.setText(shop.getCompany());
                 spinner.setVisibility(View.GONE);
                 scrollToTop();
             }
@@ -809,19 +797,18 @@ public class UserKeypadActivity extends AppCompatActivity
 
             // Changing edit text hint size
             if (s.length() == 0) {
-                if (screenInches <= 8.5) {
-                    phoneNumber.setTextSize(23);
-                } else {
+                if (UtilsHelper.isScreenLarge()) {
                     phoneNumber.setTextSize(30);
+                } else {
+                    phoneNumber.setTextSize(23);
                 }
 
             } else {
-                if (screenInches <= 8.5) {
-                    phoneNumber.setTextSize(40);
-                } else {
+                if (UtilsHelper.isScreenLarge()) {
                     phoneNumber.setTextSize(50);
+                } else {
+                    phoneNumber.setTextSize(40);
                 }
-
             }
         }
 
@@ -856,10 +843,10 @@ public class UserKeypadActivity extends AppCompatActivity
      * Helper functions
      */
     @SuppressLint("ClickableViewAccessibility")
-    private void startViewPager(int storeId, String[] strings) {
-        VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, strings);
+    private void startViewPager(int storeId, String[] urls) {
+        VPA_UserKeypad adapter = new VPA_UserKeypad(this, storeId, urls);
         vp.setAdapter(adapter);
-        vp.setPageTransformer(new MarginPageTransformer(100));
+//        vp.setPageTransformer(new MarginPageTransformer(100));
 
         TabLayout tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
         new TabLayoutMediator(tabLayout, vp, ((tab, position) -> {
@@ -1007,9 +994,9 @@ public class UserKeypadActivity extends AppCompatActivity
             }
 
             String company = shop.getCompany() + " - " + pointsString;
-            companyTextView.setText(company);
+            companyHeader.setText(company);
         } else {
-            companyTextView.setText(shop.getCompany());
+            companyHeader.setText(shop.getCompany());
         }
 
         adminLevel = adminLvl;

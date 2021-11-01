@@ -1,6 +1,5 @@
 package com.jayurewards.tablet.screens;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.GlobalConstants;
+import com.jayurewards.tablet.helpers.UtilsHelper;
 import com.jayurewards.tablet.models.OffersModel;
 
 import java.text.NumberFormat;
@@ -27,19 +27,12 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "RecyclerViewAdapter";
 
     private final ArrayList<OffersModel> offers;
-    private final Context context;
     private boolean bigScreen = true;
 
-    public RA_UserKeypad(ArrayList<OffersModel> offers, Context context) {
+    public RA_UserKeypad(ArrayList<OffersModel> offers) {
         this.offers = offers;
-        this.context = context;
 
-        double screenInches = getScreenSizeInches();
-        if (screenInches <= 8.5) {
-            bigScreen = false;
-        } else {
-            bigScreen = true;
-        }
+        bigScreen = !(UtilsHelper.isScreenLarge());
     }
 
     @Override
@@ -156,7 +149,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public class VH_Specials extends RecyclerView.ViewHolder {
+    public static class VH_Specials extends RecyclerView.ViewHolder {
 
         CardView parentLayoutSpecials;
         ConstraintLayout cardSpecials;
@@ -174,12 +167,5 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             iconSpecials = itemView.findViewById(R.id.imageRecyclerSpecialsIcon);
 
         }
-    }
-
-    private double getScreenSizeInches() {
-        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
-        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-        return Math.sqrt(x + y);
     }
 }

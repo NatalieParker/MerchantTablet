@@ -7,7 +7,6 @@
     tools:context=".screens.UserKeypadActivity">
 
     <ImageView
-        android:id="@+id/imageUserKeypadBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/image_bkg"
@@ -15,7 +14,7 @@
         android:src="@drawable/user_keypad_bkg" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineUserKeypadContainerSplit"
+        android:id="@+id/guidelineUKContainerSplit"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -25,57 +24,108 @@
 
     <!--    Left container-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layoutUserKeypadLeftContainer"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guidelineUserKeypadContainerSplit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineUKContainerSplit"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonUKOptionsMenu"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            app:icon="@drawable/ic_menu"
+            app:iconGravity="textStart"
+            app:iconSize="35dp"
+            app:iconTint="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/layoutUKCompany"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/buttonUKOptionsMenu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/buttonUKOptionsMenu"
+            app:layout_constraintTop_toTopOf="@id/buttonUKOptionsMenu">
+
+            <TextView
+                android:id="@+id/textUKCompany"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/urbanist_semi_bold"
+                android:text="@string/company"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/layoutUserKeypadTeamName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:alpha="0.7"
+                    android:contentDescription="@string/icon"
+                    android:src="@drawable/ic_user" />
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/textUKTeamMemberName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:alpha="0.7"
+                    android:fontFamily="@font/urbanist_medium"
+                    android:gravity="center"
+                    android:text="@string/team_member"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="90dp"
-            android:orientation="vertical"
-            android:visibility="visible"
+            android:layout_marginTop="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/layoutUKCompany">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerUK"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayoutShopActivityImageSlider"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginBottom="8dp"
                 android:background="@android:color/transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/viewPagerUK"
+                app:layout_constraintEnd_toEndOf="@id/viewPagerUK"
+                app:layout_constraintStart_toStartOf="@id/viewPagerUK"
                 app:tabBackground="@drawable/indicator_selector_wht"
                 app:tabIndicatorHeight="0dp" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPagerUserKeypadViewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layoutDirection="ltr"
-                android:orientation="horizontal"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </LinearLayout>
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--    Right container-->
@@ -87,7 +137,7 @@
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit">
+        app:layout_constraintStart_toEndOf="@id/guidelineUKContainerSplit">
 
         <eightbitlab.com.blurview.BlurView
             android:id="@+id/layoutUserKeypadContainer"
@@ -155,6 +205,7 @@
                     app:layout_constraintGuide_percent="0.33"
                     app:layout_constraintStart_toStartOf="parent" />
 
+<!--                TODO: Move to a recycler view-->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutUserKeypadKeypadButtons"
                     android:layout_width="0dp"
@@ -362,6 +413,7 @@
     </androidx.cardview.widget.CardView>
 
     <!-- Give points response-->
+<!--    TODO: Move to a fragment and then display-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutUKPtsResponse"
         android:layout_width="0dp"
@@ -370,7 +422,7 @@
         android:background="@android:color/white"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guidelineUserKeypadContainerSplit">
+        app:layout_constraintStart_toEndOf="@id/guidelineUKContainerSplit">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/imageUKPtsResponseExit"
@@ -761,70 +813,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--    Options menu-->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonUserKeypadOptionsMenu"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        app:icon="@drawable/ic_menu"
-        app:iconGravity="textStart"
-        app:iconSize="35dp"
-        app:iconTint="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/layoutUserKeypadCompany"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/buttonUserKeypadOptionsMenu"
-        app:layout_constraintEnd_toEndOf="@+id/guidelineUserKeypadContainerSplit"
-        app:layout_constraintStart_toEndOf="@id/buttonUserKeypadOptionsMenu"
-        app:layout_constraintTop_toTopOf="@id/buttonUserKeypadOptionsMenu">
-
-        <TextView
-            android:id="@+id/textUserKeypadCompany"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/urbanist_medium"
-            android:text="@string/company"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <LinearLayout
-            android:id="@+id/layoutUserKeypadTeamName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:alpha="0.7"
-                android:contentDescription="@string/icon"
-                android:src="@drawable/ic_user" />
-
-            <View
-                android:layout_width="5dp"
-                android:layout_height="0dp" />
-
-            <TextView
-                android:id="@+id/textUserKeypadTeamMemberName"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:alpha="0.7"
-                android:fontFamily="@font/urbanist_medium"
-                android:text="@string/team_member"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-        </LinearLayout>
-    </LinearLayout>
-
+<!--    TODO: Move to a recycler view-->
     <LinearLayout
         android:id="@+id/linearLayoutUserKeypadOptionsMenu"
         android:layout_width="250dp"
