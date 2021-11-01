@@ -24,9 +24,9 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -108,20 +108,29 @@ public class UserKeypadActivity extends AppCompatActivity
     private MaterialButton key9;
     private MaterialButton key0;
     private MaterialButton deleteButton;
-    private MaterialButton enterButton;
+    private MaterialButton submitButton;
 
     // Points response
     private ConstraintLayout containerPointsSuccess;
     private MaterialButton ptsResponseExit;
     private MaterialButton ptsResponseButton;
     private ImageView ptsResponseProfilePic;
-    private ImageView ptsResponseRibbonImg;
     private TextView ptsResponseName;
-    private TextView ptsResponseHeader;
+    private TextView ptsResponsePoints;
     private TextView ptsResponseDesc;
+    private TextView ptsResponseDesc2;
+    private TextView ptsResponseCompany;
     private TextView ptsResponseMoreInfo;
-    private ImageView ptsResponseQrCode;
+    private ConstraintLayout ptsResponseAppBottomContainer;
+    private ConstraintLayout ptsResponseAnonBottomContainer;
+    private ConstraintLayout ptsResponseAnonQRCodeContainer;
+    private ConstraintLayout ptsResponseAppQRCodeContainer;
+    private ImageView ptsResponseAnonLogo;
+    private ImageView ptsResponseAnonQrCode;
+    private ImageView ptsResponseAppQrCode;
     private TextView ptsResponseJayuUrl;
+    private ConstraintLayout ptsResponsePointIconContainer;
+    private TextView ptsResponsePointsText;
     private ImageView ptsResponseLeftConfetti;
     private ImageView ptsResponseRightConfetti;
 
@@ -132,6 +141,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private EditText phoneNumber;
     private ConstraintLayout spinner;
     private ViewPager2 vp;
+    private View ptsResponseTopSpacer;
     private TabLayout tabLayout;
 
     // Properties
@@ -151,7 +161,7 @@ public class UserKeypadActivity extends AppCompatActivity
     private long lastClickTime = 0;
 
     private Timer refreshTimer;
-
+    private double screenInches;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,12 +182,12 @@ public class UserKeypadActivity extends AppCompatActivity
         key9 = findViewById(R.id.buttonUserKeypadKey9);
         key0 = findViewById(R.id.buttonUserKeypadKey0);
         deleteButton = findViewById(R.id.deleteButton);
-        enterButton = findViewById(R.id.enterButton);
+        submitButton = findViewById(R.id.buttonUKSubmit);
         signOutButton = findViewById(R.id.buttonUserKeypadSignOut);
         goTeamLoginBtn = findViewById(R.id.buttonUserKeypadTeamLogin);
         goTeamPageBtn = findViewById(R.id.buttonUserKeypadTeamPage);
         ptsResponseButton = findViewById(R.id.buttonUserKeypadBackButton);
-        ptsResponseExit = findViewById(R.id.imageUserKeypadPtsResponseExit);
+        ptsResponseExit = findViewById(R.id.imageUKPtsResponseExit);
         buttonLockScreen = findViewById(R.id.buttonUserKeypadLockScreen);
         buttonOptionsMenu = findViewById(R.id.buttonUserKeypadOptionsMenu);
         buttonUpdatePoints = findViewById(R.id.buttonUserKeypadUpdatePoints);
@@ -191,18 +201,28 @@ public class UserKeypadActivity extends AppCompatActivity
         optionsPortalBtn = findViewById(R.id.buttonUserKeypadOptionsPortal);
         spinner = findViewById(R.id.spinnerUserKeypad);
         optionsMenuBkgDark = findViewById(R.id.constraintLayoutUserKeypadDarkenScreen);
-        containerPointsSuccess = findViewById(R.id.constraintLayoutUserKeypadPointSuccessScreen);
+        containerPointsSuccess = findViewById(R.id.layoutUKPtsResponse);
         containerKeys = findViewById(R.id.layoutUserKeypadRightContainer);
         ptsResponseProfilePic = findViewById(R.id.imageUKPtsResponseProfile);
-        ptsResponseRibbonImg = findViewById(R.id.imageUserKeypadPtsResponseRibbon);
         ptsResponseName = findViewById(R.id.textUKPtsResponseName);
-        ptsResponseHeader = findViewById(R.id.textUserKeypadPtResponseHeader);
-        ptsResponseDesc = findViewById(R.id.textUserKeypadPtsResponseDesc);
+        ptsResponseDesc = findViewById(R.id.textUKPtsResponseDesc);
+        ptsResponseDesc2 = findViewById(R.id.textUKPtsResponseDesc2);
+        ptsResponsePoints = findViewById(R.id.textUKPtsResponsePoints);
+        ptsResponseCompany = findViewById(R.id.textUKPtsResponseCompany);
         ptsResponseMoreInfo = findViewById(R.id.textUKPtsResponseMoreInfo);
-        ptsResponseQrCode = findViewById(R.id.imageViewUserKeypadQRCode);
+        ptsResponseAppBottomContainer = findViewById(R.id.layoutUKPtsResponseAppUserContainer);
+        ptsResponseAnonBottomContainer = findViewById(R.id.layoutUKPtsResponseAnonBottomContainer);
+        ptsResponseAnonQRCodeContainer = findViewById(R.id.layoutUKPtsResponseAnonQRCode);
+        ptsResponseAppQRCodeContainer = findViewById(R.id.layoutUKPtsResponseAppQRCode);
+        ptsResponseAppQrCode = findViewById(R.id.imageUKPtsResponseAppRCode);
+        ptsResponseAnonQrCode = findViewById(R.id.imageUKPtsResponseAnonQRCode);
+        ptsResponseAnonLogo = findViewById(R.id.imageUKPtsResponseAnonLogo);
         ptsResponseJayuUrl = findViewById(R.id.textUserKeypadPtsResponseUrl);
+        ptsResponsePointIconContainer = findViewById(R.id.layoutUKPtsResponsePointIconContainer);
+        ptsResponsePointsText = findViewById(R.id.textUKPtsResponsePointsText);
         ptsResponseLeftConfetti = findViewById(R.id.imagePtsResponseLeftConfetti);
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
+        ptsResponseTopSpacer = findViewById(R.id.viewUKPtsResponseTopSpacer);
         vp = findViewById(R.id.viewPagerUserKeypadViewPager);
 //        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
 
@@ -238,9 +258,9 @@ public class UserKeypadActivity extends AppCompatActivity
         super.onResume();
         converterActive = sp.getBoolean(GlobalConstants.PT_CONVERT_ACTIVATED, false);
         if (converterActive) {
-            enterButton.setText(R.string.next);
+            submitButton.setText(R.string.next);
         } else {
-            enterButton.setText(R.string.submit);
+            submitButton.setText(R.string.submit);
         }
 
         checkTeamMember();
@@ -250,32 +270,59 @@ public class UserKeypadActivity extends AppCompatActivity
     @Override
     public void onPause() {
         refreshTimer.cancel();
-        if (pointScreenTimer != null) {
-            pointScreenTimer.cancel();
-        }
+        cancelCountdownTimer();
         super.onPause();
     }
+
 
     /**
      * View Manipulation
      */
     private void prepareViews() {
+        screenInches = getScreenSizeInches();
+        if (screenInches >= 8.5) {
+            submitButton.setTextSize(25);
+
+            ptsResponseTopSpacer.getLayoutParams().height = 40;
+
+            ptsResponseName.setTextSize(35);
+            ptsResponseProfilePic.getLayoutParams().height = 100;
+            ptsResponseProfilePic.getLayoutParams().width = 100;
+            ptsResponseLeftConfetti.getLayoutParams().height = 140;
+            ptsResponseRightConfetti.getLayoutParams().height = 140;
+            ptsResponsePointIconContainer.getLayoutParams().height = 170;
+            ConstraintLayout.LayoutParams pointsLayout = (ConstraintLayout.LayoutParams) ptsResponsePoints.getLayoutParams();
+            pointsLayout.setMargins(40, 40, 40, 40);
+
+            ptsResponseAppQRCodeContainer.getLayoutParams().height = 80;
+            ptsResponseAppQRCodeContainer.getLayoutParams().width = 80;
+            ConstraintLayout.LayoutParams appQRCodeContainerLayout = (ConstraintLayout.LayoutParams) ptsResponseAppQRCodeContainer.getLayoutParams();
+            appQRCodeContainerLayout.topMargin = -30;
+            ConstraintLayout.LayoutParams appQRCodeLayout = (ConstraintLayout.LayoutParams) ptsResponseAppQrCode.getLayoutParams();
+            appQRCodeLayout.setMargins(12, 12, 12, 12);
+
+            ptsResponseMoreInfo.setTextSize(25);
+            ptsResponseJayuUrl.setTextSize(14);
+            ptsResponseAnonLogo.getLayoutParams().width = 150;
+            ptsResponseAnonQRCodeContainer.getLayoutParams().width = 150;
+            ConstraintLayout.LayoutParams anonQRCodeLayout = (ConstraintLayout.LayoutParams) ptsResponseAnonQrCode.getLayoutParams();
+            anonQRCodeLayout.setMargins(25, 25, 25, 25);
+        }
+
         optionsMenuBkgDark.setVisibility(View.GONE);
         optionsMenuContainer.setVisibility(View.GONE);
-//        containerPointsSuccess.setVisibility(View.GONE);
+        containerPointsSuccess.setVisibility(View.GONE);
 
-        // TODO: REVERT THE REVEALING THE SUCCESS SCREEN and uncomment all in prepare views
-        ptsResponseName.setVisibility(View.GONE);
-        ptsResponseProfilePic.setVisibility(View.GONE);
-
-        ptsResponseQrCode.setVisibility(View.GONE);
         String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://jayu.me";
         GlideApp.with(UserKeypadActivity.this)
                 .load(qrCodeUrl)
                 .fallback(R.drawable.qr_code)
-                .into(ptsResponseQrCode);
+                .into(ptsResponseAnonQrCode);
 
-//        ptsResponseMoreInfo.setVisibility(View.GONE);
+        GlideApp.with(UserKeypadActivity.this)
+                .load(qrCodeUrl)
+                .fallback(R.drawable.qr_code)
+                .into(ptsResponseAppQrCode);
 
         buttonLockScreen.setEnabled(false);
         buttonUpdatePoints.setEnabled(false);
@@ -297,6 +344,43 @@ public class UserKeypadActivity extends AppCompatActivity
                 .setBlurAutoUpdate(true)
                 .setHasFixedTransformationMatrix(true);
     }
+
+    private double getScreenSizeInches() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
+        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
+        return Math.sqrt(x + y);
+//        return Math.sqrt(x + y) * dm.scaledDensity; // Multiple by scaled density for more accuracy?
+        // REF: https://stackoverflow.com/questions/19155559/how-to-get-android-device-screen-size
+    }
+
+    /**
+     * Fullscreen mode
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    private void hideSystemUI() {
+        int uiOptions =
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Resize screen when out of focus (e.g. popup)
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+                        // Make full screen
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+    }
+
 
     private void checkTeamMember() {
         teamId = sp.getInt(GlobalConstants.TEAM_USER_ID, 0);
@@ -326,32 +410,6 @@ public class UserKeypadActivity extends AppCompatActivity
             goTeamLoginBtn.setVisibility(View.VISIBLE);
             goTeamLoginBtn.setEnabled(true);
         }
-    }
-
-    /**
-     * Fullscreen mode
-     */
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
-        }
-    }
-
-    private void hideSystemUI() {
-        int uiOptions =
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Resize screen when out of focus (e.g. popup)
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-
-                        // Make full screen
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN;
-
-        getWindow().getDecorView().setSystemUiVisibility(uiOptions);
     }
 
     /**
@@ -409,7 +467,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
                 int firstImageFrag = 1;
                 if (imageUrls != null) {
-                    vp.setCurrentItem(firstImageFrag,true);
+                    vp.setCurrentItem(firstImageFrag, true);
                 }
             }
 
@@ -476,7 +534,7 @@ public class UserKeypadActivity extends AppCompatActivity
             }, 10);
         });
 
-        enterButton.setOnClickListener(v -> {
+        submitButton.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - lastClickTime < 1500) {
                 return;
             }
@@ -582,12 +640,12 @@ public class UserKeypadActivity extends AppCompatActivity
 
         ptsResponseExit.setOnClickListener(v -> {
             closePointSuccessScreen();
-            pointScreenTimer.cancel();
+            cancelCountdownTimer();
         });
 
         ptsResponseButton.setOnClickListener(v -> {
             closePointSuccessScreen();
-            pointScreenTimer.cancel();
+            cancelCountdownTimer();
         });
 
         buttonOptionsMenu.setOnClickListener(v -> openKeypadOptionsMenu());
@@ -649,7 +707,9 @@ public class UserKeypadActivity extends AppCompatActivity
                         String timeLeftString = DateTimeHelper.dateDifferenceString(result.getTimeLeft());
                         desc = result.getName() + " must wait " + timeLeftString + " to get more points.";
 
-                        ptsResponseHeader.setText(R.string.too_soon);
+                        ptsResponsePoints.setText("0");
+                        ptsResponseDesc.setText(desc);
+                        ptsResponseCompany.setVisibility(View.INVISIBLE);
                         ptsResponseLeftConfetti.setVisibility(View.GONE);
                         ptsResponseRightConfetti.setVisibility(View.GONE);
 
@@ -663,44 +723,33 @@ public class UserKeypadActivity extends AppCompatActivity
                         if (pointTally == 1) {
                             pointTallyString = "1 point for rewards.";
                         } else {
-                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards.";
+                            pointTallyString = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointTally) + " points for rewards";
                         }
 
                         int pointsGiven = result.getPoints();
-
-                        String points;
                         if (pointsGiven == 1) {
-                            points = "1 point";
+                            ptsResponsePointsText.setText("point");
                         } else {
-                            points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven) + " points";
+                            ptsResponsePointsText.setText("points");
                         }
 
-                        desc = "You just got " + points + " from " + shop.getCompany() + " and now have " + pointTallyString;
-                        ptsResponseHeader.setText(points);
+                        String points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);
+                        desc = "You have " + pointTallyString;
+
+                        ptsResponsePoints.setText(points);
+                        ptsResponseDesc.setText(R.string.from_your_visit_to);
+                        ptsResponseCompany.setText(shop.getCompany());
+                        ptsResponseDesc2.setText(desc);
+
+
                     }
 
-                    ptsResponseDesc.setText(desc);
-
                     if (result.getIsAnonymous() == 1) {
-                        ptsResponseProfilePic.setVisibility(View.INVISIBLE);
-                        ptsResponseRibbonImg.setVisibility(View.VISIBLE);
+                        ptsResponseAnonBottomContainer.setVisibility(View.VISIBLE);
+                        ptsResponseProfilePic.setVisibility(View.GONE);
                         ptsResponseName.setVisibility(View.GONE);
-                        ptsResponseMoreInfo.setVisibility(View.VISIBLE);
-                        ptsResponseQrCode.setVisibility(View.VISIBLE);
-                        ptsResponseJayuUrl.setVisibility(View.VISIBLE);
-                        ptsResponseButton.setVisibility(View.GONE);
-
-                        ptsResponseMoreInfo.setText(R.string.pts_response_download_text);
 
                     } else {
-                        ptsResponseProfilePic.setVisibility(View.VISIBLE);
-                        ptsResponseRibbonImg.setVisibility(View.INVISIBLE);
-                        ptsResponseName.setVisibility(View.VISIBLE);
-                        ptsResponseMoreInfo.setVisibility(View.GONE);
-                        ptsResponseQrCode.setVisibility(View.GONE);
-                        ptsResponseJayuUrl.setVisibility(View.GONE);
-                        ptsResponseButton.setVisibility(View.VISIBLE);
-
                         GlideApp.with(UserKeypadActivity.this)
                                 .load(result.getThumbnail())
                                 .fallback(R.drawable.ribbon_medal_img)
@@ -708,7 +757,12 @@ public class UserKeypadActivity extends AppCompatActivity
                                 .override(ptsResponseProfilePic.getWidth(), ptsResponseProfilePic.getHeight())
                                 .into(ptsResponseProfilePic);
 
-                        ptsResponseName.setText(result.getName());
+                        ptsResponseAppBottomContainer.setVisibility(View.VISIBLE);
+                        ptsResponseProfilePic.setVisibility(View.VISIBLE);
+                        ptsResponseName.setVisibility(View.VISIBLE);
+
+                        String name = "Hi " + result.getName() + "!";
+                        ptsResponseName.setText(name);
                     }
 
                 } else {
@@ -717,13 +771,10 @@ public class UserKeypadActivity extends AppCompatActivity
                     AlertHelper.showNetworkAlert(UserKeypadActivity.this);
                 }
 
-                generateViewSizes();
                 openPointSuccessScreen();
                 phoneNumber.getText().clear();
-
                 pointAmount = shop.getStandardPoints();
                 companyTextView.setText(shop.getCompany());
-
                 spinner.setVisibility(View.GONE);
                 scrollToTop();
             }
@@ -758,9 +809,19 @@ public class UserKeypadActivity extends AppCompatActivity
 
             // Changing edit text hint size
             if (s.length() == 0) {
-                phoneNumber.setTextSize(23);
+                if (screenInches <= 8.5) {
+                    phoneNumber.setTextSize(23);
+                } else {
+                    phoneNumber.setTextSize(30);
+                }
+
             } else {
-                phoneNumber.setTextSize(40);
+                if (screenInches <= 8.5) {
+                    phoneNumber.setTextSize(40);
+                } else {
+                    phoneNumber.setTextSize(50);
+                }
+
             }
         }
 
@@ -781,13 +842,13 @@ public class UserKeypadActivity extends AppCompatActivity
 
     private void enablePostSubmit(Boolean enabled) {
         if (!enabled) {
-            enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
-            enterButton.setTextColor(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
-            enterButton.setEnabled(false);
+            submitButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.white)));
+            submitButton.setTextColor(ColorStateList.valueOf(getColor(R.color.colorPrimaryLight)));
+            submitButton.setEnabled(false);
 
         } else {
-            enterButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
-            enterButton.setEnabled(true);
+            submitButton.setBackgroundTintList(ColorStateList.valueOf(getColor(R.color.colorPrimary)));
+            submitButton.setEnabled(true);
         }
     }
 
@@ -813,37 +874,6 @@ public class UserKeypadActivity extends AppCompatActivity
 //            startTimer(vp, strings);
 //            return false;
 //        });
-    }
-
-
-    private void generateViewSizes() {
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-
-        double imagePercent = 0.25;
-        // TODO: Check this screen size difference
-//        if (screenHeight < 900) {
-//            imagePercent = 0.20;
-//            ptsResponseLeftConfetti.getLayoutParams().width = 70;
-//            ptsResponseRightConfetti.getLayoutParams().width = 70;
-//            ptsResponseQrCode.getLayoutParams().width = 120;
-//            ptsResponseQrCode.getLayoutParams().height = 120;
-//
-//            ptsResponseHeader.setTextSize(24);
-//            ptsResponseName.setTextSize(20);
-//            ptsResponseDesc.setTextSize(20);
-//            ptsResponseMoreInfo.setTextSize(20);
-//            ptsResponseJayuUrl.setTextSize(20);
-//        }
-
-        ptsResponseProfilePic.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
-        ptsResponseProfilePic.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
-        ptsResponseProfilePic.requestLayout();
-
-
-        ptsResponseRibbonImg.getLayoutParams().width = (int) Math.round(screenWidth * imagePercent);
-        ptsResponseRibbonImg.getLayoutParams().height = (int) Math.round(screenHeight * imagePercent);
-        ptsResponseRibbonImg.requestLayout();
     }
 
     private void openKeypadOptionsMenu() {
@@ -894,9 +924,10 @@ public class UserKeypadActivity extends AppCompatActivity
     private void closePointSuccessScreen() {
         Animation animationClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_user_keypad_point_popup_exit);
         containerPointsSuccess.startAnimation(animationClose);
+        ptsResponseAppBottomContainer.setVisibility(View.GONE);
+        ptsResponseAnonBottomContainer.setVisibility(View.GONE);
 
         ptsResponseButton.setEnabled(false);
-        ptsResponseButton.setVisibility(View.GONE);
         containerKeys.setEnabled(true);
     }
 
@@ -918,6 +949,12 @@ public class UserKeypadActivity extends AppCompatActivity
         };
 
         pointScreenTimer.start();
+    }
+
+    private void cancelCountdownTimer() {
+        if (pointScreenTimer != null) {
+            pointScreenTimer.cancel();
+        }
     }
 
     private void startTimer(ViewPager2 vp, String[] imageUrls) {
@@ -945,13 +982,13 @@ public class UserKeypadActivity extends AppCompatActivity
                     imageViewPager.setCurrentItem(timerPosition);
                     timerPosition = imageViewPager.getCurrentItem() + 1;
 
-                    if(timerPosition == (imageUrls.length + 1)) {
-                        timerPosition =0;
+                    if (timerPosition == (imageUrls.length + 1)) {
+                        timerPosition = 0;
                     }
-                    Log.i(TAG, "run: TIMER POSITION: " + timerPosition);
+//                    Log.i(TAG, "run: TIMER POSITION: " + timerPosition);
                 });
             }
-        },0, 2000);
+        }, 0, 2000);
     }
 
 
@@ -1009,9 +1046,9 @@ public class UserKeypadActivity extends AppCompatActivity
     public void onPointConvertSubmit(boolean activated) {
         converterActive = activated;
         if (converterActive) {
-            enterButton.setText(R.string.next);
+            submitButton.setText(R.string.next);
         } else {
-            enterButton.setText(R.string.submit);
+            submitButton.setText(R.string.submit);
         }
     }
 
