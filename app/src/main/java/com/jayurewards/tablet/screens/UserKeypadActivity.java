@@ -728,9 +728,9 @@ public class UserKeypadActivity extends AppCompatActivity
 
                         int pointsGiven = result.getPoints();
                         if (pointsGiven == 1) {
-                            ptsResponsePointsText.setText("point");
+                            ptsResponsePointsText.setText(R.string.point);
                         } else {
-                            ptsResponsePointsText.setText("points");
+                            ptsResponsePointsText.setText(R.string.points);
                         }
 
                         String points = NumberFormat.getNumberInstance(Locale.getDefault()).format(pointsGiven);

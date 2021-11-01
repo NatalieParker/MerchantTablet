@@ -1,6 +1,8 @@
 package com.jayurewards.tablet.screens;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +19,27 @@ import com.jayurewards.tablet.R;
 import com.jayurewards.tablet.helpers.GlobalConstants;
 import com.jayurewards.tablet.models.OffersModel;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";
 
-    ArrayList<OffersModel> offers;
-    Context context;
+    private final ArrayList<OffersModel> offers;
+    private final Context context;
+    private boolean bigScreen = true;
 
     public RA_UserKeypad(ArrayList<OffersModel> offers, Context context) {
         this.offers = offers;
         this.context = context;
+
+        double screenInches = getScreenSizeInches();
+        if (screenInches <= 8.5) {
+            bigScreen = false;
+        } else {
+            bigScreen = true;
+        }
     }
 
     @Override
@@ -54,9 +66,27 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (viewType == R.layout.recycler_specials_card) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_specials_card, parent, false);
             holder = new VH_Specials(view);
+            VH_Specials svh = (VH_Specials) holder;
+
+            if (bigScreen) {
+                svh.iconSpecials.getLayoutParams().width = 40;
+                svh.iconSpecials.getLayoutParams().height = 40;
+
+                svh.cardTextSpecials.setTextSize(30);
+                svh.typeSpecials.setTextSize(25);
+            }
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_rewards_card, parent, false);
             holder = new VH_Rewards(view);
+            VH_Rewards rvh = (VH_Rewards) holder;
+
+            if (bigScreen) {
+                rvh.coinRewards.getLayoutParams().width = 40;
+                rvh.coinRewards.getLayoutParams().height = 40;
+
+                rvh.cardTextRewards.setTextSize(30);
+                rvh.ptsRewards.setTextSize(25);
+            }
         }
         return holder;
     }
@@ -97,8 +127,11 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         } else if (holder instanceof VH_Rewards) {
             VH_Rewards rewardsVH = (VH_Rewards) holder;
-            String offerPoints = offer.getPtsRequired() + " Pts";
             rewardsVH.cardTextRewards.setText(offer.getDescription());
+
+            String points = NumberFormat.getNumberInstance(Locale.getDefault()).format(offer.getPtsRequired());
+            String offerPoints = points + " Pts";
+            if (offer.getPtsRequired() == 1) offerPoints = "1 Pt";
             rewardsVH.ptsRewards.setText(offerPoints);
         }
     }
@@ -141,5 +174,12 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             iconSpecials = itemView.findViewById(R.id.imageRecyclerSpecialsIcon);
 
         }
+    }
+
+    private double getScreenSizeInches() {
+        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
+        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
+        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
+        return Math.sqrt(x + y);
     }
 }
