@@ -16,7 +16,7 @@ public class GlobalConstants {
     public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
     public static final String STORE_ID = "storeId";
-    public static final String COUNTRY_CODE = "countryCode";
+    public static final String DIALING_CODE = "dialingCode";
     public static final String MERCHANT_ID = "merchantId";
     public static final String MERCHANT_FIREBASE_UID = "firebaseUid";
     public static final String STRIPE_ID = "stripeId";
@@ -24,7 +24,7 @@ public class GlobalConstants {
     public static final String STRIPE_STATUS = "stripeStatus";
     public static final String TEAM_USER_ID = "userId";
     public static final String TEAM_NAME = "name";
-    public static final String TEAM_COUNTRY_CODE = "countryCode";
+    public static final String TEAM_DIALING_CODE = "dialingCode";
     public static final String TEAM_PHONE = "phone";
     public static final String TEAM_USER_FIREBASE_UID = "userFirebaseUid";
     public static final String TEAM_STATUS = "teamStatus";

@@ -74,7 +74,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 
     // Passed data
     private String userFirebaseUID;
-    private String countryCode;
+    private String dialingCode;
     private String phoneNumber;
 
     private String birthdayInput = "";
@@ -101,7 +101,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 
         // Retrieve data
         Intent intent = getIntent();
-        countryCode = intent.getStringExtra(GlobalConstants.TEAM_COUNTRY_CODE);
+        dialingCode = intent.getStringExtra(GlobalConstants.TEAM_DIALING_CODE);
         phoneNumber = intent.getStringExtra(GlobalConstants.TEAM_PHONE);
         userFirebaseUID = intent.getStringExtra(GlobalConstants.TEAM_USER_FIREBASE_UID);
 
@@ -218,7 +218,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
             }
         }
 
-        RegisterUserModel params = new RegisterUserModel(nameInput, emailInput, countryCode, phoneNumber,
+        RegisterUserModel params = new RegisterUserModel(nameInput, emailInput, dialingCode, phoneNumber,
                 birthdayInput, genderInput, imageBase64, thumbnailBase64, deviceType, userFirebaseUID);
 
         Call<String> call = RetrofitClient.getInstance().getRestTeam().registerUser(params);
@@ -281,7 +281,7 @@ public class RegistrationTeamActivity extends AppCompatActivity {
 //                                editor.putInt(GlobalConstants.USER_ID, user.getUserId());
 //                                editor.putString(GlobalConstants.USER_FIREBASE_UID, user.getFirebaseUID());
 //                                editor.putString(GlobalConstants.NAME, user.getName());
-//                                editor.putString(GlobalConstants.COUNTRY_CODE, user.getCountryCode());
+//                                editor.putString(GlobalConstants.dialing_code, user.getDialingCode());
 //                                editor.putString(GlobalConstants.PHONE, user.getPhone());
 //                                editor.putString(GlobalConstants.BIRTHDATE, user.getBirthdate());
 //

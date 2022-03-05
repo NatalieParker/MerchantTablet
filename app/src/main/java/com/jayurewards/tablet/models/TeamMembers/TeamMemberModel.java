@@ -21,9 +21,9 @@ public class TeamMemberModel {
     @Expose
     private String email;
 
-    @SerializedName("country_code")
+    @SerializedName("dialing_code")
     @Expose
-    private String countryCode;
+    private String dialingCode;
 
     @SerializedName("phone")
     @Expose
@@ -89,12 +89,12 @@ public class TeamMemberModel {
         this.email = email;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getDialingCode() {
+        return dialingCode;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setDialingCode(String dialingCode) {
+        this.dialingCode = dialingCode;
     }
 
     public String getPhone() {
@@ -168,7 +168,7 @@ public class TeamMemberModel {
                 ", firebaseUID='" + firebaseUID + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", countryCode='" + countryCode + '\'' +
+                ", dialingCode='" + dialingCode + '\'' +
                 ", phone='" + phone + '\'' +
                 ", birthdate='" + birthdate + '\'' +
                 ", gender='" + gender + '\'' +

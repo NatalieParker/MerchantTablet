@@ -32,7 +32,7 @@ public class EnterAmountPopup extends DialogFragment {
     private static final String TAG = "EnterAmountPopup";
 
     public interface EnterAmountInterface {
-        void onEnterAmountSubmit(long points);
+        void onEnterAmountSubmit(long points, double spend);
     }
 
     private EnterAmountInterface listener;
@@ -46,6 +46,7 @@ public class EnterAmountPopup extends DialogFragment {
     private long amountPassed;
 
     private long pointsToGive;
+    private double amountSpent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class EnterAmountPopup extends DialogFragment {
         });
 
         submitBtn.setOnClickListener(v -> {
-            listener.onEnterAmountSubmit(pointsToGive);
+            listener.onEnterAmountSubmit(pointsToGive, amountSpent);
             dismiss();
         });
 
@@ -122,10 +123,9 @@ public class EnterAmountPopup extends DialogFragment {
                 amountInput.removeTextChangedListener(textWatcher);
                 String amountStripped = stripNumberFormatting(amount);
                 try {
-                    double amountDouble = Double.parseDouble(amountStripped);
-                    String amountFormatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(amountDouble);
-
-                    calculatePoints(amountDouble);
+                    amountSpent = Double.parseDouble(amountStripped);
+                    String amountFormatted = NumberFormat.getNumberInstance(Locale.getDefault()).format(amountSpent);
+                    calculatePoints();
 
                     amountInput.setText(amountFormatted);
                     amountInput.setSelection(amountInput.getText().toString().length());
@@ -144,7 +144,7 @@ public class EnterAmountPopup extends DialogFragment {
 
     private void checkForEmptyField() {
         String amountString = amountInput.getText().toString();
-        enableEmailSubmit(!amountString.isEmpty());
+        enableEmailSubmit(!amountString.isEmpty() && pointsToGive > 0);
     }
 
     private void enableEmailSubmit(boolean enabled) {
@@ -159,8 +159,8 @@ public class EnterAmountPopup extends DialogFragment {
         }
     }
 
-    private void calculatePoints(double amountDouble) {
-        double pointsDouble = amountDouble / amountPassed;
+    private void calculatePoints() {
+        double pointsDouble = amountSpent / amountPassed;
         pointsToGive = (long) pointsDouble * (long) pointsPassed;
 
         String pointString = pointsToGive + " points";

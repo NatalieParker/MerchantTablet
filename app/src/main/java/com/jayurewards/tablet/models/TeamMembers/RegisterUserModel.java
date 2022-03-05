@@ -4,7 +4,7 @@ public class RegisterUserModel {
 
     private String name;
     private String email;
-    private String countryCode;
+    private String dialingCode;
     private String phone;
     private String birthDate;
     private String gender;
@@ -13,10 +13,10 @@ public class RegisterUserModel {
     private String mobileDevice;
     private String firebaseUID;
 
-    public RegisterUserModel(String name, String email, String countryCode, String phone, String birthDate, String gender, String photo, String thumbnail, String mobileDevice, String firebaseUID) {
+    public RegisterUserModel(String name, String email, String dialingCode, String phone, String birthDate, String gender, String photo, String thumbnail, String mobileDevice, String firebaseUID) {
         this.name = name;
         this.email = email;
-        this.countryCode = countryCode;
+        this.dialingCode = dialingCode;
         this.phone = phone;
         this.birthDate = birthDate;
         this.gender = gender;
@@ -31,7 +31,7 @@ public class RegisterUserModel {
         return "RegisterUserModel{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", countryCode='" + countryCode + '\'' +
+                ", dialingCode='" + dialingCode + '\'' +
                 ", phone='" + phone + '\'' +
                 ", birthDate='" + birthDate + '\'' +
                 ", gender='" + gender + '\'' +

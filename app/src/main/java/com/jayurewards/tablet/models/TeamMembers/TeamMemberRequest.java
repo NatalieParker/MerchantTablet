@@ -1,12 +1,12 @@
 package com.jayurewards.tablet.models.TeamMembers;
 
 public class TeamMemberRequest {
-    String countryCode;
+    String dialingCode;
     String phone;
     int storeId;
 
-    public TeamMemberRequest(String countryCode, String phone, int storeId) {
-        this.countryCode = countryCode;
+    public TeamMemberRequest(String dialingCode, String phone, int storeId) {
+        this.dialingCode = dialingCode;
         this.phone = phone;
         this.storeId = storeId;
     }
@@ -14,7 +14,7 @@ public class TeamMemberRequest {
     @Override
     public String toString() {
         return "TeamMemberRequest{" +
-                "countryCode='" + countryCode + '\'' +
+                "dialingCode='" + dialingCode + '\'' +
                 ", phone='" + phone + '\'' +
                 ", storeId=" + storeId +
                 '}';

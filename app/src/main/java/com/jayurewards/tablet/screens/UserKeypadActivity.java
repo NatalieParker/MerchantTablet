@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -137,12 +136,12 @@ public class UserKeypadActivity extends AppCompatActivity
     private ConstraintLayout spinner;
     private ViewPager2 vp;
     private View ptsResponseTopSpacer;
-    private TabLayout tabLayout;
 
     // Properties
     private ArrayList<ShopAdminModel> shopList = new ArrayList<>();
     private ShopAdminModel shop;
     private long pointAmount;
+    private double spentAmount;
     private int adminLevel;
     private int teamId;
 
@@ -218,9 +217,6 @@ public class UserKeypadActivity extends AppCompatActivity
         ptsResponseRightConfetti = findViewById(R.id.imagePtsResponseRightConfetti);
         ptsResponseTopSpacer = findViewById(R.id.viewUKPtsResponseTopSpacer);
         vp = findViewById(R.id.viewPagerUK);
-
-//        tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
-//        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
 
         sp = getSharedPreferences(GlobalConstants.SHARED_PREF, Context.MODE_PRIVATE);
         adminLevel = sp.getInt(GlobalConstants.ADMIN_LEVEL, 1);
@@ -412,7 +408,7 @@ public class UserKeypadActivity extends AppCompatActivity
                     shop = shopList.get(0);
 
                     try {
-                        ccp.setCountryForPhoneCode(Integer.parseInt(shop.getCountryCode()));
+                        ccp.setCountryForPhoneCode(Integer.parseInt(shop.getDialingCode()));
                     } catch (Throwable t) {
                         String errorMessage = "Convert Country code to int error";
                         LogHelper.logReport(TAG, errorMessage, LogHelper.ErrorReportType.NETWORK);
@@ -565,7 +561,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 sharedPref.edit().remove(GlobalConstants.TEAM_USER_ID).commit();
                 sharedPref.edit().remove(GlobalConstants.TEAM_USER_FIREBASE_UID).commit();
                 sharedPref.edit().remove(GlobalConstants.TEAM_NAME).commit();
-                sharedPref.edit().remove(GlobalConstants.TEAM_COUNTRY_CODE).commit();
+                sharedPref.edit().remove(GlobalConstants.TEAM_DIALING_CODE).commit();
                 sharedPref.edit().remove(GlobalConstants.TEAM_PHONE).commit();
 
                 teamId = 0;
@@ -594,7 +590,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
             PointConvertPopup popup = new PointConvertPopup();
             Bundle args = new Bundle();
-            args.putString(GlobalConstants.COUNTRY_CODE, shop.getCountryCode());
+            args.putString(GlobalConstants.DIALING_CODE, shop.getDialingCode());
             args.putLong(GlobalConstants.PT_CONVERT_POINTS, points);
             args.putLong(GlobalConstants.PT_CONVERT_AMOUNT, amount);
             args.putBoolean(GlobalConstants.PT_CONVERT_ACTIVATED, active);
@@ -647,7 +643,7 @@ public class UserKeypadActivity extends AppCompatActivity
 
         EnterAmountPopup popup = new EnterAmountPopup();
         Bundle args = new Bundle();
-        args.putString(GlobalConstants.COUNTRY_CODE, shop.getCountryCode());
+        args.putString(GlobalConstants.DIALING_CODE, shop.getDialingCode());
         args.putLong(GlobalConstants.PT_CONVERT_POINTS, points);
         args.putLong(GlobalConstants.PT_CONVERT_AMOUNT, amount);
         args.putString(GlobalConstants.ENTERED_PHONE, phoneEntered);
@@ -664,7 +660,7 @@ public class UserKeypadActivity extends AppCompatActivity
         String company = shop.getCompany();
         int storeId = shop.getStoreId();
 
-        String cc = shop.getCountryCode();
+        String cc = shop.getDialingCode();
         String phoneFormatted = phoneNumber.getText().toString();
         String phone = phoneFormatted.replaceAll("[^0-9]", "");
 
@@ -676,7 +672,7 @@ public class UserKeypadActivity extends AppCompatActivity
         String day = DateTimeHelper.getDayString(new Date());
         String time = DateTimeHelper.getTimeString(new Date());
 
-        GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, pointAmount, method,
+        GivePointsRequest params = new GivePointsRequest(cc, phone, storeId, company, pointAmount, spentAmount, method,
                 type, teamId, adminLevel, timeout, day, time);
 
         Call<GivePointsResponse> call = RetrofitClient.getInstance().getRestPoints().merchantGivePoints(params);
@@ -760,6 +756,7 @@ public class UserKeypadActivity extends AppCompatActivity
                 openPointSuccessScreen();
                 phoneNumber.getText().clear();
                 pointAmount = shop.getStandardPoints();
+                spentAmount = 0.00;
                 companyHeader.setText(shop.getCompany());
                 spinner.setVisibility(View.GONE);
                 scrollToTop();
@@ -847,8 +844,7 @@ public class UserKeypadActivity extends AppCompatActivity
 //        vp.setPageTransformer(new MarginPageTransformer(100));
 
         TabLayout tabLayout = findViewById(R.id.tabLayoutShopActivityImageSlider);
-        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> {
-        })).attach();
+        new TabLayoutMediator(tabLayout, vp, ((tab, position) -> { })).attach();
 //        startTimer(vp, strings);
 
         // Need to get child because Viewpager 2 is a view group
@@ -948,7 +944,6 @@ public class UserKeypadActivity extends AppCompatActivity
         }
         timerPosition = vp.getCurrentItem();
         startSlider(vp, imageUrls);
-        Log.i(TAG, "startTimer: TIMER STARTED");
     }
 
     private void stopTimer() {
@@ -1038,7 +1033,8 @@ public class UserKeypadActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEnterAmountSubmit(long points) {
+    public void onEnterAmountSubmit(long points, double spent) {
+        spentAmount = spent;
         pointAmount = points;
         giveUserPoints();
     }

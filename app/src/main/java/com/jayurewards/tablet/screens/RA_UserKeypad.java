@@ -1,7 +1,5 @@
 package com.jayurewards.tablet.screens;
 
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,7 @@ public class RA_UserKeypad extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "RecyclerViewAdapter";
 
     private final ArrayList<OffersModel> offers;
-    private boolean bigScreen = true;
+    private boolean bigScreen;
 
     public RA_UserKeypad(ArrayList<OffersModel> offers) {
         this.offers = offers;

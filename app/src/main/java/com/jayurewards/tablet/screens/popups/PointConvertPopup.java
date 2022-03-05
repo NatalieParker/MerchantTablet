@@ -43,7 +43,7 @@ public class PointConvertPopup extends DialogFragment {
     private TextView calculatedExample;
     private MaterialButton submitBtn;
 
-    private String countryCode;
+    private String dialingCode;
     private boolean activated;
 
     @Override
@@ -64,7 +64,7 @@ public class PointConvertPopup extends DialogFragment {
         setCancelable(false);
 
         if (getArguments() != null) {
-            countryCode = getArguments().getString(GlobalConstants.COUNTRY_CODE);
+            dialingCode = getArguments().getString(GlobalConstants.DIALING_CODE);
             long convertPoints = getArguments().getLong(GlobalConstants.PT_CONVERT_POINTS);
             long convertAmount = getArguments().getLong(GlobalConstants.PT_CONVERT_AMOUNT);
             activated = getArguments().getBoolean(GlobalConstants.PT_CONVERT_ACTIVATED);
@@ -242,13 +242,13 @@ public class PointConvertPopup extends DialogFragment {
 
         String amountString;
         if (amount.equals("1")) {
-            if (countryCode != null && countryCode.equals("63")){
+            if (dialingCode != null && dialingCode.equals("63")){
                 amountString = "1 peso";
             } else {
                 amountString = "1 dollar";
             }
         } else {
-            if (countryCode != null && countryCode.equals("63")){
+            if (dialingCode != null && dialingCode.equals("63")){
                 amountString = amount + " pesos";
             } else {
                 amountString = amount + " dollars";

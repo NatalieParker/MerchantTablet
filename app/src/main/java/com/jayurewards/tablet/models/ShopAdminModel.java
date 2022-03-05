@@ -13,9 +13,9 @@ public class ShopAdminModel {
     @Expose
     private String company;
 
-    @SerializedName("country_code")
+    @SerializedName("dialing_code")
     @Expose
-    private String countryCode;
+    private String dialingCode;
 
     @SerializedName("std_points")
     @Expose
@@ -41,12 +41,12 @@ public class ShopAdminModel {
         this.company = company;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getDialingCode() {
+        return dialingCode;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setDialingCode(String dialingCode) {
+        this.dialingCode = dialingCode;
     }
 
     public int getStandardPoints() {
@@ -70,7 +70,7 @@ public class ShopAdminModel {
         return "ShopAdminModel{" +
                 "storeId=" + storeId +
                 ", company='" + company + '\'' +
-                ", countryCode='" + countryCode + '\'' +
+                ", dialingCode='" + dialingCode + '\'' +
                 ", standardPoints=" + standardPoints +
                 ", standardPtTimeout=" + standardPtTimeout +
                 '}';

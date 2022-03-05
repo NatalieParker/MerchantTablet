@@ -40,12 +40,12 @@ public class LoginTeamVerifyFragment extends Fragment {
 
     // Passed data
     private static final String PHONE_NUMBER = "phoneNumber";
-    private static final String COUNTRY_CODE = "countryCode";
+    private static final String DIALING_CODE = "dialingCode";
     private static final String PHONE_FORMATTED = "phoneFormatted";
     private static final String STORE_ID = "storeId";
 
     private String phoneNumber;
-    private String countryCode;
+    private String dialingCode;
     private String phoneFormatted;
     private int storeId;
 
@@ -63,11 +63,11 @@ public class LoginTeamVerifyFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static LoginTeamVerifyFragment newInstance(String phoneNumber, String countryCode, String phoneFormatted, int storeId) {
+    public static LoginTeamVerifyFragment newInstance(String phoneNumber, String dialingCode, String phoneFormatted, int storeId) {
         LoginTeamVerifyFragment fragment = new LoginTeamVerifyFragment();
         Bundle args = new Bundle();
         args.putString(PHONE_NUMBER, phoneNumber);
-        args.putString(COUNTRY_CODE, countryCode);
+        args.putString(DIALING_CODE, dialingCode);
         args.putString(PHONE_FORMATTED, phoneFormatted);
         args.putInt(STORE_ID, storeId);
         fragment.setArguments(args);
@@ -79,7 +79,7 @@ public class LoginTeamVerifyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             phoneNumber = getArguments().getString(PHONE_NUMBER);
-            countryCode = getArguments().getString(COUNTRY_CODE);
+            dialingCode = getArguments().getString(DIALING_CODE);
             phoneFormatted = getArguments().getString(PHONE_FORMATTED);
             storeId = getArguments().getInt(STORE_ID);
         }
@@ -143,7 +143,7 @@ public class LoginTeamVerifyFragment extends Fragment {
      * Network calls
      */
     private void requestVerification() {
-        String phone = "+" + countryCode + phoneNumber;
+        String phone = "+" + dialingCode + phoneNumber;
         Call<String> call = RetrofitClient.getInstance().getRestTeam().requestSMSVerification(phone);
         call.enqueue(new Callback<String>() {
             @Override
@@ -172,7 +172,7 @@ public class LoginTeamVerifyFragment extends Fragment {
     }
 
     private void checkVerification(String code) {
-        String phone = "+" + countryCode + phoneNumber;
+        String phone = "+" + dialingCode + phoneNumber;
         CheckSMSVerificationModel params = new CheckSMSVerificationModel(phone, code);
         Call<String> call = RetrofitClient.getInstance().getRestTeam().checkSMSVerification(params);
         call.enqueue(new Callback<String>() {
@@ -206,7 +206,7 @@ public class LoginTeamVerifyFragment extends Fragment {
     }
 
     private void getTeamMember() {
-        TeamMemberRequest params = new TeamMemberRequest(countryCode, phoneNumber, storeId);
+        TeamMemberRequest params = new TeamMemberRequest(dialingCode, phoneNumber, storeId);
         Call<TeamMemberModel> call = RetrofitClient.getInstance().getRestTeam().getTeamMember(params);
         call.enqueue(new Callback<TeamMemberModel>() {
             @Override
@@ -251,7 +251,7 @@ public class LoginTeamVerifyFragment extends Fragment {
                             editor.putInt(GlobalConstants.TEAM_USER_ID, user.getUserId());
                             editor.putString(GlobalConstants.TEAM_USER_FIREBASE_UID, user.getFirebaseUID());
                             editor.putString(GlobalConstants.TEAM_NAME, user.getName());
-                            editor.putString(GlobalConstants.TEAM_COUNTRY_CODE, user.getCountryCode());
+                            editor.putString(GlobalConstants.TEAM_DIALING_CODE, user.getDialingCode());
                             editor.putString(GlobalConstants.TEAM_PHONE, user.getPhone());
                             editor.putString(GlobalConstants.TEAM_STATUS, user.getStatus());
                             editor.putString(GlobalConstants.TEAM_TYPE, user.getType());
@@ -275,8 +275,8 @@ public class LoginTeamVerifyFragment extends Fragment {
 //                        getFragmentManager().popBackStackImmediate();
 //                        Intent intent = new Intent(getActivity(), RegistrationTeamActivity.class);
 //
-//                        if (countryCode != null && phoneNumber != null) {
-//                            intent.putExtra(GlobalConstants.COUNTRY_CODE, countryCode);
+//                        if (dialingCode != null && phoneNumber != null) {
+//                            intent.putExtra(GlobalConstants.COUNTRY_CODE, dialingCode);
 //                            intent.putExtra(GlobalConstants.PHONE, phoneNumber);
 //                            intent.putExtra(GlobalConstants.USER_FIREBASE_UID, firebaseUid);
 //                            startActivity(intent);

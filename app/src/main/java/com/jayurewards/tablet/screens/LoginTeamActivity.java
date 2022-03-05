@@ -116,7 +116,7 @@ public class LoginTeamActivity extends AppCompatActivity {
      * @param phoneNumber Entered phone number
      * @param countryCode Entered country code
      */
-    private void openFragment(String phoneNumber, String countryCode, String phoneFormatted) {
+    private void openFragment(String phoneNumber, String dialingCode, String phoneFormatted) {
 
         // Disable submit button or the user can click through the fragment
         enablePostSubmit(false);
@@ -125,7 +125,7 @@ public class LoginTeamActivity extends AppCompatActivity {
         phoneNumberInput.requestFocus();
 
         // Prep fragment with passed data
-        LoginTeamVerifyFragment fragment = LoginTeamVerifyFragment.newInstance(phoneNumber, countryCode, phoneFormatted, storeId);
+        LoginTeamVerifyFragment fragment = LoginTeamVerifyFragment.newInstance(phoneNumber, dialingCode, phoneFormatted, storeId);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
